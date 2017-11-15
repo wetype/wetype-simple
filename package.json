@@ -1,0 +1,26 @@
+{
+  "name": "wetype-simple",
+  "version": "0.0.2",
+  "author": "GrePuG",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rm -rf dist && rollup -c && tsc"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.85",
+    "@types/node": "^8.0.51",
+    "@types/rollup": "^0.41.1",
+    "gulp": "^3.9.1",
+    "is-extendable": "^1.0.1",
+    "isobject": "^3.0.1",
+    "rollup": "^0.51.5",
+    "rollup-plugin-typescript2": "^0.8.0",
+    "through2": "^2.0.3",
+    "typescript": "^2.5.3"
+  },
+  "dependencies": {
+    "lodash": "^4.17.4",
+    "tslib": "^1.8.0"
+  }
+}
