@@ -9,5 +9,5 @@ export {
     ComponentDecor,
     PageDecor,
     global,
-    PageConstr
+    PageConstr,
 }
