@@ -1,9 +1,5 @@
-import { Options } from './common'
 import { promisify } from '../lib/util'
+import { wx } from './wx'
 
-export declare namespace images {
-
-   
-}
-
-export const chooseImage = (opts: images.ChooseImageOpts): images.ChooseImageRes => promisify<images.ChooseImageRes>(opts, wx.chooseImage)
+export const chooseImage = (opts: wx.ChooseImageOpts): Promise<wx.ChooseImageRes> => 
+    promisify<wx.ChooseImageRes>(opts, wx.chooseImage)
