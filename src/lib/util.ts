@@ -39,3 +39,11 @@ export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[]) =
 
     return { methods, lifeCycleMethods, data }
 }
+
+export const promisify = <T>(options, func) => {
+    return new Promise<T>((resolve, reject) => {
+        options.success = resolve
+        options.fail = reject
+        func(options)
+    })
+}
