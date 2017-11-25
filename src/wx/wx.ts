@@ -652,6 +652,67 @@ namespace wx {
     export declare function createMapContext(mapId: string, context?: any): MapContext
 }
 
+/**
+ * 交互反馈
+ */
+namespace wx {
+
+
+    export interface ShowModalOpts extends Options<ShowModalRes> {
+        /**
+         * 提示的标题
+         */
+        title: string
+
+        /**
+         * 提示的内容
+         */
+        content: string
+
+        /**
+         * 是否显示取消按钮，默认为 true
+         */
+        showCancel?: boolean
+
+        /**
+         * 取消按钮的文字，默认为"取消"，最多 4 个字符
+         */
+        cancelText?: string
+
+        /**
+         * 取消按钮的文字颜色，默认为"#000000"
+         */
+        cancelColor?: string
+
+        /**
+         * 确定按钮的文字，默认为"确定"，最多 4 个字符
+         */
+        confirmText?: string
+
+        /**
+         * 确定按钮的文字颜色，默认为"#3CC51F"
+         */
+        confirmColor?: string
+    }
+
+    export interface ShowModalRes {
+        /**
+         * 为 true 时，表示用户点击了确定按钮
+         */
+        confirm: boolean
+
+        /**
+         * 为 true 时，表示用户点击了取消（用于 Android 系统区分点击蒙层关闭还是点击取消按钮关闭）
+         */
+        cancel: boolean
+    }
+    export declare function showModal(opts: ShowModalOpts): void
+
+
+
+}
+
+
 export {
     wx
 }

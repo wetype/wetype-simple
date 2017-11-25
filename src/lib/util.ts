@@ -9,3 +9,9 @@ export const promisify = <T>(options, func) => {
         func(options)
     })
 }
+
+export const request = () => {
+
+}
+
+
