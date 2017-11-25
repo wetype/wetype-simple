@@ -1,5 +1,6 @@
 import { global } from './global'
-import { isInNode, handleConstructor } from './lib/util'
+import { isInNode } from './lib/util'
+import { handleConstructor } from './lib/handleConstructor'
 
 export declare const Page: Function
 
