@@ -3,7 +3,8 @@
  */
 
 import { global } from './global'
-import { isInNode, handleConstructor } from './lib/util'
+import { isInNode } from './lib/util'
+import { handleConstructor } from './lib/handleConstructor'
 
 declare const Component: Function
 

@@ -3,7 +3,8 @@ import { PageDecor } from './page.decor'
 import { ComponentDecor } from './component.decor'
 import { global } from './global'
 import { PageConstr } from './Page'
-import * as wx from './wx/typings'
+import { wx } from './lib/wx'
+import * as wt from './lib/wetype'
 
 export {
     AppDecor,
@@ -11,5 +12,9 @@ export {
     PageDecor,
     global,
     PageConstr,
+    wt,
+    /**
+     * 原生提供的wx对象
+     */
     wx
 }
