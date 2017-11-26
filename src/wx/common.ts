@@ -3,3 +3,7 @@ export interface Options<T> {
     fail?(): void
     complete?(): void
 }
+
+export interface ObjectLiteral {
+    [key: string]: any
+}

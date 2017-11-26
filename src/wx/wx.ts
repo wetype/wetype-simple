@@ -1,8 +1,4 @@
-import { Options } from './common'
-
-export interface ObjectLiteral {
-    [key: string]: any
-}
+import { Options, ObjectLiteral } from './common'
 
 /**
  * #网络
@@ -706,11 +702,90 @@ namespace wx {
          */
         cancel: boolean
     }
+    
+    /**
+     * 显示模态弹窗
+     * @param opts 
+     */
     export declare function showModal(opts: ShowModalOpts): void
 
+    export interface ShowActionSheetOpts extends Options<ShowActionSheetRes> {
+        /**
+         * 按钮的文字数组，数组长度最大为6个
+         */
+        itemList: string[]
 
+        /**
+         * 按钮的文字颜色，默认为"#000000"
+         */
+        itemColor: string
+    }
+
+    export interface ShowActionSheetRes {
+        /**
+         * 用户点击的按钮，从上到下的顺序，从0开始
+         */
+        tapIndex: number
+    }
+
+    /**
+     * ​显示操作菜单
+     */
+    export declare function showActionSheet(opts: ShowActionSheetOpts): void
 
 }
+
+/**
+ * navbar
+ */
+namespace wx {
+
+    export interface SetNavigationBarTitleOpts extends Options<SetNavigationBarTitleRes> {
+        /**
+         * 页面标题
+         */
+        title: string
+    }
+
+    export interface SetNavigationBarTitleRes {}
+
+    /**
+     * 动态设置置顶栏文字内容，只有当前小程序被置顶时能生效，如果当前小程序没有被置顶，也能调用成功，但是不会立即生效，只有在用户将这个小程序置顶后才换上设置的文字内容。注意：调用成功后，需间隔 5s 才能再次调用此接口，如果在 5s 内再次调用此接口，会回调 fail，errMsg："setTopBarText: fail invoke too frequently"
+     */
+     export declare function setNavigationBarTitle(opts: SetNavigationBarTitleOpts): void
+
+     /**
+      * 在当前页面显示导航条加载动画
+      */
+    export declare function showNavigationBarLoading(): void
+
+    /**
+     * 隐藏导航条加载动画
+     */
+    export declare function hideNavigationBarLoading(): void
+
+
+    export interface SetTopBarTextOpts extends Options<SetTopBarTextRes> {
+        /**
+         * 置顶栏文字内容
+         */
+        text: string
+    }
+
+    export interface SetTopBarTextRes {
+    }
+    /**
+     * 动态设置置顶栏文字内容，只有当前小程序被置顶时能生效，如果当前小程序没有被置顶，也能调用成功，但是不会立即生效，只有在用户将这个小程序置顶后才换上设置的文字内容。注意：调用成功后，需间隔 5s 才能再次调用此接口，如果在 5s 内再次调用此接口，会回调 fail，errMsg："setTopBarText: fail invoke too frequently"
+     */
+    export declare function setTopBarText(opts: SetTopBarTextOpts): void
+ }
+
+
+declare namespace wx {
+    export declare function 
+}
+
+
 
 
 export {
