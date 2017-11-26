@@ -10,8 +10,3 @@ export const promisify = <T>(options, func) => {
     })
 }
 
-export const request = () => {
-
-}
-
-

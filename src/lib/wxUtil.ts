@@ -1,5 +1,6 @@
-import { wx } from '../wx/wx'
-import { showModal } from '../wx/interaction'
+import { wx } from './wx'
+import { promisify } from '../lib/util'
+import * as wxTypes from './types'
 
 /**
  * rpx 转 px
@@ -23,9 +24,15 @@ export const px2rpx = (px: number, screenWidthInPx: number) => {
 }
 
 /**
+ * promisify showModal
+ */
+export const showModal = (opts: wxTypes.ShowModalOpts): Promise<wxTypes.ShowModalRes> =>
+    promisify<wxTypes.ShowModalRes>(opts, wx.showModal)
+
+/**
  * 弹出提示框
  */
-export const alert = async (
+export const alert = (
     content: string,
     title?: string
 ) => {
@@ -39,7 +46,7 @@ export const alert = async (
 /**
  * 弹出确认对话框
  */
-export const confirm = async (
+export const confirm = (
     content: string,
     title?: string
 ) => {
@@ -49,3 +56,31 @@ export const confirm = async (
         showCancel: true
     })
 }
+
+/**
+* 发起网络请求
+* @param options 
+*/
+export const request = (options: wxTypes.RequestOpts): Promise<wxTypes.RequestRes> => 
+   promisify<wxTypes.RequestRes>(options, wx.request)
+
+
+/**
+* 将本地资源上传到开发者服务器，客户端发起一个 HTTPS POST 请求，其中 content-type 为 multipart/form-data
+* @param options 
+*/
+export const uploadFile = (options: wxTypes.UploadFileOpts): wxTypes.UploadFileResPromisified => {
+   let uploadTask: wxTypes.UploadTask
+   let promise: any = new Promise((resolve, reject) => {
+       options.success = resolve
+       options.fail = reject
+       promise.uploadTask = wx.uploadFile(options)
+   })
+   return promise
+}
+
+export const chooseImage = (opts: wxTypes.ChooseImageOpts): Promise<wxTypes.ChooseImageRes> => 
+    promisify<wxTypes.ChooseImageRes>(opts, wx.chooseImage)
+
+export const getLocation = (opts: wxTypes.GetLocationOpts): Promise<wxTypes.GetLocationRes> =>
+    promisify<wxTypes.GetLocationRes>(opts, wx.getLocation)

@@ -7,3 +7,10 @@ export interface Options<T> {
 export interface ObjectLiteral {
     [key: string]: any
 }
+
+export interface ErrMsg {
+    /**
+     * 调用结果
+     */
+    errMsg: string
+}
