@@ -1,6 +1,10 @@
 import { Options, ObjectLiteral, ErrMsg } from './common'
 import * as wxx from './types'
 
+declare const App: Function
+declare const Page: Function
+declare const Component: Function
+
 /**
  * #网络
  */
@@ -427,5 +431,8 @@ declare namespace wx {
 }
 
 export {
-    wx
+    wx,
+    App,
+    Page,
+    Component,
 }

@@ -21,6 +21,8 @@ export function AppDecor(appOptions: AppOptions) {
             let lifeCycleMethodNames = ['onLaunch', 'onShow']
             let { methods, lifeCycleMethods } = handleConstructor(appConstructor, lifeCycleMethodNames)
             
+            lifeCycleMethods
+
             App({
                 ...methods,
                 ...lifeCycleMethods
@@ -29,11 +31,5 @@ export function AppDecor(appOptions: AppOptions) {
 
 
     }
-
-}
-
-export function config() {
-
-
 
 }

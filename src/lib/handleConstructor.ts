@@ -28,9 +28,20 @@ export interface PageContext {
     setDataAsync(arg: any): Promise<void>
 }
 
+export interface AppOnLaunchParams {
+
+    
+
+}
+
 export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[]) => {
     let ins = new Constr
     let proto = Constr.prototype
+
+    /**
+     * app || page || component
+     */
+    let type = ins.type
 
     let methods: any = {}
     let lifeCycleMethods: any = {}
@@ -44,13 +55,30 @@ export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[]) =
                 for (let p in this.data) {
                     this[p] = this.data[p]
                 }
-
-                // promisify setData
-                if (this.setData) {
-                    this.setDataAsync = (arg) => {
-                        return new Promise(resolve => this.setData(arg, resolve))
+                //
+                if (type === 'page') {
+                    // promisify setData
+                    if (this.setData) {
+                        this.setDataAsync = (arg) => {
+                            return new Promise(resolve => this.setData(arg, resolve))
+                        }
                     }
+                } 
+                //
+                else if (type === 'app') {
+
+                    if (name === 'onLaunch') {
+
+                    }
+
+
+
+                } 
+                //
+                else if (type === 'component') {
+
                 }
+
 
                 proto[name].call(this, ...args)
             }

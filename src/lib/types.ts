@@ -849,13 +849,13 @@ export interface AddPhoneContactOpts {
     /**
      * 
      */
-    complete(cb: () => void): void
+    complete?(cb: () => void): void
 
 }
 
 export interface StartPullDownRefreshRes {
     errMsg: ErrMsg<string>
-}
+}   
 
 export interface ShowModalOpts extends Options<ShowModalRes> {
     /**

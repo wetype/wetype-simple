@@ -1,9 +1,32 @@
-export class PageConstr {
+import { Page as nativePage } from './lib/wx'
+import { global } from './global'
+import { isInNode } from './lib/util'
+import { handleConstructor } from './lib/handleConstructor'
+
+export abstract class Page {
+
+    type = 'page'
+
+    static decor(pageOptions?: PageOptions) {
+        return function(pageConstructor: any) {
+            if (isInNode) {
+                pageConstructor.config = pageOptions && pageOptions.config
+            } else {
+                let lifeCycleMethodNames = ['onLoad', 'onShow', 'onUnload']
+                let { methods, lifeCycleMethods, data } = handleConstructor(pageConstructor, lifeCycleMethodNames)
+                nativePage({
+                    data,
+                    ...methods,
+                    ...lifeCycleMethods
+                })
+            }
+        }
+    }
 
     /**
      * 用于将数据从逻辑层发送到视图层（异步），同时改变对应的 this.data 的值（同步）。
      */
-    setData(arg: any) {
+    setData(arg: any): void {
 
     }
 
@@ -21,4 +44,66 @@ export class PageConstr {
         return Promise.resolve()
     }
 
+    /**
+     * 生命周期函数--监听页面加载
+     */
+    abstract onLoad(options: OnloadOptions): void
+}
+
+export interface Page {
+    
+    /**
+     * 生命周期函数--监听页面初次渲染完成
+     */
+    onReady?(): void
+
+    /**
+     * 生命周期函数--监听页面卸载
+     */
+    onUnload?(): void
+
+    /**
+     * 页面相关事件处理函数--监听用户下拉动作
+     */
+    onPullDownRefresh?(): void
+
+    /**
+     * 页面上拉触底事件的处理函数
+     */
+    onReachBottom?(): void
+
+    /**
+     * 用户点击右上角转发
+     */
+    onShareAppMessage?(options: ShareAppMessageOptions): void
+
+    /**
+     * 页面滚动触发事件的处理函数
+     */
+    onPageScroll?(): void
+
+    /**
+     * 生命周期函数--监听页面显示   
+     */
+    onShow?(): void
+
+    /**
+     * 生命周期函数--监听页面隐藏
+     */
+    onHide?(): void
+}
+
+export interface OnloadOptions {
+    /**
+     * 
+     */
+    query: any
+}
+
+export interface ShareAppMessageOptions {
+
+}
+
+export interface PageOptions {
+    config?: any
 }

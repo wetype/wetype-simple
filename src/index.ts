@@ -1,17 +1,21 @@
-import { AppDecor } from './app.decor'
-import { PageDecor } from './page.decor'
-import { ComponentDecor } from './component.decor'
+// import { AppDecor } from './app.decor'
+// import { PageDecor } from './page.decor'
+// import { ComponentDecor } from './component.decor'
 import { global } from './global'
-import { PageConstr } from './Page'
+import { Page } from './Page'
+import { App } from './App'
+import { Component } from './Component'
 import { wx } from './lib/wx'
 import * as wt from './lib/wetype'
 
 export {
-    AppDecor,
-    ComponentDecor,
-    PageDecor,
+    // AppDecor,
+    // ComponentDecor,
+    // PageDecor,
     global,
-    PageConstr,
+    Page,
+    App,
+    Component,
     wt,
     /**
      * 原生提供的wx对象
