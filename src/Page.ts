@@ -2,7 +2,7 @@ import { Page as nativePage } from './lib/wx'
 import { global } from './global'
 import { isInNode } from './lib/util'
 import { handleConstructor } from './lib/handleConstructor'
-import { ErrMsg } from './lib/common'
+import { ErrMsg, WindowConfig, ObjectLiteral } from './lib/common'
 
 export abstract class Page {
 
@@ -140,5 +140,19 @@ export interface ShareAppMessageRes {
 }
 
 export interface PageOptions {
-    config?: any
+    config?: PageConfig
+}
+
+export interface PageConfig extends WindowConfig {
+
+    /**
+     * 设置为 true 则页面整体不能上下滚动；只在 page.json 中有效，无法在 app.json 中设置该项
+     * default: false
+     */
+    disableScroll?: boolean
+
+    /**
+     * 使用已注册的自定义组件前，首先要在页面的 json 文件中进行引用声明。此时需要提供每个自定义组件的标签名和对应的自定义组件文件路径
+     */
+    usingComponents?: ObjectLiteral
 }

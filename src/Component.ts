@@ -51,7 +51,7 @@ export type Methods = {
 }
 
 export interface ComOptions {
-    config?: any
+    config?: ComponentConfig
     properties?: Properties
     behaviors?: any[]
     options?: any
@@ -67,4 +67,8 @@ export interface ComObj {
     attached?: () => void
     moved?: () => void
     detached?: () => void
+}
+
+export interface ComponentConfig {
+
 }
