@@ -2,6 +2,7 @@ import { Page as nativePage } from './lib/wx'
 import { global } from './global'
 import { isInNode } from './lib/util'
 import { handleConstructor } from './lib/handleConstructor'
+import { ErrMsg } from './lib/common'
 
 export abstract class Page {
 
@@ -75,7 +76,7 @@ export interface Page {
     /**
      * 用户点击右上角转发
      */
-    onShareAppMessage?(options: ShareAppMessageOptions): void
+    onShareAppMessage?(options: ShareAppMessageOptions): ShareAppMessageRes
 
     /**
      * 页面滚动触发事件的处理函数
@@ -101,7 +102,41 @@ export interface OnloadOptions {
 }
 
 export interface ShareAppMessageOptions {
+    /**
+     * 转发事件来源。button：页面内转发按钮；menu：右上角转发菜单
+     */
+    from: string
 
+    /**
+     * 如果 from 值是 button，则 target 是触发这次转发事件的 button，否则为 undefined
+     */
+    target?: any
+}
+
+export interface ShareAppMessageRes {
+    /**
+     * 转发标题	
+     * 默认：当前小程序名称
+     */
+    title?: string
+
+    /**
+     * 转发路径
+     * 当前页面 path ，必须是以 / 开头的完整路径
+     */
+    path?: string
+
+    /**
+     * 自定义图片路径，可以是本地文件路径、代码包文件路径或者网络图片路径，支持PNG及JPG，不传入 imageUrl 则使用默认截图。iOS 显示图片长宽比是 5:4，Android 显示图片长宽比是 215:168。高度超出部分会从底部裁剪。推荐使用 Android 图片长宽比，可保证图片在两个平台都完整显示，其中 iOS 底部会出现一小段白色
+     */
+    imageUrl?: string
+
+    /**
+     * shareTicket 数组，每一项是一个 shareTicket ，对应一个转发对象
+     */
+    success?(cb: (shareTickets: string[]) => void): void
+
+    fail?(cb: (msg: ErrMsg<string>) => void): void
 }
 
 export interface PageOptions {
