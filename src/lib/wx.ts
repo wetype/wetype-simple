@@ -116,6 +116,123 @@ declare namespace wx {
 }
 
 /**
+ * 系统信息
+ */
+declare namespace wx {
+    /**
+     * 获取系统信息
+     */
+    export function getSystemInfo(opts: Options<wxx.GetSystemInfoRes>): void
+
+    /**
+     * 获取系统信息同步接口
+     */
+    export function getSystemInfoSync(): wxx.GetSystemInfoRes
+
+    /**
+     * 判断小程序的API，回调，参数，组件等是否在当前版本可用
+     * String参数说明： 使用${API}.${method}.${param}.${options}或者${component}.${attribute}.${option}方式来调用，
+     * 例如：
+     * ${API} 代表 API 名字
+     * ${method} 代表调用方式，有效值为return, success, object, callback
+     * ${param} 代表参数或者返回值
+     * ${options} 代表参数的可选值
+     * ${component} 代表组件名字
+     * ${attribute} 代表组件属性
+     * ${option} 代表组件属性的可选值
+     */
+    export function canIUse(opts: string): boolean
+}
+
+/**
+ * 网络状态
+ */
+declare namespace wx {
+
+    /**
+     * 获取网络类型
+     */
+    export function getNetworkType(opts: Options<wxx.GetNetworkTypeRes>): void
+
+    /**
+     * 监听网络状态变化
+     */
+    export function onNetworkStatusChange(cb: (isConnected: boolean, networkType: wxx.NetworkType) => void): void
+}
+
+/**
+ * 系统功能
+ */
+declare namespace wx {
+    /**
+     * 设置屏幕亮度。
+     */
+    export function setScreenBrightness(opts: wxx.SetScreenBrightnessOpts): void
+
+    /**
+     * 获取屏幕亮度
+     */
+    export function getScreenBrightness(opts: Options<wxx.GetScreenBrightnessRes>): void
+
+    /**
+     * 使手机发生较长时间的振动（400ms）
+     */
+    export function vibrateLong(opts: Options<void>): void
+
+    /**
+     * 使手机发生较短时间的振动（15ms）
+     * 仅在 iPhone7/iPhone7Plus 及 Android 机型生效
+     */
+    export function vibrateShort(opts: Options<void>): void
+
+    /**
+     * 拨打电话
+     */
+    export function makePhoneCall(opts: wxx.MakePhoneCallOpts): void
+
+    /**
+     * 调起客户端扫码界面，扫码成功后返回对应的结果
+     */
+    export function scanCode(opts: wxx.ScanCodeOpts): void
+
+    /**
+     * 设置系统剪贴板的内容
+     */
+    export function setClipboardData(opts: wxx.SetClipboardDataOpts): void
+
+    /**
+     * 获取系统剪贴板内容
+     */
+    export function getClipboardData(opts: Options<wxx.SetClipboardDataRes>): void
+
+    /**
+     * 监听用户主动截屏事件，用户使用系统截屏按键截屏时触发此事件
+     */
+    export function onUserCaptureScreen(cb: () => void): void
+
+    /**
+     * 调用后，用户可以选择将该表单以“新增联系人”或“添加到已有联系人”的方式，写入手机系统通讯录，完成手机通讯录联系人和联系方式的增加。
+     */
+    export  function addPhoneContact(opts: wxx.AddPhoneContactOpts): void
+}
+
+/**
+ * 下拉刷新
+ */
+declare namespace wx {
+
+    /**
+     * 开始下拉刷新，调用后触发下拉刷新动画，效果与用户手动下拉刷新一致
+     */
+    export function startPullDownRefresh(opts: Options<wxx.StartPullDownRefreshRes>): void
+
+    /**
+     * 停止当前页面下拉刷新
+     */
+    export function stopPullDownRefresh(): void
+}
+
+/**
  * 交互反馈
  */
 declare namespace wx {
@@ -130,7 +247,6 @@ declare namespace wx {
      * ​显示操作菜单
      */
     export function showActionSheet(opts: wxx.ShowActionSheetOpts): void
-
 }
 
 /**

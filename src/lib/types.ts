@@ -533,6 +533,330 @@ export interface MapContext {
     getScale: Options<Scale>
 }
 
+export interface GetSystemInfoRes {
+    /**
+     * 手机品牌
+     */
+    brand: string
+
+    /**
+     * 手机型号
+     */
+    model: string
+
+    /**
+     * 设备像素比
+     */
+    pixelRatio: number | string
+
+    /**
+     * 屏幕宽度
+     */
+    screenWidth: number
+
+    /**
+     * 屏幕高度
+     */
+    screenHeight: number
+
+    /**
+     * 可使用窗口宽度
+     */
+    windowWidth: number
+
+    /**
+     * 可使用窗口高度
+     */
+    windowHeight: number
+
+    /**
+     * 微信设置的语言
+     */
+    language: string
+
+    /**
+     * 微信版本号
+     */
+    version: string | number
+
+    /**
+     * 操作系统版本
+     */
+    system: string
+
+    /**
+     * 客户端平台
+     */
+    platform: string
+
+    /**
+     * 用户字体大小设置。以“我-设置-通用-字体大小”中的设置为准，单位：px
+     */
+    fontSizeSetting: number
+
+    /**
+     * 客户端基础库版本
+     */
+    SDKVersion: string | number
+}
+
+export type NetworkType = 'wifi' | '2g' | '3g' | '4g' | 'unknown' | 'none'
+
+export interface GetNetworkTypeRes {
+    /**
+     * 网络类型
+     * wifi/2g/3g/4g/unknown(Android下不常见的网络类型)/none(无网络)
+     */
+    networkType: NetworkType
+}
+
+export interface SetScreenBrightnessOpts extends Options<void> {
+    /**
+     * 屏幕亮度值，范围 0~1，0 最暗，1 最亮
+     */
+    value: number
+}
+
+export interface GetScreenBrightnessRes {
+    /**
+     * 	屏幕亮度值，范围 0~1，0 最暗，1 最亮
+     */
+    value: number
+}
+
+export interface MakePhoneCallOpts extends Options<void> {
+    /**
+     * 需要拨打的电话号码
+     */
+    phoneNumber: string
+}
+
+export interface ScanCodeOpts extends Options<ScanCodeRes> {
+    /**
+     * 是否只能从相机扫码，不允许从相册选择图片
+     */
+    onlyFromCamera?: boolean
+}
+
+export interface ScanCodeRes {
+    /**
+     * 所扫码的内容
+     */
+    result: string
+
+    /**
+     * 所扫码的类型
+     */
+    scanType: string
+
+    /**
+     * 所扫码的字符集
+     */
+    charSet: string
+
+    /**
+     * 当所扫的码为当前小程序的合法二维码时，会返回此字段，内容为二维码携带的 path
+     */
+    path: string
+}
+
+export interface SetClipboardDataOpts extends Options<void> {
+    /**
+     * 需要设置的内容
+     */
+    data: string
+}
+
+export interface SetClipboardDataRes {
+    /**
+     * 剪贴板的内容
+     */
+    data: string
+}
+
+export interface AddPhoneContactOpts {
+
+    /**
+     * 头像本地文件路径
+     */
+    photoFilePath?: string
+
+    /**
+     * 昵称
+     */
+    nickName?: string
+
+    /**
+     * 姓氏
+     */
+    lastName?: string
+
+    /**
+     * 中间名
+     */
+    middleName?: string
+
+    /**
+     * 名字
+     */
+    firstName: string
+
+    /**
+     * 备注
+     */
+    remark?: string
+
+    /**
+     * 手机号
+     */
+    mobilePhoneNumber?: string
+
+    /**
+     * 微信号
+     */
+    weChatNumber?: string
+
+    /**
+     * 联系地址国家
+     */
+    addressCountry?: string
+
+    /**
+     * 联系地址省份
+     */
+    addressState?: string
+
+    /**
+     * 联系地址城市
+     */
+    addressCity?: string
+
+    /**
+     * 联系地址街道
+     */
+    addressStreet?: string
+
+    /**
+     * 联系地址邮政编码
+     */
+    addressPostalCode?: string
+
+    /**
+     * 公司
+     */
+    organization?: string
+
+    /**
+     * 职位
+     */
+    title?: string
+
+    /**
+     * 工作传真
+     */
+    workFaxNumber?: string
+
+    /**
+     * 工作电话
+     */
+    workPhoneNumber?: string
+
+    /**
+     * 公司电话
+     */
+    hostNumber?: string
+
+    /**
+     * 电子邮件
+     */
+    email?: string
+
+    /**
+     * 网站
+     */
+    url?: string
+    
+    /**
+     * 工作地址国家
+     */
+    workAddressCountry?: string
+
+    /**
+     * 工作地址省份
+     */
+    workAddressState?: string
+
+    /**
+     * 工作地址城市
+     */
+    workAddressCity?: string
+
+    /**
+     * 工作地址街道
+     */
+    workAddressStreet?: string
+
+    /**
+     * 工作地址邮政编码
+     */
+    workAddressPostalCode?: string
+
+    /**
+     * 住宅传真
+     */
+    homeFaxNumber?: string
+
+    /**
+     * 住宅电话
+     */
+    homePhoneNumber?: string
+
+    /**
+     * 住宅地址国家
+     */
+    homeAddressCountry?: string
+
+    /**
+     * 住宅地址省份
+     */
+    homeAddressState?: string
+
+    /**
+     * 住宅地址城市
+     */
+    homeAddressCity?: string
+
+    /**
+     * 住宅地址街道
+     */
+    homeAddressStreet?: string
+
+    /**
+     * 住宅地址邮政编码
+     */
+    homeAddressPostalCode?: string
+
+    /**
+     * 接口调用成功
+     */
+    success?(cb: (res: ErrMsg<'ok'>) => void): void
+
+    /**
+     * 
+     */
+    fail?(cb: (res: ErrMsg<string>) => void): void
+
+    /**
+     * 
+     */
+    complete(cb: () => void): void
+
+}
+
+export interface StartPullDownRefreshRes {
+    errMsg: ErrMsg<string>
+}
+
 export interface ShowModalOpts extends Options<ShowModalRes> {
     /**
      * 提示的标题
@@ -866,7 +1190,7 @@ export interface CheckIsSupportSoterAuthenticationRes {
     errMsg: string
 }
 
-export interface SetEnableDebugOpts extends Options<ErrMsg> {
+export interface SetEnableDebugOpts extends Options<ErrMsg<string>> {
     /**
      * 是否打开调试
      */

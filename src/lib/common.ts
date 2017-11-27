@@ -8,9 +8,9 @@ export interface ObjectLiteral {
     [key: string]: any
 }
 
-export interface ErrMsg {
+export interface ErrMsg<T> {
     /**
      * 调用结果
      */
-    errMsg: string
+    errMsg: T
 }
