@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "rm -rf dist && rollup -c && tsc"
+    "start": "rm -rf dist && rollup -c && tsc"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.85",

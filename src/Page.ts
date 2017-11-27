@@ -8,6 +8,14 @@ export abstract class Page {
 
     type = 'page'
 
+    /**
+     * 获取到当前页面的路径
+     */
+    route: string
+
+    /**
+     * 初始化Page
+     */
     static decor(pageOptions?: PageOptions) {
         return function(pageConstructor: any) {
             if (isInNode) {
@@ -23,6 +31,7 @@ export abstract class Page {
             }
         }
     }
+
 
     /**
      * 用于将数据从逻辑层发送到视图层（异步），同时改变对应的 this.data 的值（同步）。

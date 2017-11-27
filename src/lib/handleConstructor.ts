@@ -70,15 +70,11 @@ export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[]) =
                     if (name === 'onLaunch') {
 
                     }
-
-
-
                 } 
                 //
                 else if (type === 'component') {
 
                 }
-
 
                 proto[name].call(this, ...args)
             }
@@ -86,7 +82,8 @@ export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[]) =
     })
 
     Object.keys(ins).forEach(name => {
-        if (typeof ins[name] !== 'function') {
+        // 排除route 和 type function
+        if (typeof ins[name] !== 'function' && name !== 'route') {
             data[name] = ins[name]
         }
     })
