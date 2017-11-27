@@ -5,6 +5,8 @@ declare const App: Function
 declare const Page: Function
 declare const Component: Function
 
+declare const getCurrentPages
+
 /**
  * #网络
  */
