@@ -4,6 +4,10 @@ import * as wxx from './types'
 declare const App: Function
 declare const Page: Function
 declare const Component: Function
+/**
+ * behaviors 是用于组件间代码共享的特性，类似于一些编程语言中的mixins或traits
+ */
+declare const Behavior: Function
 
 /**
  * 获取到小程序实例
@@ -446,4 +450,5 @@ export {
     App,
     Page,
     Component,
+    Behavior
 }

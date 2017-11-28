@@ -15,28 +15,45 @@ export abstract class Component {
             } else {
                 let lifeCycleMethodNames = ['attached', 'moved', 'detached', 'created', 'ready']
                 let { data, methods, lifeCycleMethods } = handleConstructor(comConstructor, lifeCycleMethodNames)
-                let properties
-                let behaviors
-                let options
-                if (comOptions) {
-                    properties = comOptions.properties
-                    behaviors = comOptions.behaviors
-                    options = comOptions.options
-                }
     
+                if (comOptions) {
+                    delete comOptions.config
+                }
+
                 nativeComponent({
-                    properties,
-                    behaviors,
                     data,
                     methods,
                     ...lifeCycleMethods,
-                    options
+                    ...comOptions
                 })
     
             }
         }
     }
+
+    /**
+     * 用于将数据从逻辑层发送到视图层（异步），同时改变对应的 this.data 的值（同步）。
+     */
+    setData(arg: any): void {
+        
+    }
+
+    /**
+     * 异步setData
+     */
+    setDataAsync(arg: any): Promise<void> {
+        return Promise.resolve()
+    }
     
+}
+
+export interface Component {
+
+    // 生命周期函数
+    attached?(): void
+    moved?(): void
+    detached?(): void
+
 }
 
 export type Properties = {
