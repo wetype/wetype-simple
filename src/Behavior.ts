@@ -52,7 +52,7 @@ export interface BehaviorOptions {
     /**
      * 
      */
-    behaviors: any[]
+    behaviors?: Behavior[]
 
     properties?: Properties
 }

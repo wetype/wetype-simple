@@ -1,6 +1,7 @@
 import { isInNode } from './lib/util'
 import { handleConstructor } from './lib/handleConstructor'
 import { Component as nativeComponent } from './lib/wx'
+import { Behavior } from './Behavior'
 
 export abstract class Component {
 
@@ -70,7 +71,7 @@ export type Methods = {
 export interface ComOptions {
     config?: ComponentConfig
     properties?: Properties
-    behaviors?: any[]
+    behaviors?: Behavior[]
     options?: any
 }
 
