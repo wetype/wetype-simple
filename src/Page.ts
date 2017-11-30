@@ -14,6 +14,11 @@ export abstract class Page {
     route: string
 
     /**
+     * 数据
+     */
+    data: Page
+
+    /**
      * 初始化Page
      */
     static decor(pageOptions?: PageOptions) {

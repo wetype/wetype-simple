@@ -18,7 +18,13 @@ export abstract class Component {
                 let { data, methods, lifeCycleMethods } = handleConstructor(comConstructor, lifeCycleMethodNames)
     
                 if (comOptions) {
+                    // 去掉config
                     delete comOptions.config
+                    // 处理behaviors
+                    let { behaviors } = comOptions
+                    if (behaviors) {
+                        comOptions.behaviors = behaviors.map(el => el.behavior)
+                    }
                 }
 
                 nativeComponent({
@@ -71,7 +77,7 @@ export type Methods = {
 export interface ComOptions {
     config?: ComponentConfig
     properties?: Properties
-    behaviors?: Behavior[]
+    behaviors?: any[]
     options?: any
 }
 

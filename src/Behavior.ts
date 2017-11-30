@@ -15,7 +15,7 @@ export abstract class Behavior {
             let lifeCycleMethodNames = ['attached']
             let { data, methods, lifeCycleMethods } = handleConstructor(constr, lifeCycleMethodNames)
 
-            nativeBehavior({
+            constr.behavior = nativeBehavior({
                 data,
                 methods,
                 ...lifeCycleMethods,
@@ -44,7 +44,7 @@ export interface Behavior {
     /**
      * 生命周期函数
      */
-    attatched?(): void
+    attached?(): void
 
 }
 
