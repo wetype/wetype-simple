@@ -100,6 +100,55 @@ declare namespace wx {
  */
 declare namespace wx {
 
+    /**
+     * 将数据存储在本地缓存中指定的 key 中，会覆盖掉原来该 key 对应的内容，这是一个异步接口
+     */
+    export function setStorage(opts: wxx.SetStorageOpts): void
+
+    /**
+     * 将 data 存储在本地缓存中指定的 key 中，会覆盖掉原来该 key 对应的内容，这是一个同步接口
+     */
+    export function setStorageSync(key: string, data: ObjectLiteral | string): void
+
+    /**
+     * 从本地缓存中异步获取指定 key 对应的内容。
+     */
+    export function getStorage(opts: wxx.GetStorageOpts): void
+
+    /**
+     * 从本地缓存中同步获取指定 key 对应的内容。
+     */
+    export function getStorageSync(key: string): any
+
+    /**
+     * 异步获取当前storage的相关信息
+     */
+    export function getStorageInfo(opts: Options<wxx.GetStorageInfoRes>)
+
+    /**
+     * 同步获取当前storage的相关信息
+     */
+    export function getStorageInfoSync(): wxx.GetStorageInfoRes
+
+    /**
+     * 从本地缓存中异步移除指定 key 。
+     */
+    export function removeStorage(opts: wxx.RemoveStorageOpts): void
+    
+    /**
+     * 从本地缓存中同步移除指定 key 。
+     */
+    export function removeStorageSync(key: string): void
+
+    /**
+     * 清理本地数据缓存
+     */
+    export function clearStorage(): void
+
+    /**
+     * 同步清理本地数据缓存
+     */
+    export function clearStorageSync(): void
 }
 
 /**

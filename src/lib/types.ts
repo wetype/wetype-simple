@@ -333,6 +333,44 @@ export interface ChooseVideoRes {
     width: number
 }
 
+export interface SetStorageOpts extends Options<void> {
+    key: string
+    data: ObjectLiteral | string
+}
+
+export interface GetStorageOpts extends Options<GetStorageRes> {
+    key: string
+}
+
+export interface GetStorageRes {
+    data: any
+}
+
+export interface GetStorageInfoRes {
+    /**
+     * 当前storage中所有的key
+     */
+    keys: string[]
+
+    /**
+     * 当前占用的空间大小, 单位kb
+     */
+    currentSize: number
+
+    /**
+     * 限制的空间大小，单位kb
+     */
+    limitSize: number
+}
+
+export interface RemoveStorageOpts extends Options<RemoveStorageRes> {
+    key: string
+}
+
+export interface RemoveStorageRes {
+
+}
+
 export interface GetLocationOpts extends Options<GetLocationRes> {
     /**
      * 默认为 wgs84 返回 gps 坐标，gcj02 返回可用于wx.openLocation的坐标
