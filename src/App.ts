@@ -2,7 +2,7 @@ import { global } from './global'
 import { isInNode } from './lib/util'
 import { handleConstructor } from './lib/handleConstructor'
 import { App as nativeApp }  from './lib/wx'
-import { WindowConfig } from './lib/common'
+import { WindowConfig } from './types/common'
 
 export interface OnLaunchOptions {
     
@@ -64,10 +64,12 @@ export abstract class App {
  
     type = 1
 
-    abstract onLaunch(options: OnLaunchOptions): void
+    // abstract onLaunch(): void
 }
 
 export interface App {
+
+    onLaunch(options: OnLaunchOptions): void
 
     onShow?(options: OnLaunchOptions): void
     

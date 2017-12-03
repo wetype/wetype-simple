@@ -1,5 +1,5 @@
-import { Options, ObjectLiteral, ErrMsg } from './common'
-import * as wxx from './types'
+import { Options, ObjectLiteral, ErrMsg } from '../types/common'
+import * as wxx from '../types/types'
 
 declare const App: Function
 declare const Page: Function

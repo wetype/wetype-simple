@@ -1,6 +1,6 @@
 import { wx } from './wx'
 import { promisify } from '../lib/util'
-import * as wxTypes from './types'
+import * as wxTypes from '../types/types'
 
 /**
  * rpx 转 px
@@ -84,3 +84,12 @@ export const chooseImage = (opts: wxTypes.ChooseImageOpts): Promise<wxTypes.Choo
 
 export const getLocation = (opts: wxTypes.GetLocationOpts): Promise<wxTypes.GetLocationRes> =>
     promisify<wxTypes.GetLocationRes>(opts, wx.getLocation)
+
+export const getStorage = (opts: wxTypes.GetStorageOpts): Promise<wxTypes.GetStorageRes> =>
+    promisify<wxTypes.GetStorageRes>(opts, wx.getStorage)
+
+export const setStorage = (opts: wxTypes.SetStorageOpts): Promise<void> =>
+    promisify<void>(opts, wx.setStorage)
+
+export const login = (): Promise<wxTypes.LoginRes> =>
+    promisify<wxTypes.LoginRes>(undefined, wx.login)

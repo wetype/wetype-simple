@@ -2,7 +2,7 @@ import { Page as nativePage } from './lib/wx'
 import { global } from './global'
 import { isInNode } from './lib/util'
 import { handleConstructor } from './lib/handleConstructor'
-import { ErrMsg, WindowConfig, ObjectLiteral } from './lib/common'
+import { ErrMsg, WindowConfig, ObjectLiteral } from './types/common'
 
 export abstract class Page {
 
