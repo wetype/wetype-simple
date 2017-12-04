@@ -306,10 +306,29 @@ declare namespace wx {
 declare namespace wx {
 
     /**
+     * 显示消息提示框
+     */
+    export function showtToast(opts: wxx.ShowToastOpts): void
+
+    /**
+     * 隐藏消息提示框
+     */
+    export function hideToast(): void
+
+    /**
      * 显示模态弹窗
-     * @param opts 
      */
     export function showModal(opts: wxx.ShowModalOpts): void
+
+    /**
+     * 显示 loading 提示框, 需主动调用 wx.hideLoading 才能关闭提示框
+     */
+    export function showLoading(opts: wxx.ShowLoadingOpts): void
+
+    /**
+     * 隐藏 loading 提示框
+     */
+    export function hideLoading(): void
 
     /**
      * ​显示操作菜单
@@ -370,7 +389,7 @@ declare namespace wx {
      * 关闭当前页面，返回上一页面或多级页面。可通过 getCurrentPages()) 获取当前的页面栈，决定需要返回几层
      * tip: wx.navigateTo 和 wx.redirectTo 不允许跳转到 tabbar 页面，只能用 wx.switchTab 跳转到 tabbar 页面
      */
-    export function navigateBack(opts: wxx.NavigateBackOpts): void
+    export function navigateBack(opts?: wxx.NavigateBackOpts): void
 }
 
 /**

@@ -1,4 +1,4 @@
-import { Properties } from './Component'
+import { Properties } from './types/ComponentTypes'
 import { isInNode } from './lib/util'
 import { handleConstructor } from './lib/handleConstructor'
 import { Behavior as nativeBehavior } from './lib/wx'

@@ -893,7 +893,49 @@ export interface AddPhoneContactOpts {
 
 export interface StartPullDownRefreshRes {
     errMsg: ErrMsg<string>
-}   
+}
+
+export interface ShowToastOpts extends Options<void> {
+    /**
+     * 提示的内容
+     */
+    title: string
+
+    /**
+     * 图标，有效值 "success", "loading"
+     */
+    icon?: string
+
+    /**
+     * 自定义图标的本地路径，image 的优先级高于 icon
+     */
+    images?: string
+
+    /**
+     * 提示的延迟时间，单位毫秒
+     * 默认：1500
+     */
+    duration?: number
+
+    /**
+     * 是否显示透明蒙层，防止触摸穿透
+     * 默认：false
+     */
+    mask?: boolean
+}
+
+export interface ShowLoadingOpts extends Options<void> {
+    /**
+     * 提示的内容
+     */
+    title: string
+
+    /**
+     * 是否显示透明蒙层，防止触摸穿透
+     * 默认：false
+     */
+    mask?: boolean
+}
 
 export interface ShowModalOpts extends Options<ShowModalRes> {
     /**
@@ -1006,7 +1048,7 @@ export interface NavigateBackOpts extends Options<void> {
      * 返回的页面数，如果 delta 大于现有页面数，则返回到首页。
      * 默认 1
      */
-    delta: number
+    delta?: number
 }
 
 export interface LoginRes {

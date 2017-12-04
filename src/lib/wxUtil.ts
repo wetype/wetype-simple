@@ -92,4 +92,10 @@ export const setStorage = (opts: wxTypes.SetStorageOpts): Promise<void> =>
     promisify<void>(opts, wx.setStorage)
 
 export const login = (): Promise<wxTypes.LoginRes> =>
-    promisify<wxTypes.LoginRes>(undefined, wx.login)
+    promisify<wxTypes.LoginRes>({}, wx.login)
+
+export const showToast = (opts: wxTypes.ShowToastOpts): Promise<void> =>
+    promisify<void>(opts, wx.showtToast)
+
+export const showLoading = (opts: wxTypes.ShowLoadingOpts): Promise<void> =>
+    promisify<void>(opts, wx.showLoading)
