@@ -8,6 +8,8 @@ export abstract class Component {
 
     type = 'component'
 
+    data: any
+
     static decor(comOptions?: ComOptions) {
         return function(comConstructor: any) {
             if (isInNode) {

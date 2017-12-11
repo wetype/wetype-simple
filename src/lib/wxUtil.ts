@@ -82,8 +82,8 @@ export const uploadFile = (options: wxTypes.UploadFileOpts): wxTypes.UploadFileR
 export const chooseImage = (opts: wxTypes.ChooseImageOpts): Promise<wxTypes.ChooseImageRes> => 
     promisify<wxTypes.ChooseImageRes>(opts, wx.chooseImage)
 
-export const getLocation = (opts: wxTypes.GetLocationOpts): Promise<wxTypes.GetLocationRes> =>
-    promisify<wxTypes.GetLocationRes>(opts, wx.getLocation)
+export const getLocation = (opts?: wxTypes.GetLocationOpts): Promise<wxTypes.GetLocationRes> =>
+    promisify<wxTypes.GetLocationRes>(opts || {}, wx.getLocation)
 
 export const getStorage = (opts: wxTypes.GetStorageOpts): Promise<wxTypes.GetStorageRes> =>
     promisify<wxTypes.GetStorageRes>(opts, wx.getStorage)
@@ -99,3 +99,9 @@ export const showToast = (opts: wxTypes.ShowToastOpts): Promise<void> =>
 
 export const showLoading = (opts: wxTypes.ShowLoadingOpts): Promise<void> =>
     promisify<void>(opts, wx.showLoading)
+
+export const getUserInfo = (opts: wxTypes.GetUserInfoOpts): Promise<wxTypes.GetUserInfoRes> =>
+    promisify<wxTypes.GetUserInfoRes>(opts, wx.getUserInfo)
+
+// export const getLocation = (opts: wxTypes.GetLocationOpts): Promise<wxTypes.GetLocationRes> =>
+//     promisify<wxTypes.GetLocationRes>(opts, wx.getLocation)

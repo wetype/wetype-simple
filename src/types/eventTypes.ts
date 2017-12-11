@@ -80,6 +80,6 @@ export interface GetUserInfoEvent extends WxEvent {
         iv: string
         rawData: string
         signature: string
+        userInfo: UserInfo
     }
-    userInfo: UserInfo
 }

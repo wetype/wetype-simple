@@ -17,7 +17,7 @@ export abstract class Page {
     /**
      * 数据
      */
-    data: Page
+    data: any
 
     /**
      * 初始化Page
