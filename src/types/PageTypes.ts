@@ -1,48 +1,5 @@
 import { ErrMsg, WindowConfig, ObjectLiteral } from './common'
 
-export interface Page {
-    
-    /**
-     * 生命周期函数--监听页面初次渲染完成
-     */
-    onReady?(): void
-
-    /**
-     * 生命周期函数--监听页面卸载
-     */
-    onUnload?(): void
-
-    /**
-     * 页面相关事件处理函数--监听用户下拉动作
-     */
-    onPullDownRefresh?(): void
-
-    /**
-     * 页面上拉触底事件的处理函数
-     */
-    onReachBottom?(): void
-
-    /**
-     * 用户点击右上角转发
-     */
-    onShareAppMessage?(options: ShareAppMessageOptions): ShareAppMessageRes
-
-    /**
-     * 页面滚动触发事件的处理函数
-     */
-    onPageScroll?(): void
-
-    /**
-     * 生命周期函数--监听页面显示   
-     */
-    onShow?(): void
-
-    /**
-     * 生命周期函数--监听页面隐藏
-     */
-    onHide?(): void
-}
-
 export interface OnloadOptions {
     /**
      * 
@@ -89,7 +46,10 @@ export interface ShareAppMessageRes {
 }
 
 export interface PageOptions {
+    
     config?: PageConfig
+
+    mixins?: any[]
 }
 
 export interface PageConfig extends WindowConfig {
