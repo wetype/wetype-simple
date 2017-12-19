@@ -61,25 +61,24 @@ export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[]) =
         if (typeof proto[name] === 'function' && name !== 'constructor') {
             let isLifeCycleMethod = lifeCycleMethodNames.indexOf(name) !== -1
             let key = isLifeCycleMethod ? lifeCycleMethods : methods
-            key[name] = function(this: PageContext, ...args) {
 
-                // 初始化 dataCache
-                this.dataCache = {}
-
-                for (let p in this.data) {
-
-                    Object.defineProperty(this, p, {
-                        set: (v) => {
-                            console.log(p, v)
-                            this.dataCache[p] = v
-                        },
-                        get: () => this.data[p]
-                    })
-
-                }
-
-                //
-                if (type === 'page') {
+            if (name === 'onLoad') {
+                
+                key['onLoad'] = function(this: PageContext, ...args) {
+                    // 初始化 dataCache
+                    this.dataCache = {}
+    
+                    for (let p in this.data) {
+    
+                        Object.defineProperty(this, p, {
+                            set: (v) => {
+                                this.dataCache[p] = v
+                            },
+                            get: () => this.data[p]
+                        })
+    
+                    }
+    
                     // promisify setData
                     if (this.setData) {
                         this.setDataAsync = (arg) => {
@@ -96,12 +95,22 @@ export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[]) =
                         return Promise.resolve()
                     }
 
-                } 
-                
-                proto[name].call(this, ...args)
+                    proto[name].call(this, ...args)
 
-                type === 'page' && this.applyData()
+                    this.applyData()
+    
+                }
+
+            } else {
+
+                key[name] = function(this: PageContext, ...args) {
+    
+                    proto[name].call(this, ...args)
+    
+                    type === 'page' && this.applyData()
+                }
             }
+
         }
     })
 
