@@ -28,7 +28,7 @@ export abstract class Page {
                 pageConstructor.config = pageOptions && pageOptions.config
             } else {
                 let lifeCycleMethodNames = ['onLoad', 'onShow', 'onUnload']
-                let { methods, lifeCycleMethods, data } = handleConstructor(pageConstructor, lifeCycleMethodNames)
+                let { methods, lifeCycleMethods, data } = handleConstructor(pageConstructor, lifeCycleMethodNames, pageOptions && pageOptions.mixins)
                 nativePage({
                     data,
                     ...methods,
@@ -38,28 +38,6 @@ export abstract class Page {
         }
     }
 
-
-    /**
-     * 用于将数据从逻辑层发送到视图层（异步），同时改变对应的 this.data 的值（同步）。
-     */
-    setData(arg: any): void {
-
-    }
-
-    // /**
-    //  * 异步setData
-    //  */
-    // setDataAsync(arg: any): Promise<void> {
-    //     return Promise.resolve()
-    // }
-
-    // /**
-    //  * 
-    //  */
-    // applyData(): Promise<void> {
-    //     return Promise.resolve()
-    // }
-
     /**
      * 生命周期函数--监听页面加载
      */
@@ -67,6 +45,11 @@ export abstract class Page {
 }
 
 export interface Page {
+
+    /**
+     * 用于将数据从逻辑层发送到视图层（异步），同时改变对应的 this.data 的值（同步）。
+     */
+    setData(arg: any): void
     
     /**
      * 异步setData

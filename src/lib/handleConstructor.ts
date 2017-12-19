@@ -44,7 +44,14 @@ export interface AppOnLaunchParams {
 
 }
 
-export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[]) => {
+export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[], mixins?: any[]) => {
+
+    let data: any = {}
+
+    if (mixins) {
+        data = applyMixins(Constr, mixins, lifeCycleMethodNames)
+    }
+
     let ins = new Constr
     let proto = Constr.prototype
 
@@ -55,7 +62,6 @@ export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[]) =
 
     let methods: any = {}
     let lifeCycleMethods: any = {}
-    let data: any = {}
 
     Object.getOwnPropertyNames(proto).forEach(name => {
         if (typeof proto[name] === 'function' && name !== 'constructor') {
@@ -123,3 +129,49 @@ export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[]) =
 
     return { methods, lifeCycleMethods, data }
 }
+
+function applyMixins(derivedCtor: any, baseCtors: any[], lifeCycleMethodNames: string[]) {
+    let data = {}
+    baseCtors.forEach(baseCtor => {
+        let ins = new baseCtor
+        Object.keys(ins).forEach(name => {
+            // 排除route 和 type function
+            if (typeof ins[name] !== 'function' && name !== 'route') {
+                data[name] = ins[name]
+            }
+        })
+        Object.getOwnPropertyNames(baseCtor.prototype).forEach(name => {
+            if (lifeCycleMethodNames.indexOf(name) === -1) {
+                derivedCtor.prototype[name] = baseCtor.prototype[name]
+            }
+        })
+    })
+    return data
+}
+
+// function handleMixins(mixins: any[], methods: any) {
+
+//     let Constr = mixins[0]
+//     let ins = new Constr
+//     let proto = Constr.prototype
+
+//     Object.getOwnPropertyNames(proto).forEach(name => {
+//         if (typeof proto[name] === 'function' && name !== 'constructor') {
+
+//             methods[name] = proto[name]
+
+//         }
+//     })
+
+//     Object.getOwnPropertyNames(methods).forEach(name => {
+
+
+
+
+//     })
+
+//     return mixins.length > 0 
+//         ? handleMixins(mixins.slice(1), methods)
+//         : methods
+
+// }
