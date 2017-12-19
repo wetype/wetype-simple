@@ -46,19 +46,19 @@ export abstract class Page {
 
     }
 
-    /**
-     * 异步setData
-     */
-    setDataAsync(arg: any): Promise<void> {
-        return Promise.resolve()
-    }
+    // /**
+    //  * 异步setData
+    //  */
+    // setDataAsync(arg: any): Promise<void> {
+    //     return Promise.resolve()
+    // }
 
-    /**
-     * 
-     */
-    apply(): Promise<void> {
-        return Promise.resolve()
-    }
+    // /**
+    //  * 
+    //  */
+    // applyData(): Promise<void> {
+    //     return Promise.resolve()
+    // }
 
     /**
      * 生命周期函数--监听页面加载
@@ -69,7 +69,22 @@ export abstract class Page {
 export interface Page {
     
     /**
+     * 异步setData
+     */
+    setDataAsync(arg: any): Promise<void>
+
+    /**
+     * 
+     */
+    applyData(): Promise<void>
+    
+    
+    /**
      * 生命周期函数--监听页面初次渲染完成
+    /**
+     * 
+     * 
+     * @memberof Page
      */
     onReady?(): void
 

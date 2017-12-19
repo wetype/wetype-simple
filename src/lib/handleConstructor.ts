@@ -26,6 +26,16 @@ export interface PageContext {
      * setData异步形式
      */
     setDataAsync(arg: any): Promise<void>
+
+    /**
+     * setData缓存
+     */
+    dataCache: any
+
+    /**
+     * 使dataCache中的数据生效
+     */
+    applyData(): Promise<void>
 }
 
 export interface AppOnLaunchParams {
@@ -52,9 +62,22 @@ export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[]) =
             let isLifeCycleMethod = lifeCycleMethodNames.indexOf(name) !== -1
             let key = isLifeCycleMethod ? lifeCycleMethods : methods
             key[name] = function(this: PageContext, ...args) {
+
+                // 初始化 dataCache
+                this.dataCache = {}
+
                 for (let p in this.data) {
-                    this[p] = this.data[p]
+
+                    Object.defineProperty(this, p, {
+                        set: (v) => {
+                            console.log(p, v)
+                            this.dataCache[p] = v
+                        },
+                        get: () => this.data[p]
+                    })
+
                 }
+
                 //
                 if (type === 'page') {
                     // promisify setData
@@ -63,20 +86,21 @@ export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[]) =
                             return new Promise(resolve => this.setData(arg, resolve))
                         }
                     }
-                } 
-                //
-                else if (type === 'app') {
 
-                    if (name === 'onLaunch') {
-
+                    this.applyData = () => {
+                        if (Object.keys(this.dataCache).length) {
+                            let promise = this.setDataAsync(this.dataCache)
+                            this.dataCache = {}
+                            return promise
+                        }
+                        return Promise.resolve()
                     }
+
                 } 
-                //
-                else if (type === 'component') {
-
-                }
-
+                
                 proto[name].call(this, ...args)
+
+                type === 'page' && this.applyData()
             }
         }
     })
