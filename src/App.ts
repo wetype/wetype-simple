@@ -16,8 +16,6 @@ export abstract class App {
                 let lifeCycleMethodNames = ['onLaunch', 'onShow']
                 let { methods, lifeCycleMethods } = handleConstructor(appConstructor, lifeCycleMethodNames)
                 
-                lifeCycleMethods
-    
                 nativeApp({
                     ...methods,
                     ...lifeCycleMethods
