@@ -103,5 +103,5 @@ export const showLoading = (opts: wxTypes.ShowLoadingOpts): Promise<void> =>
 export const getUserInfo = (opts: wxTypes.GetUserInfoOpts): Promise<wxTypes.GetUserInfoRes> =>
     promisify<wxTypes.GetUserInfoRes>(opts, wx.getUserInfo)
 
-// export const getLocation = (opts: wxTypes.GetLocationOpts): Promise<wxTypes.GetLocationRes> =>
-//     promisify<wxTypes.GetLocationRes>(opts, wx.getLocation)
+export const showActionSheet = (opts: wxTypes.ShowActionSheetOpts): Promise<wxTypes.ShowActionSheetRes> =>
+    promisify<wxTypes.ShowActionSheetRes>(opts, wx.showActionSheet)

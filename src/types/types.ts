@@ -995,7 +995,7 @@ export interface ShowActionSheetOpts extends Options<ShowActionSheetRes> {
     /**
      * 按钮的文字颜色，默认为"#000000"
      */
-    itemColor: string
+    itemColor?: string
 }
 
 export interface ShowActionSheetRes {
