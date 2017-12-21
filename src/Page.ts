@@ -38,6 +38,18 @@ export abstract class Page {
         }
     }
 
+    static eventMethods = {}
+
+    static event(proto: Object, methodName: string) {
+        Page.eventMethods[methodName] = proto[methodName]
+    }
+
+    static watchMethods = {}
+
+    static watch(proto: Object, methodName: string) {
+        Page.watchMethods[methodName] = proto[methodName]
+    }
+
     /**
      * 生命周期函数--监听页面加载
      */
