@@ -9,3 +9,11 @@ export const promisify = <T>(options, func) => {
         func(options)
     })
 }
+
+export const inArray = (arr: any[], str: string) => {
+    return arr.indexOf(str) !== -1
+}
+
+export const isFunc = (obj: any) => {
+    return typeof obj === 'function'
+}

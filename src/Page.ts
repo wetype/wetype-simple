@@ -12,7 +12,7 @@ export abstract class Page {
     /**
      * 获取到当前页面的路径
      */
-    route: string
+    route: any
 
     /**
      * 数据
@@ -34,20 +34,20 @@ export abstract class Page {
                     ...methods,
                     ...lifeCycleMethods
                 })
-            }
+            } 
         }
     }
 
-    static eventMethods = {}
+    static eventMethodNames: string[] = []
 
     static event(proto: Object, methodName: string) {
-        Page.eventMethods[methodName] = proto[methodName]
+        Page.eventMethodNames.push(methodName)
     }
 
-    static watchMethods = {}
+    static watchMethodNames: string[] = []
 
     static watch(proto: Object, methodName: string) {
-        Page.watchMethods[methodName] = proto[methodName]
+        Page.watchMethodNames.push(methodName)
     }
 
     /**

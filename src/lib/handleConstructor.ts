@@ -1,3 +1,5 @@
+import * as _ from 'lodash-es'
+
 export interface PageContext {
 
     /**
@@ -36,12 +38,11 @@ export interface PageContext {
      * 使dataCache中的数据生效
      */
     applyData(): Promise<void>
-}
 
-export interface AppOnLaunchParams {
-
-    
-
+    /**
+     * 发射时间
+     */
+    emit(): any
 }
 
 export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[], mixins?: any[]) => {
@@ -55,6 +56,8 @@ export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[], m
     let ins = new Constr
     let proto = Constr.prototype
 
+    // 事件、监听方法名
+    let { eventMethodNames, watchMethodNames } = Constr
     /**
      * app || page || component
      */
@@ -63,115 +66,95 @@ export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[], m
     let methods: any = {}
     let lifeCycleMethods: any = {}
 
-    Object.getOwnPropertyNames(proto).forEach(name => {
-        if (typeof proto[name] === 'function' && name !== 'constructor') {
-            let isLifeCycleMethod = lifeCycleMethodNames.indexOf(name) !== -1
+    _.each(proto, (method, k) => {
+        if (_.isFunction(method) && k !== 'constructor') {
+            let isLifeCycleMethod = _.includes(lifeCycleMethodNames, k)
             let key = isLifeCycleMethod ? lifeCycleMethods : methods
-
-            if (name === 'onLoad') {
-                
+            if (k === 'onLoad') {
                 key['onLoad'] = function(this: PageContext, ...args) {
                     // 初始化 dataCache
                     this.dataCache = {}
-    
                     for (let p in this.data) {
-    
                         Object.defineProperty(this, p, {
                             set: (v) => {
                                 this.dataCache[p] = v
                             },
                             get: () => this.data[p]
                         })
-    
                     }
-    
                     // promisify setData
                     if (this.setData) {
                         this.setDataAsync = (arg) => {
                             return new Promise(resolve => this.setData(arg, resolve))
                         }
                     }
-
                     this.applyData = () => {
-                        if (Object.keys(this.dataCache).length) {
+                        if (!_.isEmpty(this.dataCache)) {
+                            // 处理监听数据
+                            handleWatcher.call(this, watchMethodNames, proto)
                             let promise = this.setDataAsync(this.dataCache)
                             this.dataCache = {}
                             return promise
                         }
                         return Promise.resolve()
                     }
-
-                    proto[name].call(this, ...args)
-
+                    method.call(this, ...args)
                     this.applyData()
-    
                 }
-
             } else {
-
-                key[name] = function(this: PageContext, ...args) {
-    
-                    proto[name].call(this, ...args)
-    
+                key[k] = function(this: PageContext, ...args) {
+                    method.call(this, ...args)
                     type === 'page' && this.applyData()
                 }
             }
-
         }
     })
 
-    Object.keys(ins).forEach(name => {
+    _.each(ins, (v, k) => {
         // 排除route 和 type function
-        if (typeof ins[name] !== 'function' && name !== 'route') {
-            data[name] = ins[name]
+        if (!_.isFunction(v) && k !== 'route') {
+            data[k] = v
         }
     })
 
     return { methods, lifeCycleMethods, data }
 }
 
+/**
+ * 
+ * @param derivedCtor 
+ * @param baseCtors 
+ * @param lifeCycleMethodNames 
+ * @returns 返回data
+ */
 function applyMixins(derivedCtor: any, baseCtors: any[], lifeCycleMethodNames: string[]) {
     let data = {}
     baseCtors.forEach(baseCtor => {
         let ins = new baseCtor
-        Object.keys(ins).forEach(name => {
-            // 排除route 和 type function
-            if (typeof ins[name] !== 'function' && name !== 'route') {
-                data[name] = ins[name]
+        _.each(ins, (v, k) => {
+            if (!_.isFunction(v) && k !== 'route') {
+                data[k] = v
             }
         })
-        Object.getOwnPropertyNames(baseCtor.prototype).forEach(name => {
-            if (lifeCycleMethodNames.indexOf(name) === -1) {
-                derivedCtor.prototype[name] = baseCtor.prototype[name]
+        _.each(baseCtor.prototype, (v, k) => {
+            if (!_.includes(lifeCycleMethodNames, k)) {
+                derivedCtor.prototype[k] = v
             }
         })
     })
     return data
 }
 
-// function handleMixins(mixins: any[], methods: any) {
+function handleWatcher(this: PageContext, watchMethodNames: string[], proto: Object) {
+    // k的形式: 如，propertyName: list, 则watchName: $$list
+    _.each(proto, (method, k) => {
+        let name = k.slice(2)
+        if (name in this.dataCache) {
+            method.call(this)
+        }
+    })
+}
 
-//     let Constr = mixins[0]
-//     let ins = new Constr
-//     let proto = Constr.prototype
+function handleEvent(this: PageContext, eventMethodNames: string[], proto: Object) {
 
-//     Object.getOwnPropertyNames(proto).forEach(name => {
-//         if (typeof proto[name] === 'function' && name !== 'constructor') {
-
-//             methods[name] = proto[name]
-
-//         }
-//     })
-
-//     Object.getOwnPropertyNames(methods).forEach(name => {
-
-
-
-
-//     })
-
-//     return mixins.length > 0 
-//         ? handleMixins(mixins.slice(1), methods)
-//         : methods
-
-// }
+}

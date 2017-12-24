@@ -5,22 +5,31 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "start": "rm -rf dist && rollup -c && tsc",
-    "build": "rollup -c && tsc"
+    "start": "rm -rf dist && npm run build",
+    "build": "rollup -c && tsc",
+    "postbuild": "uglifyjs --compress --mangle -o ./dist/wetype.min.js -- ./dist/wetype.js"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.85",
+    "@types/lodash": "^4.14.91",
+    "@types/lodash-es": "^4.17.0",
     "@types/node": "^8.0.51",
     "@types/rollup": "^0.41.1",
+    "babel-core": "^6.26.0",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-preset-env": "^1.6.1",
     "gulp": "^3.9.1",
     "is-extendable": "^1.0.1",
     "isobject": "^3.0.1",
     "rollup": "^0.51.5",
+    "rollup-plugin-babel": "^3.0.3",
     "rollup-plugin-typescript2": "^0.8.0",
     "through2": "^2.0.3",
-    "typescript": "^2.5.3"
+    "typescript": "^2.5.3",
+    "uglify-js": "^3.2.2"
   },
   "dependencies": {
+    "lodash": "^4.17.4",
+    "lodash-es": "^4.17.4",
     "tslib": "^1.8.0"
   }
 }
