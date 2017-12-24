@@ -65,3 +65,17 @@ export interface PageConfig extends WindowConfig {
      */
     usingComponents?: ObjectLiteral
 }
+
+export interface WatchObj {
+
+    /** 
+     * data name
+    */
+    dataName: string
+
+    /**
+     * 
+     */
+    func(val: any, old: any): void
+
+}

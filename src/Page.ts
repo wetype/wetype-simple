@@ -2,7 +2,7 @@ import { Page as nativePage } from './lib/wx'
 import { global } from './global'
 import { isInNode } from './lib/util'
 import { handleConstructor } from './lib/handleConstructor'
-import { PageOptions, ShareAppMessageOptions, ShareAppMessageRes, OnloadOptions } from './types/PageTypes'
+import { PageOptions, ShareAppMessageOptions, ShareAppMessageRes, OnloadOptions, WatchObj } from './types/PageTypes'
 
 
 export abstract class Page {
@@ -41,13 +41,18 @@ export abstract class Page {
     static eventMethodNames: string[] = []
 
     static event(proto: Object, methodName: string) {
-        Page.eventMethodNames.push(methodName)
+        Page.eventMethodNames.push(methodName.slice(2))
     }
 
-    static watchMethodNames: string[] = []
+    static watchMethodNames: WatchObj[] = []
 
-    static watch(proto: Object, methodName: string) {
-        Page.watchMethodNames.push(methodName)
+    static watch(func: (val: any, old?: any) => void) {
+        return function(proto: Object, dataName: string) {
+            Page.watchMethodNames.push({
+                dataName,
+                func
+            })
+        }
     }
 
     /**

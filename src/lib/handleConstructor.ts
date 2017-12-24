@@ -1,6 +1,8 @@
 import * as _ from 'lodash-es'
+import { WatchObj } from '../types/PageTypes'
+import { queue } from './queue'
 
-export interface PageContext {
+export abstract class PageContext {
 
     /**
      * 页面数据
@@ -10,12 +12,12 @@ export interface PageContext {
     /**
      * 获取当前页面路径
      */
-    route: string
+    abstract route: string
 
     /**
      * 用于将数据从逻辑层发送到视图层（异步），同时改变对应的 this.data 的值（同步）
      */
-    setData(arg: any, cb?: () => void): void
+    abstract setData(arg: any, cb?: () => void): void
 
     /**
      * # wetype
@@ -27,7 +29,7 @@ export interface PageContext {
      * # wetype
      * setData异步形式
      */
-    setDataAsync(arg: any): Promise<void>
+    abstract setDataAsync(arg: any): Promise<void>
 
     /**
      * setData缓存
@@ -37,20 +39,28 @@ export interface PageContext {
     /**
      * 使dataCache中的数据生效
      */
-    applyData(): Promise<void>
+    abstract applyData(watchedDataName?: string): Promise<void>
+
+    /**
+     * events
+     */
+    $events: any
 
     /**
      * 发射时间
      */
-    emit(): any
+    abstract emit(eventName: string, ...args: any[]): any
 }
 
 export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[], mixins?: any[]) => {
 
     let data: any = {}
+    let mixinOnLoads: any[] = []
 
     if (mixins) {
-        data = applyMixins(Constr, mixins, lifeCycleMethodNames)
+        let res = applyMixins(Constr, mixins, lifeCycleMethodNames)
+        data = res.data
+        mixinOnLoads = res.onLoads
     }
 
     let ins = new Constr
@@ -82,23 +92,42 @@ export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[], m
                             get: () => this.data[p]
                         })
                     }
+                    // 初始化$event
+                    this.$events = {}
+                    /**
+                     * 实现emit
+                     */
+                    this.emit = (eventName: string, ...args: any[]) => {
+                        this.$events[eventName].call(this, ...args)
+                        // globalEvents[eventName].call(this, ...args)
+                    }
+
+                    handleEvent.call(this, eventMethodNames, proto)
+
                     // promisify setData
                     if (this.setData) {
                         this.setDataAsync = (arg) => {
                             return new Promise(resolve => this.setData(arg, resolve))
                         }
                     }
-                    this.applyData = () => {
+                    this.applyData = (watchedDataName?: string) => {
                         if (!_.isEmpty(this.dataCache)) {
                             // 处理监听数据
-                            handleWatcher.call(this, watchMethodNames, proto)
+                            handleWatcher.call(this, watchMethodNames, watchedDataName)
                             let promise = this.setDataAsync(this.dataCache)
                             this.dataCache = {}
                             return promise
                         }
                         return Promise.resolve()
                     }
+
+                    // 先依次执行mixin中的onLoad时间
+                    _.each(mixinOnLoads, (method, i) => {
+                        method.call(this, ...args)
+                    })
+
                     method.call(this, ...args)
+
                     this.applyData()
                 }
             } else {
@@ -129,6 +158,7 @@ export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[], m
  */
 function applyMixins(derivedCtor: any, baseCtors: any[], lifeCycleMethodNames: string[]) {
     let data = {}
+    let onLoads: any[] = []
     baseCtors.forEach(baseCtor => {
         let ins = new baseCtor
         _.each(ins, (v, k) => {
@@ -141,20 +171,35 @@ function applyMixins(derivedCtor: any, baseCtors: any[], lifeCycleMethodNames: s
                 derivedCtor.prototype[k] = v
             }
         })
+
+        if (baseCtor.prototype.onLoad) {
+            onLoads.push(baseCtor.prototype.onLoad)
+        }
+
     })
-    return data
+    return {
+        data,
+        onLoads
+    }
 }
 
-function handleWatcher(this: PageContext, watchMethodNames: string[], proto: Object) {
-    // k的形式: 如，propertyName: list, 则watchName: $$list
-    _.each(proto, (method, k) => {
-        let name = k.slice(2)
-        if (name in this.dataCache) {
-            method.call(this)
+function handleWatcher(this: PageContext, watchObj: WatchObj[], watchedDataName?: string) {
+    _.each(watchObj, ({ dataName, func }) => {
+        if (dataName in this.dataCache) {
+            if (dataName !== watchedDataName) {
+                func.call(this, this.dataCache[dataName], this.data[dataName])
+                this.applyData()
+            } else {
+                this.applyData(dataName)
+            }
         }
     })
 }
 
 function handleEvent(this: PageContext, eventMethodNames: string[], proto: Object) {
-
+    _.each(proto, (method, k) => {
+        if (_.includes(eventMethodNames, k)) {
+            this.$events[k] = method
+        }
+    })
 }
