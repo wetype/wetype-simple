@@ -39,7 +39,7 @@ export abstract class PageContext {
     /**
      * 使dataCache中的数据生效
      */
-    abstract applyData(watchedDataName?: string): Promise<void>
+    abstract applyData(isHandleWatcher?: boolean): Promise<void>
 
     /**
      * events
@@ -110,12 +110,14 @@ export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[], m
                             return new Promise(resolve => this.setData(arg, resolve))
                         }
                     }
-                    this.applyData = (watchedDataName?: string) => {
+                    this.applyData = (isHandleWatcher?: boolean) => {
                         if (!_.isEmpty(this.dataCache)) {
                             // 处理监听数据
-                            handleWatcher.call(this, watchMethodNames, watchedDataName)
+                            isHandleWatcher !== false &&
+                                handleWatcher.call(this, watchMethodNames)
                             let promise = this.setDataAsync(this.dataCache)
                             this.dataCache = {}
+                            // return queue.push(promise)
                             return promise
                         }
                         return Promise.resolve()
@@ -128,7 +130,7 @@ export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[], m
 
                     method.call(this, ...args)
 
-                    this.applyData()
+                    this.applyData(false)
                 }
             } else {
                 key[k] = function(this: PageContext, ...args) {
@@ -183,15 +185,11 @@ function applyMixins(derivedCtor: any, baseCtors: any[], lifeCycleMethodNames: s
     }
 }
 
-function handleWatcher(this: PageContext, watchObj: WatchObj[], watchedDataName?: string) {
+function handleWatcher(this: PageContext, watchObj: WatchObj[]) {
     _.each(watchObj, ({ dataName, func }) => {
         if (dataName in this.dataCache) {
-            if (dataName !== watchedDataName) {
-                func.call(this, this.dataCache[dataName], this.data[dataName])
-                this.applyData()
-            } else {
-                this.applyData(dataName)
-            }
+            func.call(this, this.dataCache[dataName], this.data[dataName])
+            this.applyData(false)
         }
     })
 }
