@@ -117,16 +117,30 @@ export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[], m
                         }
                     }
                     this.applyData = (isHandleWatcher?: boolean) => {
-                        if (!_.isEmpty(this.dataCache)) {
-                            // 处理监听数据
-                            isHandleWatcher !== false &&
-                                handleWatcher.call(this, watchMethodNames)
-                            let promise = this.setDataAsync(this.dataCache)
-                            this.dataCache = {}
-                            // return queue.push(promise)
-                            return promise
-                        }
-                        return Promise.resolve()
+                        // if (!_.isEmpty(this.dataCache)) {
+                        //     // 处理监听数据
+                        //     isHandleWatcher !== false &&
+                        //         handleWatcher.call(this, watchMethodNames)
+                        //     let promise = this.setDataAsync(this.dataCache)
+                        //     this.dataCache = {}
+                        //     // return queue.push(promise)
+                        //     return promise
+                        // }
+                        // return Promise.resolve()
+                        let dataCache: any = {}
+                        _.keys(this.data).map(k => {
+                            let obj = this[k]
+                            if (obj) {
+                                if (_.isArray(obj)) {
+                                    dataCache[k] = 
+                                }
+                                if (_.isObject(obj)) {
+                                    _.extend(dataCache, obj)
+                                } else {
+
+                                }
+                            }
+                        })
                     }
 
                     // 先依次执行mixin中的onLoad事件
