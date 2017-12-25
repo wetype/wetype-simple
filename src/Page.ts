@@ -41,7 +41,7 @@ export abstract class Page {
     static eventMethodNames: string[] = []
 
     static event(proto: Object, methodName: string) {
-        Page.eventMethodNames.push(methodName.slice(2))
+        Page.eventMethodNames.push(methodName)
     }
 
     static watchMethodNames: WatchObj[] = []
@@ -77,7 +77,11 @@ export interface Page {
      * 
      */
     applyData(): Promise<void>
-    
+
+    /**
+     * 发射事件
+     */
+    emit(eventName: string, ...args: any[]): any
     
     /**
      * 生命周期函数--监听页面初次渲染完成

@@ -86,20 +86,26 @@ export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[], m
                     this.dataCache = {}
                     for (let p in this.data) {
                         Object.defineProperty(this, p, {
-                            set: (v) => {
-                                this.dataCache[p] = v
-                            },
-                            get: () => this.data[p]
+                            // set: (v) => {
+                            //     _.extend(this.dataCache, { [p]: v })
+                            // },
+                            get: () => this.data[p],
+                            value: null
                         })
                     }
+                    _.extend(this, this.data)
                     // 初始化$event
                     this.$events = {}
                     /**
                      * 实现emit
                      */
                     this.emit = (eventName: string, ...args: any[]) => {
-                        this.$events[eventName].call(this, ...args)
-                        // globalEvents[eventName].call(this, ...args)
+                        let event = this.$events[eventName]
+                        if (event) {
+                            event.call(this, ...args)
+                        } else {
+                            throw Error(`no such event ${eventName} registered!`)
+                        }
                     }
 
                     handleEvent.call(this, eventMethodNames, proto)
@@ -123,7 +129,7 @@ export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[], m
                         return Promise.resolve()
                     }
 
-                    // 先依次执行mixin中的onLoad时间
+                    // 先依次执行mixin中的onLoad事件
                     _.each(mixinOnLoads, (method, i) => {
                         method.call(this, ...args)
                     })
