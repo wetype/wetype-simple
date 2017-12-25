@@ -17,7 +17,7 @@ export abstract class Page {
     /**
      * 数据
      */
-    data: any
+    readonly data: any
 
     /**
      * 初始化Page
@@ -44,11 +44,11 @@ export abstract class Page {
         Page.eventMethodNames.push(methodName)
     }
 
-    static watchMethodNames: WatchObj[] = []
+    static watchObjs: WatchObj[] = []
 
     static watch(func: (val: any, old?: any) => void) {
         return function(proto: Object, dataName: string) {
-            Page.watchMethodNames.push({
+            Page.watchObjs.push({
                 dataName,
                 func
             })

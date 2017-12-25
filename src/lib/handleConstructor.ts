@@ -7,7 +7,7 @@ export abstract class PageContext {
     /**
      * 页面数据
      */
-    data: any
+    readonly data: any
 
     /**
      * 获取当前页面路径
@@ -67,7 +67,7 @@ export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[], m
     let proto = Constr.prototype
 
     // 事件、监听方法名
-    let { eventMethodNames, watchMethodNames } = Constr
+    let { eventMethodNames, watchObjs } = Constr
     /**
      * app || page || component
      */
@@ -82,17 +82,7 @@ export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[], m
             let key = isLifeCycleMethod ? lifeCycleMethods : methods
             if (k === 'onLoad') {
                 key['onLoad'] = function(this: PageContext, ...args) {
-                    // 初始化 dataCache
-                    this.dataCache = {}
-                    for (let p in this.data) {
-                        Object.defineProperty(this, p, {
-                            // set: (v) => {
-                            //     _.extend(this.dataCache, { [p]: v })
-                            // },
-                            get: () => this.data[p],
-                            value: null
-                        })
-                    }
+
                     _.extend(this, this.data)
                     // 初始化$event
                     this.$events = {}
@@ -117,30 +107,18 @@ export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[], m
                         }
                     }
                     this.applyData = (isHandleWatcher?: boolean) => {
-                        // if (!_.isEmpty(this.dataCache)) {
-                        //     // 处理监听数据
-                        //     isHandleWatcher !== false &&
-                        //         handleWatcher.call(this, watchMethodNames)
-                        //     let promise = this.setDataAsync(this.dataCache)
-                        //     this.dataCache = {}
-                        //     // return queue.push(promise)
-                        //     return promise
-                        // }
-                        // return Promise.resolve()
-                        let dataCache: any = {}
-                        _.keys(this.data).map(k => {
-                            let obj = this[k]
-                            if (obj) {
-                                if (_.isArray(obj)) {
-                                    dataCache[k] = 
-                                }
-                                if (_.isObject(obj)) {
-                                    _.extend(dataCache, obj)
-                                } else {
-
-                                }
+                        let toSetData: any = {}
+                        _.each(this.data, (v, k) => {
+                            if (!_.isEqual(v, this[k])) {
+                                toSetData[k] = _.cloneDeep(this[k])
                             }
                         })
+                        if (!_.isEmpty(toSetData)) {
+                            // TODO: 可能有bug
+                            handleWatcher.call(this, watchObjs, toSetData)
+                            return this.setDataAsync(toSetData)
+                        }
+                        return Promise.resolve()
                     }
 
                     // 先依次执行mixin中的onLoad事件
@@ -205,11 +183,11 @@ function applyMixins(derivedCtor: any, baseCtors: any[], lifeCycleMethodNames: s
     }
 }
 
-function handleWatcher(this: PageContext, watchObj: WatchObj[]) {
+function handleWatcher(this: PageContext, watchObj: WatchObj[], toSetData: any) {
     _.each(watchObj, ({ dataName, func }) => {
-        if (dataName in this.dataCache) {
-            func.call(this, this.dataCache[dataName], this.data[dataName])
-            this.applyData(false)
+        if (dataName in toSetData) {
+            func.call(this, toSetData[dataName], this.data[dataName])
+            this.applyData()
         }
     })
 }
