@@ -79,3 +79,16 @@ export interface WatchObj {
     func(val: any, old: any): void
 
 }
+
+export interface InputObj {
+
+    propName: string
+
+    inputEventHandlerName: string
+
+    opts?: {
+        // 截流
+        debounce: number
+    }
+
+}

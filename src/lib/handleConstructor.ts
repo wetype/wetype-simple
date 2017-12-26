@@ -1,6 +1,7 @@
 import * as _ from 'lodash-es'
-import { WatchObj } from '../types/PageTypes'
+import { WatchObj, PageConfig } from '../types/PageTypes'
 import { queue } from './queue'
+import { WxEvent } from '../types/eventTypes'
 
 export abstract class PageContext {
 
@@ -47,14 +48,14 @@ export abstract class PageContext {
     abstract applyData(isHandleWatcher?: string): Promise<void>
 
     /**
-     * events
+     * listener
      */
-    $events: any
+    $listener: any
 
     /**
      * 发射时间
      */
-    abstract emit(eventName: string, ...args: any[]): any
+    abstract emit(listenerName: string, ...args: any[]): any
 }
 
 export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[], mixins?: any[]) => {
@@ -72,7 +73,7 @@ export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[], m
     let proto = Constr.prototype
 
     // 事件、监听方法名
-    let { eventMethodNames, watchObjs } = Constr
+    let { listenerMethodNames, watchObjs, inputObjs } = Constr
     /**
      * app || page || component
      */
@@ -107,21 +108,21 @@ export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[], m
                     _.extend(this, this.data)
                     // 初始化getters
                     _.extend(this, _.mapValues(getters, v => v.call(this)))
-                    // 初始化$event
-                    this.$events = {}
+                    // 初始化$listener
+                    this.$listeners = {}
                     /**
                      * 实现emit
                      */
-                    this.emit = (eventName: string, ...args: any[]) => {
-                        let event = this.$events[eventName]
-                        if (event) {
-                            event.call(this, ...args)
+                    this.emit = (listenerName: string, ...args: any[]) => {
+                        let listener = this.$listeners[listenerName]
+                        if (listener) {
+                            listener.call(this, ...args)
                         } else {
-                            throw Error(`no such event ${eventName} registered!`)
+                            throw Error(`no such listener ${listenerName} registered!`)
                         }
                     }
 
-                    handleEvent.call(this, eventMethodNames, proto)
+                    handleListener.call(this, listenerMethodNames, proto)
 
                     // promisify setData
                     if (this.setData) {
@@ -160,7 +161,8 @@ export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[], m
                     prop.call(this, ...args)
                     this.applyData('nowatch')
                 }
-            } else {
+            } 
+            else {
                 key[k] = function(this: PageContext, ...args) {
                     prop.call(this, ...args)
                     type === 'page' && this.applyData()
@@ -173,6 +175,19 @@ export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[], m
         // 排除route 和 type function
         if (!_.isFunction(v) && k !== 'route') {
             data[k] = v
+        }
+    })
+    
+    _.each(data, (v, k) => {
+        // input
+        let foundInput = _.find(inputObjs, { propName: k })
+        if (foundInput) {
+            let { propName, inputEventHandlerName, opts } = foundInput
+            methods[inputEventHandlerName] = function(this: PageContext, e: WxEvent) {
+                let value = e.detail.value
+                this[propName] = value
+                this.applyData()
+            }
         }
     })
 
@@ -222,10 +237,10 @@ function handleWatcher(this: PageContext, watchObj: WatchObj[], toSetData: any) 
     })
 }
 
-function handleEvent(this: PageContext, eventMethodNames: string[], proto: Object) {
+function handleListener(this: PageContext, listenerMethodNames: string[], proto: Object) {
     _.each(proto, (method, k) => {
-        if (_.includes(eventMethodNames, k)) {
-            this.$events[k] = method
+        if (_.includes(listenerMethodNames, k)) {
+            this.$listeners[k] = method
         }
     })
 }
