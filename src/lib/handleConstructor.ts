@@ -178,16 +178,12 @@ export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[], m
         }
     })
     
-    _.each(data, (v, k) => {
-        // input
-        let foundInput = _.find(inputObjs, { propName: k })
-        if (foundInput) {
-            let { propName, inputEventHandlerName, opts } = foundInput
-            methods[inputEventHandlerName] = function(this: PageContext, e: WxEvent) {
-                let value = e.detail.value
-                this[propName] = value
-                this.applyData()
-            }
+    // 处理inputObj
+    _.each(inputObjs, ({ propName, inputEventHandlerName, opts }) => {
+        methods[inputEventHandlerName] = function(this: PageContext, e: WxEvent) {
+            let value = e.detail.value
+            this[propName] = value
+            this.applyData()
         }
     })
 
