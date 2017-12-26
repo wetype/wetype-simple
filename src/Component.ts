@@ -1,5 +1,5 @@
 import { isInNode } from './lib/util'
-import { handleConstructor } from './lib/handleConstructor'
+import { handleAppConstr } from './lib/handleAppConstr'
 import { Component as nativeComponent } from './lib/wx'
 import { Behavior } from './Behavior'
 import { ComOptions } from './types/ComponentTypes'
@@ -18,7 +18,7 @@ export abstract class Component {
                 }
             } else {
                 let lifeCycleMethodNames = ['attached', 'moved', 'detached', 'created', 'ready']
-                let { data, methods, lifeCycleMethods } = handleConstructor(comConstructor, lifeCycleMethodNames)
+                let { data, methods, lifeCycleMethods } = handleAppConstr(comConstructor, lifeCycleMethodNames)
     
                 if (comOptions) {
                     // 去掉config

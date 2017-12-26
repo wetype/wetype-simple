@@ -1,6 +1,6 @@
 import { Properties } from './types/ComponentTypes'
 import { isInNode } from './lib/util'
-import { handleConstructor } from './lib/handleConstructor'
+import { handleAppConstr } from './lib/handleAppConstr'
 import { Behavior as nativeBehavior } from './lib/wx'
 
 export abstract class Behavior {
@@ -13,7 +13,7 @@ export abstract class Behavior {
                 return
             }
             let lifeCycleMethodNames = ['attached']
-            let { data, methods, lifeCycleMethods } = handleConstructor(constr, lifeCycleMethodNames)
+            let { data, methods, lifeCycleMethods } = handleAppConstr(constr, lifeCycleMethodNames)
 
             constr.behavior = nativeBehavior({
                 data,

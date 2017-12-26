@@ -9,12 +9,12 @@ import { PageOptions, ShareAppMessageOptions,
 
 export abstract class Page {
 
-    type = 'page'
+    readonly type = 'page'
 
     /**
      * 获取到当前页面的路径
      */
-    route: any
+    readonly route: any
 
     /**
      * 数据

@@ -17,6 +17,7 @@ export const handleAppConstr = (Constr: any, lifeCycleMethodNames: string[], mix
 
     let methods: any = {}
     let lifeCycleMethods: any = {}
+    let data: any = {}
 
     _.each(proto, (prop, k) => {
         if (_.isFunction(prop) && k !== 'constructor') {
@@ -28,5 +29,11 @@ export const handleAppConstr = (Constr: any, lifeCycleMethodNames: string[], mix
         }
     })
 
-    return { methods, lifeCycleMethods }
+    _.each(ins, (v, k) => {
+        if (!_.isFunction(v)) {
+            data[k] = v
+        }
+    })
+
+    return { methods, lifeCycleMethods, data }
 }

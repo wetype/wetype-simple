@@ -83,7 +83,7 @@ export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[], m
     let lifeCycleMethods: any = {}
 
     let getters: any = {}
-    let setters: any = {}
+    // let setters: any = {}
 
     // 先遍历原型获取getters 和 setters
     _.each(proto, (v, k) => {
@@ -91,7 +91,7 @@ export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[], m
             let descriptor = Object.getOwnPropertyDescriptor(proto, k)
             if (descriptor) {
                 getters[k] = descriptor.get
-                setters[k] = descriptor.set
+                // setters[k] = descriptor.set
                 data[k] = v
             }
         }
