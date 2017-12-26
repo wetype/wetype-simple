@@ -15,6 +15,11 @@ export abstract class PageContext {
     abstract route: string
 
     /**
+     * 
+     */
+    applyDataState: 'pending' | 'idle'
+
+    /**
      * 用于将数据从逻辑层发送到视图层（异步），同时改变对应的 this.data 的值（同步）
      */
     abstract setData(arg: any, cb?: () => void): void
@@ -39,7 +44,7 @@ export abstract class PageContext {
     /**
      * 使dataCache中的数据生效
      */
-    abstract applyData(isHandleWatcher?: boolean): Promise<void>
+    abstract applyData(isHandleWatcher?: string): Promise<void>
 
     /**
      * events
@@ -76,14 +81,32 @@ export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[], m
     let methods: any = {}
     let lifeCycleMethods: any = {}
 
-    _.each(proto, (method, k) => {
-        if (_.isFunction(method) && k !== 'constructor') {
+    let getters: any = {}
+    let setters: any = {}
+
+    // 先遍历原型获取getters 和 setters
+    _.each(proto, (v, k) => {
+        if (!_.isFunction(v)) {
+            let descriptor = Object.getOwnPropertyDescriptor(proto, k)
+            if (descriptor) {
+                getters[k] = descriptor.get
+                setters[k] = descriptor.set
+                data[k] = v
+            }
+        }
+    })
+
+    _.each(proto, (prop, k) => {
+        if (_.isFunction(prop) && k !== 'constructor') {
             let isLifeCycleMethod = _.includes(lifeCycleMethodNames, k)
             let key = isLifeCycleMethod ? lifeCycleMethods : methods
             if (k === 'onLoad') {
                 key['onLoad'] = function(this: PageContext, ...args) {
 
+                    // 初始化data
                     _.extend(this, this.data)
+                    // 初始化getters
+                    _.extend(this, _.mapValues(getters, v => v.call(this)))
                     // 初始化$event
                     this.$events = {}
                     /**
@@ -106,7 +129,7 @@ export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[], m
                             return new Promise(resolve => this.setData(arg, resolve))
                         }
                     }
-                    this.applyData = (isHandleWatcher?: boolean) => {
+                    this.applyData = (isHandleWatcher: string = '') => {
                         let toSetData: any = {}
                         _.each(this.data, (v, k) => {
                             if (!_.isEqual(v, this[k])) {
@@ -115,25 +138,31 @@ export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[], m
                         })
                         if (!_.isEmpty(toSetData)) {
                             // TODO: 可能有bug
-                            isHandleWatcher !== false &&
+                            if (!/nowatch/i.test(isHandleWatcher)) {
                                 handleWatcher.call(this, watchObjs, toSetData)
-                            return this.setDataAsync(toSetData)
+                            }
+
+                            // if (!/nosetter/i.test(isHandleWatcher)) {
+                            //     handleSetters.call(this, setters)
+                            // }
+
+                            let getterChanges = handleGetters.call(this, getters, toSetData)
+
+                            return this.setDataAsync({ ...toSetData, ...getterChanges })
                         }
                         return Promise.resolve()
                     }
 
                     // 先依次执行mixin中的onLoad事件
-                    _.each(mixinOnLoads, (method, i) => {
-                        method.call(this, ...args)
+                    _.each(mixinOnLoads, (prop, i) => {
+                        prop.call(this, ...args)
                     })
-
-                    method.call(this, ...args)
-
-                    this.applyData(false)
+                    prop.call(this, ...args)
+                    this.applyData('nowatch')
                 }
             } else {
                 key[k] = function(this: PageContext, ...args) {
-                    method.call(this, ...args)
+                    prop.call(this, ...args)
                     type === 'page' && this.applyData()
                 }
             }
@@ -188,7 +217,7 @@ function handleWatcher(this: PageContext, watchObj: WatchObj[], toSetData: any) 
     _.each(watchObj, ({ dataName, func }) => {
         if (dataName in toSetData) {
             func.call(this, toSetData[dataName], this.data[dataName])
-            this.applyData(false)
+            this.applyData('nowatch')
         }
     })
 }
@@ -200,3 +229,23 @@ function handleEvent(this: PageContext, eventMethodNames: string[], proto: Objec
         }
     })
 }
+
+function handleGetters(this: PageContext, getters: any, toSetData: any, setters: any) {
+    let changes: any = {}
+    _.each(getters, (func, k) => {
+        let computed = func.call(this)
+        if (!_.isEqual(computed, this[k])) {
+            changes[k] = computed
+            this[k] = computed
+        }
+    })
+    return changes
+}
+
+// function handleSetters(this: PageContext, setters: any) {
+//     _.each(setters, (func, k) => {
+//         func.call(this)
+//     })
+//     return _.filter(this, o => _.isEqual())
+// }
+
