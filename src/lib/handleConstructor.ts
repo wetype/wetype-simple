@@ -115,7 +115,8 @@ export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[], m
                         })
                         if (!_.isEmpty(toSetData)) {
                             // TODO: 可能有bug
-                            handleWatcher.call(this, watchObjs, toSetData)
+                            isHandleWatcher !== false &&
+                                handleWatcher.call(this, watchObjs, toSetData)
                             return this.setDataAsync(toSetData)
                         }
                         return Promise.resolve()
@@ -187,7 +188,7 @@ function handleWatcher(this: PageContext, watchObj: WatchObj[], toSetData: any) 
     _.each(watchObj, ({ dataName, func }) => {
         if (dataName in toSetData) {
             func.call(this, toSetData[dataName], this.data[dataName])
-            this.applyData()
+            this.applyData(false)
         }
     })
 }
