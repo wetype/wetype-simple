@@ -19,7 +19,7 @@
 
 ## 先看一段demo
 
-````
+````typescript
 // myPage.ts
 
 import { Page, wx, wt, types } from 'wetype-simple'
@@ -68,7 +68,7 @@ class MyPage extends Page {
 
 ````
 
-````
+````pug
 //- myPage.pug
 
 .page
