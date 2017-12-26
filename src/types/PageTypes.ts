@@ -92,3 +92,10 @@ export interface InputObj {
     }
 
 }
+
+export interface PageDecors {
+    listenerMethodNames: string[],
+    watchObjs: WatchObj[],
+    inputObjs: InputObj[]
+
+}

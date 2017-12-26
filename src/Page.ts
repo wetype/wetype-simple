@@ -4,7 +4,7 @@ import { isInNode } from './lib/util'
 import { handleConstructor } from './lib/handleConstructor'
 import { PageOptions, ShareAppMessageOptions, 
     ShareAppMessageRes, OnloadOptions, WatchObj,
-    InputObj } from './types/PageTypes'
+    InputObj, PageDecors } from './types/PageTypes'
 
 
 export abstract class Page {
@@ -40,28 +40,28 @@ export abstract class Page {
         }
     }
 
-    static listenerMethodNames: string[] = []
-
-    static on(proto: Object, methodName: string) {
-        Page.listenerMethodNames.push(methodName)
+    private static decors: PageDecors = {
+        listenerMethodNames: [],
+        watchObjs: [],
+        inputObjs: []
     }
 
-    static watchObjs: WatchObj[] = []
+    static on(proto: Object, methodName: string) {
+        Page.decors.listenerMethodNames.push(methodName)
+    }
 
     static watch(func: (val: any, old?: any) => void) {
         return function(proto: Object, dataName: string) {
-            Page.watchObjs.push({
+            Page.decors.watchObjs.push({
                 dataName,
                 func
             })
         }
     }
 
-    static inputObjs: InputObj[] = []
-
     static input(inputEventHandlerName: string, opts?: any) {
         return function(proto: Object, propName: string) {
-            Page.inputObjs.push({
+            Page.decors.inputObjs.push({
                 propName,
                 inputEventHandlerName,
                 opts

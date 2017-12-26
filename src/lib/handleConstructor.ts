@@ -73,7 +73,7 @@ export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[], m
     let proto = Constr.prototype
 
     // 事件、监听方法名
-    let { listenerMethodNames, watchObjs, inputObjs } = Constr
+    let { listenerMethodNames, watchObjs, inputObjs } = Constr.decors
     /**
      * app || page || component
      */
