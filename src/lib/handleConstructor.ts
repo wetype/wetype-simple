@@ -1,6 +1,6 @@
 import * as _ from 'lodash-es'
-import { WatchObj, PageConfig } from '../types/PageTypes'
-import { queue } from './queue'
+import { WatchObj, InputObj, PageConfig } from '../types/PageTypes'
+// import { queue } from './queue'
 import { WxEvent } from '../types/eventTypes'
 
 export abstract class PageContext {
