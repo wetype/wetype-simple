@@ -10,14 +10,41 @@
 - API未使用Promise封装
 - setData很繁琐
 - 
-很快在社区里发现了[wepy](https://github.com/tencent/wepy)这样的小程序开发框架，一番尝试后决定用它来开发我的第一款小程序。但在开发过程中，仍然觉得wepy不能满足我的要求：
+很快在社区里发现了[wepy](https://github.com/tencent/wepy)这样的小程序开发框架，一番尝试后决定用它来开发我的第一款小程序。但在开发过程中，仍然觉得wepy不能满足我的要求：
 
-- 没有代码提示，用惯了TypeScript再去写纯的JS，没有代码提示是很不舒服的事情
+- 没有代码提示，用惯了TypeScript再去写纯JS，没有代码提示是很不舒服的事情
 - 定义对class API不太友好
 
 于是我在wepy的启发下，着手开发出wetype这样的小程序框架，全程用TypeScript开发。
 
 ## 先看一段demo
+
+````typescript
+// app.ts
+
+import { App } from 'wetype-simple'
+
+@App.decor({
+    config: {
+        pages: [
+            'index',
+        ],
+        window: {
+            backgroundTextStyle: 'light',
+            navigationBarBackgroundColor: '#3cf',
+            navigationBarTitleText: 'WeType',
+        }
+    }
+})
+class APP extends App {
+
+    onLaunch() {
+
+    }
+
+}
+
+````
 
 ````typescript
 // myPage.ts
@@ -55,13 +82,34 @@ class MyPage extends Page {
         this.title = 'hi'
     }
 
+    /**
+     * 计算属性
+     * */
+    get myComputedValue() {
+        return this.inputVal + 1
+    }
+
     @Page.on
-    onListChanged(list) {
-        this.list = list
+    myMixinLoaded() {
+        
     }
 
     tapItem(e: types.wxEvent) {
 
+    }
+
+}
+
+````
+````typescript
+// myMixin.ts
+
+import { Page, wx } from 'wetype-simple'
+
+export class MyMixin extends Page {
+
+    onLoad() {
+        this.emit('myMixinLoaded', true)
     }
 
 }
@@ -78,3 +126,49 @@ class MyPage extends Page {
             .title {{el.title}}
 
 ````
+
+从demo不难看出，实际上wetype就是封装了一层语法糖，把一些很繁琐的语法精简了一下：
+
+- class 属性直接用作`data`
+
+- `get`语法用作计算属性
+
+- class 方法直接用作`Page`对象的方法
+
+- 装饰器`@Page.watch`可以直接对`data`对象的属性进行监听变化；
+
+- 装饰器`@Page.input(eventName)`可以直接将表单输入的值对被修饰的`data`对象属性进行赋值；
+
+- 装饰器`@Page.on`可以监听mixin发生的事件；
+
+- ...
+
+## 用法
+
+推荐使用wetype提供的开发模板`wetype-simple-template`
+````bash
+$ git clone https://github.com/wetype/wetype-simple-template
+````
+
+````bash
+$ cd wetype-simple-template
+````
+````bash
+$ npm i
+````
+
+````bash
+$ npm start
+````
+
+## 申明
+
+wetype目前并没有强大的后盾去支持，现阶段只是本人一个对于小程序框架用TypeScript去封装的一个尝试，暂时还没有用wetype开发并上线的小程序产品。这么早开源出来也是想起到一个抛砖引玉的作用。希望感兴趣的社区里的开发者朋友能一起来使wetype变得强大。
+
+## TODO
+
+* [ ] 文档
+* [ ] 单元测试
+* [ ] 代码精简
+* [ ] 打包工具优化
+* [ ] 库体积优化
