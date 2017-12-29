@@ -1,6 +1,6 @@
 {
   "name": "wetype-simple",
-  "version": "0.0.2",
+  "version": "0.0.2-alpha-1",
   "author": "GrePuG",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -29,7 +29,6 @@
     "uglify-js": "^3.2.2"
   },
   "dependencies": {
-    "lodash": "^4.17.4",
     "lodash-es": "^4.17.4",
     "tslib": "^1.8.0"
   }
