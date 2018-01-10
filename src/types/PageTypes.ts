@@ -93,9 +93,13 @@ export interface InputObj {
 
 }
 
+export interface WxEventObj {
+    propName: string
+}
+
 export interface PageDecors {
     listenerMethodNames: string[],
     watchObjs: WatchObj[],
     inputObjs: InputObj[]
-
+    wxEventObjs: string[]
 }

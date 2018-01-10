@@ -43,7 +43,8 @@ export abstract class Page {
     private static decors: PageDecors = {
         listenerMethodNames: [],
         watchObjs: [],
-        inputObjs: []
+        inputObjs: [],
+        wxEventObjs: []
     }
 
     static on(proto: Object, methodName: string) {
@@ -67,6 +68,10 @@ export abstract class Page {
                 opts
             })
         }
+    }
+
+    static event(pro: Object, methodName: string) {
+        Page.decors.wxEventObjs.push(methodName)
     }
 
     /**

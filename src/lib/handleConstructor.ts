@@ -2,6 +2,7 @@ import * as _ from 'lodash-es'
 import { WatchObj, InputObj, PageConfig } from '../types/PageTypes'
 // import { queue } from './queue'
 import { WxEvent } from '../types/eventTypes'
+import { alphabet } from './util'
 
 export abstract class PageContext {
 
@@ -73,7 +74,7 @@ export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[], m
     let proto = Constr.prototype
 
     // 事件、监听方法名
-    let { listenerMethodNames, watchObjs, inputObjs } = Constr.decors
+    let { listenerMethodNames, watchObjs, inputObjs, wxEventObjs } = Constr.decors
     /**
      * app || page || component
      */
@@ -143,10 +144,6 @@ export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[], m
                                 handleWatcher.call(this, watchObjs, toSetData)
                             }
 
-                            // if (!/nosetter/i.test(isHandleWatcher)) {
-                            //     handleSetters.call(this, setters)
-                            // }
-
                             let getterChanges = handleGetters.call(this, getters, toSetData)
 
                             return this.setDataAsync({ ...toSetData, ...getterChanges })
@@ -161,7 +158,22 @@ export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[], m
                     prop.call(this, ...args)
                     this.applyData('nowatch')
                 }
-            } 
+            }
+            // 处理wxEventObj
+            else if (_.includes(wxEventObjs, k)) {
+                key[k] = function(this: PageContext, e: WxEvent) {
+                    let args: any[] = []
+                    _.each(e.currentTarget.dataset, (v, k) => {
+                        let last = k.slice(-1)
+                        if (/[A-Z]{1}/.test(last)) {
+                            let index = alphabet(last)
+                            args[index] = v
+                        }
+                    })
+                    prop.call(this, ...args, e)
+                    type === 'page' && this.applyData()
+                }
+            }
             else {
                 key[k] = function(this: PageContext, ...args) {
                     prop.call(this, ...args)

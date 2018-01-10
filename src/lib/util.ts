@@ -48,3 +48,22 @@ export const getFlatObject = function(object) {
     iter(object, []);
     return path;
 }
+
+export const alphabet = function(str: string | number) {
+    str = (str + '').toLowerCase()
+    let map = {
+        a: 0,
+        b: 1,
+        c: 2,
+        d: 3,
+        e: 4,
+        f: 5,
+        g: 6
+    }
+    let aa = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+    if (/\d/.test(str)) {
+        return aa[str].toLowerCase()
+    } else {
+        return map[str]
+    }
+}
