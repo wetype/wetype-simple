@@ -1,4 +1,5 @@
 import { wx } from './wx'
+import { store } from './store'
 
 export class Route {
 
@@ -10,8 +11,10 @@ export class Route {
 
     }
 
-    navigateTo() {
-        wx.navigateTo()
+    async navigateTo(path, requestFunc: Promise<any>) {
+        wx.navigateTo({ url: path })
+        let res = await requestFunc
+        store.mutate({ requestData: { path: res } })
     }
 
     navigateBack() {
