@@ -58,7 +58,18 @@ export interface AppConfig {
      * 接受一个数组，每一项都是字符串，来指定小程序由哪些页面组成。每一项代表对应页面的【路径+文件名】信息，数组的第一项代表小程序的初始页面。小程序中新增/减少页面，都需要对 pages 数组进行修改。
      *  文件名不需要写文件后缀，因为框架会自动去寻找路径下 .json, .js, .wxml, .wxss 四个文件进行整合。
      */
-    pages: string[]
+    pages?: string[]
+
+    /** 
+     * 主页 
+     * 默认 index
+    */
+    mainPage?: string
+
+    /** 
+     * 排除的页面
+    */
+    excludePages?: string[]
 
     /**
      * 用于设置小程序的状态栏、导航条、标题、窗口背景色。

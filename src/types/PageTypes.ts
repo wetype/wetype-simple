@@ -46,10 +46,20 @@ export interface ShareAppMessageRes {
 }
 
 export interface PageOptions {
-    
+    /** 
+     * 页面配置
+    */
     config?: PageConfig
 
+    /** 
+     * 混合
+    */
     mixins?: any[]
+
+    /** 
+     * 页面路径
+    */
+    // path: string
 }
 
 export interface PageConfig extends WindowConfig {

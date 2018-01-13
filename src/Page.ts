@@ -24,7 +24,7 @@ export abstract class Page {
     /**
      * 初始化Page
      */
-    static decor(pageOptions?: PageOptions) {
+    static decor(pageOptions: PageOptions) {
         return function(pageConstructor: any) {
             if (isInNode) {
                 pageConstructor.config = pageOptions && pageOptions.config
@@ -145,4 +145,9 @@ export interface Page {
      * 生命周期函数--监听页面隐藏
      */
     onHide?(): void
+
+    /**
+     * wetype事件
+     */
+    onPreload?(): void
 }

@@ -5,7 +5,7 @@ export class Store {
     private state: any = {
         currentPath: '',
         requestData: {
-
+            
         }
     }
     

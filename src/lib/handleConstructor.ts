@@ -1,8 +1,8 @@
 import * as _ from 'lodash-es'
 import { WatchObj, InputObj, PageConfig } from '../types/PageTypes'
-// import { queue } from './queue'
 import { WxEvent } from '../types/eventTypes'
 import { alphabet } from './util'
+// import { router } from './router'
 
 export abstract class PageContext {
 
@@ -15,11 +15,6 @@ export abstract class PageContext {
      * 获取当前页面路径
      */
     abstract route: string
-
-    /**
-     * 
-     */
-    applyDataState: 'pending' | 'idle'
 
     /**
      * 用于将数据从逻辑层发送到视图层（异步），同时改变对应的 this.data 的值（同步）
@@ -85,6 +80,9 @@ export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[], m
 
     let getters: any = {}
     // let setters: any = {}
+
+    // 加入router
+    // router.addPage(path)
 
     // 先遍历原型获取getters 和 setters
     _.each(proto, (v, k) => {
@@ -158,6 +156,9 @@ export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[], m
                     prop.call(this, ...args)
                     this.applyData('nowatch')
                 }
+            }
+            else if (k === 'onPreload') {
+                // router.addEvent('', key[k])
             }
             // 处理wxEventObj
             else if (_.includes(wxEventObjs, k)) {
@@ -264,11 +265,4 @@ function handleGetters(this: PageContext, getters: any, toSetData: any, setters:
     })
     return changes
 }
-
-// function handleSetters(this: PageContext, setters: any) {
-//     _.each(setters, (func, k) => {
-//         func.call(this)
-//     })
-//     return _.filter(this, o => _.isEqual())
-// }
 
