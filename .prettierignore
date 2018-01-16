@@ -1,4 +1,9 @@
 node_modules
+dist
+.DS_Store
+.rpt2_cache
+*_cache
+*.log
 *.jpg
 *.png
 *.gif
