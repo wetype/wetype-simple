@@ -6,15 +6,15 @@
 //         return request({
 //             url,
 //             data: params,
-            
+
 //         })
 //     }
 
 //     post() {
 
 //     }
-    
-//     /** 
+
+//     /**
 //      * create instance
 //     */
 //     create() {
@@ -22,4 +22,3 @@
 //     }
 
 // }
-

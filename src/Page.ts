@@ -2,13 +2,17 @@ import { Page as nativePage } from './lib/wx'
 import { global } from './global'
 import { isInNode } from './lib/util'
 import { handleConstructor } from './lib/handleConstructor'
-import { PageOptions, ShareAppMessageOptions, 
-    ShareAppMessageRes, OnloadOptions, WatchObj,
-    InputObj, PageDecors } from './types/PageTypes'
-
+import {
+    PageOptions,
+    ShareAppMessageOptions,
+    ShareAppMessageRes,
+    OnloadOptions,
+    WatchObj,
+    InputObj,
+    PageDecors
+} from './types/PageTypes'
 
 export abstract class Page {
-
     readonly type = 'page'
 
     /**
@@ -30,13 +34,17 @@ export abstract class Page {
                 pageConstructor.config = pageOptions && pageOptions.config
             } else {
                 let lifeCycleMethodNames = ['onLoad', 'onShow', 'onUnload']
-                let { methods, lifeCycleMethods, data } = handleConstructor(pageConstructor, lifeCycleMethodNames, pageOptions && pageOptions.mixins)
+                let { methods, lifeCycleMethods, data } = handleConstructor(
+                    pageConstructor,
+                    lifeCycleMethodNames,
+                    pageOptions && pageOptions.mixins
+                )
                 nativePage({
                     data,
                     ...methods,
                     ...lifeCycleMethods
                 })
-            } 
+            }
         }
     }
 
@@ -81,19 +89,18 @@ export abstract class Page {
 }
 
 export interface Page {
-
     /**
      * 用于将数据从逻辑层发送到视图层（异步），同时改变对应的 this.data 的值（同步）。
      */
     setData(arg: any): void
-    
+
     /**
      * 异步setData
      */
     setDataAsync(arg: any): Promise<void>
 
     /**
-     * 
+     *
      */
     applyData(): Promise<void>
 
@@ -101,7 +108,7 @@ export interface Page {
      * 发射事件
      */
     emit(eventName: string, ...args: any[]): any
-    
+
     /**
      * 生命周期函数--监听页面初次渲染完成
     /**
@@ -137,7 +144,7 @@ export interface Page {
     onPageScroll?(): void
 
     /**
-     * 生命周期函数--监听页面显示   
+     * 生命周期函数--监听页面显示
      */
     onShow?(): void
 

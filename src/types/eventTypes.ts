@@ -70,7 +70,7 @@ export interface WxTouchEvent extends WxEvent {
     /**
      * 触摸事件，当前变化的触摸点信息的数组
      */
-    changedTouches: Touch[] 
+    changedTouches: Touch[]
 }
 
 export interface GetUserInfoEvent extends WxEvent {

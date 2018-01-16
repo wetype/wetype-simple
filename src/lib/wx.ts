@@ -27,12 +27,11 @@ declare namespace wx {
     /**
      * 发起网络请求
      */
-    
+
     export function request(options: wxx.RequestOpts): void
-    
-    
+
     export function uploadFile(options: wxx.UploadFileOpts): wxx.UploadTask
-    
+
     /**
      * 下载文件资源到本地，客户端直接发起一个 HTTP GET 请求，返回文件的本地临时路径。
      */
@@ -43,22 +42,24 @@ declare namespace wx {
  * # 媒体
  */
 declare namespace wx {
-
-  
     /**
      * 从本地相册选择图片或使用相机拍照。
-    */
+     */
     export function chooseImage(opts: wxx.ChooseImageOpts): wxx.ChooseImageRes
 
     export function previewImage(opts: wxx.PreviewImageOpts): void
 
-    export function getImageInfo(opts: wxx.GetImageInfoOpts): wxx.GetImageInfoRes
+    export function getImageInfo(
+        opts: wxx.GetImageInfoOpts
+    ): wxx.GetImageInfoRes
 
     /**
      * 保存图片到系统相册。需要用户授权 scope.writePhotosAlbum
      * 基础库 1.2.0 开始支持，低版本需做兼容处理
      */
-    export function saveImageToPhotosAlbumave(opts: wxx.SaveImageToPhotosAlbumOpts): wxx.SaveImageToPhotosAlbumRes
+    export function saveImageToPhotosAlbumave(
+        opts: wxx.SaveImageToPhotosAlbumOpts
+    ): wxx.SaveImageToPhotosAlbumRes
 
     /**
      * 注意：1.6.0 版本开始，本接口不再维护。
@@ -72,20 +73,16 @@ declare namespace wx {
      */
     export function stopRecord(options: Options<void>): void
 
-
     export function getRecorderManager(): wxx.RecorderManager
-
 
     /**
      *  视频
      */
 
-    
     /**
      * 拍摄视频或从手机相册中选视频，返回视频的临时文件路径。
      */
     export function chooseVideo(opts: wxx.ChooseVideoOpts): void
-    
 }
 
 /**
@@ -99,7 +96,6 @@ declare namespace wx {
  * # 数据缓存
  */
 declare namespace wx {
-
     /**
      * 将数据存储在本地缓存中指定的 key 中，会覆盖掉原来该 key 对应的内容，这是一个异步接口
      */
@@ -108,7 +104,10 @@ declare namespace wx {
     /**
      * 将 data 存储在本地缓存中指定的 key 中，会覆盖掉原来该 key 对应的内容，这是一个同步接口
      */
-    export function setStorageSync(key: string, data: ObjectLiteral | string): void
+    export function setStorageSync(
+        key: string,
+        data: ObjectLiteral | string
+    ): void
 
     /**
      * 从本地缓存中异步获取指定 key 对应的内容。
@@ -134,7 +133,7 @@ declare namespace wx {
      * 从本地缓存中异步移除指定 key 。
      */
     export function removeStorage(opts: wxx.RemoveStorageOpts): void
-    
+
     /**
      * 从本地缓存中同步移除指定 key 。
      */
@@ -155,14 +154,11 @@ declare namespace wx {
  * # 位置
  */
 declare namespace wx {
-
     /**
      * 获取当前的地理位置、速度。当用户离开小程序后，此接口无法调用；当用户点击“显示在聊天顶部”时，此接口可继续调用。
      */
     export function getLocation(opts: wxx.GetLocationOpts): void
 
-    
-    
     /**
      * 打开地图选择位置。
      * 需要用户授权 scope.userLocation
@@ -180,7 +176,10 @@ declare namespace wx {
      * @param mapId map组件的id
      * @param context 组件实例this
      */
-    export function createMapContext(mapId: string, context?: any): wxx.MapContext
+    export function createMapContext(
+        mapId: string,
+        context?: any
+    ): wxx.MapContext
 }
 
 /**
@@ -216,7 +215,6 @@ declare namespace wx {
  * 网络状态
  */
 declare namespace wx {
-
     /**
      * 获取网络类型
      */
@@ -225,7 +223,9 @@ declare namespace wx {
     /**
      * 监听网络状态变化
      */
-    export function onNetworkStatusChange(cb: (isConnected: boolean, networkType: wxx.NetworkType) => void): void
+    export function onNetworkStatusChange(
+        cb: (isConnected: boolean, networkType: wxx.NetworkType) => void
+    ): void
 }
 
 /**
@@ -240,7 +240,9 @@ declare namespace wx {
     /**
      * 获取屏幕亮度
      */
-    export function getScreenBrightness(opts: Options<wxx.GetScreenBrightnessRes>): void
+    export function getScreenBrightness(
+        opts: Options<wxx.GetScreenBrightnessRes>
+    ): void
 
     /**
      * 使手机发生较长时间的振动（400ms）
@@ -271,7 +273,9 @@ declare namespace wx {
     /**
      * 获取系统剪贴板内容
      */
-    export function getClipboardData(opts: Options<wxx.SetClipboardDataRes>): void
+    export function getClipboardData(
+        opts: Options<wxx.SetClipboardDataRes>
+    ): void
 
     /**
      * 监听用户主动截屏事件，用户使用系统截屏按键截屏时触发此事件
@@ -281,18 +285,19 @@ declare namespace wx {
     /**
      * 调用后，用户可以选择将该表单以“新增联系人”或“添加到已有联系人”的方式，写入手机系统通讯录，完成手机通讯录联系人和联系方式的增加。
      */
-    export  function addPhoneContact(opts: wxx.AddPhoneContactOpts): void
+    export function addPhoneContact(opts: wxx.AddPhoneContactOpts): void
 }
 
 /**
  * 下拉刷新
  */
 declare namespace wx {
-
     /**
      * 开始下拉刷新，调用后触发下拉刷新动画，效果与用户手动下拉刷新一致
      */
-    export function startPullDownRefresh(opts: Options<wxx.StartPullDownRefreshRes>): void
+    export function startPullDownRefresh(
+        opts: Options<wxx.StartPullDownRefreshRes>
+    ): void
 
     /**
      * 停止当前页面下拉刷新
@@ -304,7 +309,6 @@ declare namespace wx {
  * 交互反馈
  */
 declare namespace wx {
-
     /**
      * 显示消息提示框
      */
@@ -340,15 +344,16 @@ declare namespace wx {
  * navbar
  */
 declare namespace wx {
-
     /**
      * 动态设置置顶栏文字内容，只有当前小程序被置顶时能生效，如果当前小程序没有被置顶，也能调用成功，但是不会立即生效，只有在用户将这个小程序置顶后才换上设置的文字内容。注意：调用成功后，需间隔 5s 才能再次调用此接口，如果在 5s 内再次调用此接口，会回调 fail，errMsg："setTopBarText: fail invoke too frequently"
      */
-     export function setNavigationBarTitle(opts: wxx.SetNavigationBarTitleOpts): void
+    export function setNavigationBarTitle(
+        opts: wxx.SetNavigationBarTitleOpts
+    ): void
 
-     /**
-      * 在当前页面显示导航条加载动画
-      */
+    /**
+     * 在当前页面显示导航条加载动画
+     */
     export function showNavigationBarLoading(): void
 
     /**
@@ -360,26 +365,22 @@ declare namespace wx {
      * 动态设置置顶栏文字内容，只有当前小程序被置顶时能生效，如果当前小程序没有被置顶，也能调用成功，但是不会立即生效，只有在用户将这个小程序置顶后才换上设置的文字内容。注意：调用成功后，需间隔 5s 才能再次调用此接口，如果在 5s 内再次调用此接口，会回调 fail，errMsg："setTopBarText: fail invoke too frequently"
      */
     export function setTopBarText(opts: wxx.SetTopBarTextOpts): void
- }
+}
 
 /**
  * 页面导航
  */
 declare namespace wx {
-
     /**
      * 保留当前页面，跳转到应用内的某个页面，使用wx.navigateBack可以返回到原页面
      */
     export function navigateTo(opts: wxx.NavigateToOpts): void
 
-   
     /**
      * 关闭当前页面，跳转到应用内的某个页面。
      */
     export function redirectTo(opts: wxx.RedirectToOpts): void
 
-
-    
     /**
      * 跳转到 tabBar 页面，并关闭其他所有非 tabBar 页面
      */
@@ -396,7 +397,6 @@ declare namespace wx {
  * 登录
  */
 declare namespace wx {
-    
     /**
      * 调用接口获取登录凭证（code）进而换取用户登录态信息，包括用户的唯一标识（openid） 及本次登录的 会话密钥（session_key）等。用户数据的加解密通讯需要依赖会话密钥完成。
      * 注：调用 login 会引起登录态的刷新，之前的 sessionKey 可能会失效。
@@ -413,7 +413,6 @@ declare namespace wx {
  * 用户相关
  */
 declare namespace wx {
-
     /**
      * 获取用户信息，withCredentials 为 true 时需要先调用 wx.login 接口。
      * 需要用户授权 scope.userInfo
@@ -427,7 +426,6 @@ declare namespace wx {
  * 微信支付
  */
 declare namespace wx {
-
     /**
      * 发起微信支付
      */
@@ -438,11 +436,10 @@ declare namespace wx {
  * 转发
  */
 
- declare namespace wx {
-
-     /**
-      * 显示当前页面的转发按钮
-      */
+declare namespace wx {
+    /**
+     * 显示当前页面的转发按钮
+     */
     export function showShareMenu(opts: wxx.ShowShareMenuOpts): void
 
     /**
@@ -459,10 +456,9 @@ declare namespace wx {
      * 获取转发详细信息
      */
     export function getShareInfo(opts: wxx.GetShareInfoOpts): void
- }
+}
 
- declare namespace wx {
-
+declare namespace wx {
     /**
      * 调起客户端小程序设置界面，返回用户设置的操作结果。
      * 注：设置界面只会出现小程序已经向用户请求过的权限。
@@ -474,49 +470,44 @@ declare namespace wx {
      * 注：返回值中只会出现小程序已经向用户请求过的权限
      */
     export function getSetting(opts: Options<wxx.OpenSettingRes>): void
- }
+}
 
- /**
-  * 小程序跳转
-  */
+/**
+ * 小程序跳转
+ */
 declare namespace wx {
-
     /**
      * 打开同一公众号下关联的另一个小程序。
      */
-    export function navigateToMiniProgram(opts: wxx.NavigateToMiniProgramOpts): void
+    export function navigateToMiniProgram(
+        opts: wxx.NavigateToMiniProgramOpts
+    ): void
 
     /**
      * 返回到上一个小程序，只有在当前小程序是被其他小程序打开时可以调用成功
      */
-    export function navigateBackMiniProgram(opts: wxx.NavigateBackMiniProgramOpts): void
-
+    export function navigateBackMiniProgram(
+        opts: wxx.NavigateBackMiniProgramOpts
+    ): void
 }
 
 /**
  * 生物认证
  */
 declare namespace wx {
-
-    export function checkIsSupportSoterAuthentication(opts: Options<wxx.CheckIsSupportSoterAuthenticationRes>): void
+    export function checkIsSupportSoterAuthentication(
+        opts: Options<wxx.CheckIsSupportSoterAuthenticationRes>
+    ): void
 }
 
 /**
  * 调试
  */
 declare namespace wx {
-
     /**
      * 设置是否打开调试开关，此开关对正式版也能生效。
      */
     export function setEnableDebug(opts: wxx.SetEnableDebugOpts): void
-
 }
 
-export {
-    wx,
-    App,
-    Page,
-    Component,
-    Behavior
-}
+export { wx, App, Page, Component, Behavior }

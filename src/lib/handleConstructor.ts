@@ -5,7 +5,6 @@ import { alphabet } from './util'
 // import { router } from './router'
 
 export abstract class PageContext {
-
     /**
      * 页面数据
      */
@@ -54,8 +53,11 @@ export abstract class PageContext {
     abstract emit(listenerName: string, ...args: any[]): any
 }
 
-export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[], mixins?: any[]) => {
-
+export const handleConstructor = (
+    Constr: any,
+    lifeCycleMethodNames: string[],
+    mixins?: any[]
+) => {
     let data: any = {}
     let mixinOnLoads: any[] = []
 
@@ -65,11 +67,16 @@ export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[], m
         mixinOnLoads = res.onLoads
     }
 
-    let ins = new Constr
+    let ins = new Constr()
     let proto = Constr.prototype
 
     // 事件、监听方法名
-    let { listenerMethodNames, watchObjs, inputObjs, wxEventObjs } = Constr.decors
+    let {
+        listenerMethodNames,
+        watchObjs,
+        inputObjs,
+        wxEventObjs
+    } = Constr.decors
     /**
      * app || page || component
      */
@@ -102,7 +109,6 @@ export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[], m
             let key = isLifeCycleMethod ? lifeCycleMethods : methods
             if (k === 'onLoad') {
                 key['onLoad'] = function(this: PageContext, ...args) {
-
                     // 初始化data
                     _.extend(this, this.data)
                     // 初始化getters
@@ -117,7 +123,9 @@ export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[], m
                         if (listener) {
                             listener.call(this, ...args)
                         } else {
-                            throw Error(`no such listener ${listenerName} registered!`)
+                            throw Error(
+                                `no such listener ${listenerName} registered!`
+                            )
                         }
                     }
 
@@ -125,8 +133,10 @@ export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[], m
 
                     // promisify setData
                     if (this.setData) {
-                        this.setDataAsync = (arg) => {
-                            return new Promise(resolve => this.setData(arg, resolve))
+                        this.setDataAsync = arg => {
+                            return new Promise(resolve =>
+                                this.setData(arg, resolve)
+                            )
                         }
                     }
                     this.applyData = (isHandleWatcher: string = '') => {
@@ -142,9 +152,16 @@ export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[], m
                                 handleWatcher.call(this, watchObjs, toSetData)
                             }
 
-                            let getterChanges = handleGetters.call(this, getters, toSetData)
+                            let getterChanges = handleGetters.call(
+                                this,
+                                getters,
+                                toSetData
+                            )
 
-                            return this.setDataAsync({ ...toSetData, ...getterChanges })
+                            return this.setDataAsync({
+                                ...toSetData,
+                                ...getterChanges
+                            })
                         }
                         return Promise.resolve()
                     }
@@ -156,12 +173,10 @@ export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[], m
                     prop.call(this, ...args)
                     this.applyData('nowatch')
                 }
-            }
-            else if (k === 'onPreload') {
+            } else if (k === 'onPreload') {
                 // router.addEvent('', key[k])
-            }
-            // 处理wxEventObj
-            else if (_.includes(wxEventObjs, k)) {
+            } else if (_.includes(wxEventObjs, k)) {
+                // 处理wxEventObj
                 key[k] = function(this: PageContext, e: WxEvent) {
                     let args: any[] = []
                     _.each(e.currentTarget.dataset, (v, k) => {
@@ -174,8 +189,7 @@ export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[], m
                     prop.call(this, ...args, e)
                     type === 'page' && this.applyData()
                 }
-            }
-            else {
+            } else {
                 key[k] = function(this: PageContext, ...args) {
                     prop.call(this, ...args)
                     type === 'page' && this.applyData()
@@ -190,10 +204,13 @@ export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[], m
             data[k] = v
         }
     })
-    
+
     // 处理inputObj
     _.each(inputObjs, ({ propName, inputEventHandlerName, opts }) => {
-        methods[inputEventHandlerName] = function(this: PageContext, e: WxEvent) {
+        methods[inputEventHandlerName] = function(
+            this: PageContext,
+            e: WxEvent
+        ) {
             let value = e.detail.value
             this[propName] = value
             this.applyData()
@@ -204,17 +221,21 @@ export const handleConstructor = (Constr: any, lifeCycleMethodNames: string[], m
 }
 
 /**
- * 
- * @param derivedCtor 
- * @param baseCtors 
- * @param lifeCycleMethodNames 
+ *
+ * @param derivedCtor
+ * @param baseCtors
+ * @param lifeCycleMethodNames
  * @returns 返回data
  */
-function applyMixins(derivedCtor: any, baseCtors: any[], lifeCycleMethodNames: string[]) {
+function applyMixins(
+    derivedCtor: any,
+    baseCtors: any[],
+    lifeCycleMethodNames: string[]
+) {
     let data = {}
     let onLoads: any[] = []
     baseCtors.forEach(baseCtor => {
-        let ins = new baseCtor
+        let ins = new baseCtor()
         _.each(ins, (v, k) => {
             if (!_.isFunction(v) && k !== 'route') {
                 data[k] = v
@@ -229,7 +250,6 @@ function applyMixins(derivedCtor: any, baseCtors: any[], lifeCycleMethodNames: s
         if (baseCtor.prototype.onLoad) {
             onLoads.push(baseCtor.prototype.onLoad)
         }
-
     })
     return {
         data,
@@ -237,7 +257,11 @@ function applyMixins(derivedCtor: any, baseCtors: any[], lifeCycleMethodNames: s
     }
 }
 
-function handleWatcher(this: PageContext, watchObj: WatchObj[], toSetData: any) {
+function handleWatcher(
+    this: PageContext,
+    watchObj: WatchObj[],
+    toSetData: any
+) {
     _.each(watchObj, ({ dataName, func }) => {
         if (dataName in toSetData) {
             func.call(this, toSetData[dataName], this.data[dataName])
@@ -246,7 +270,11 @@ function handleWatcher(this: PageContext, watchObj: WatchObj[], toSetData: any) 
     })
 }
 
-function handleListener(this: PageContext, listenerMethodNames: string[], proto: Object) {
+function handleListener(
+    this: PageContext,
+    listenerMethodNames: string[],
+    proto: Object
+) {
     _.each(proto, (method, k) => {
         if (_.includes(listenerMethodNames, k)) {
             this.$listeners[k] = method
@@ -254,7 +282,12 @@ function handleListener(this: PageContext, listenerMethodNames: string[], proto:
     })
 }
 
-function handleGetters(this: PageContext, getters: any, toSetData: any, setters: any) {
+function handleGetters(
+    this: PageContext,
+    getters: any,
+    toSetData: any,
+    setters: any
+) {
     let changes: any = {}
     _.each(getters, (func, k) => {
         let computed = func.call(this)
@@ -265,4 +298,3 @@ function handleGetters(this: PageContext, getters: any, toSetData: any, setters:
     })
     return changes
 }
-

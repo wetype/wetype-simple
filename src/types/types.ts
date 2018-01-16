@@ -13,7 +13,15 @@ export interface RequestOpts extends Options<RequestRes> {
     /**
      * （需大写）有效值：OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
      */
-    method?: 'OPTIONS' | 'GET' | 'HEAD' | 'POST' | 'PUT' | 'DELETE' | 'TRACE' | 'CONNECT'
+    method?:
+        | 'OPTIONS'
+        | 'GET'
+        | 'HEAD'
+        | 'POST'
+        | 'PUT'
+        | 'DELETE'
+        | 'TRACE'
+        | 'CONNECT'
     /**
      * 默认：json，如果设为json，会尝试对返回的数据做一次 JSON.parse
      */
@@ -57,7 +65,6 @@ export interface UploadFileOpts extends Options<UploadFileRes> {
      * HTTP 请求中其他额外的 form data
      */
     formData?: any
-
 }
 
 export interface UploadFileRes {
@@ -182,7 +189,8 @@ export interface GetImageInfoRes {
     path: string
 }
 
-export interface SaveImageToPhotosAlbumOpts extends Options<SaveImageToPhotosAlbumRes> {
+export interface SaveImageToPhotosAlbumOpts
+    extends Options<SaveImageToPhotosAlbumRes> {
     /**
      * 图片文件路径，可以是临时文件路径也可以是永久文件路径，不支持网络图片路径
      */
@@ -236,7 +244,6 @@ export interface RecorderStartOptions {
 }
 
 export interface RecorderManager {
-    
     /**
      * 开始录音
      */
@@ -281,7 +288,6 @@ export interface RecorderManager {
      * 录音错误事件, 会回调错误信息
      */
     onError(cb: (err: any) => void): void
-
 }
 
 export interface ChooseVideoOpts extends Options<ChooseVideoRes> {
@@ -291,17 +297,17 @@ export interface ChooseVideoOpts extends Options<ChooseVideoRes> {
     sourceType?: string[]
 
     /**
-     * 是否压缩所选的视频源文件，默认值为true，需要压缩	
+     * 是否压缩所选的视频源文件，默认值为true，需要压缩
      */
     compressed?: boolean
 
     /**
-     * 拍摄视频最长拍摄时间，单位秒。最长支持 60 秒	
+     * 拍摄视频最长拍摄时间，单位秒。最长支持 60 秒
      */
     maxDuration?: number
 
     /**
-     * 默认调起的为前置还是后置摄像头。front: 前置，back: 后置，默认 back	
+     * 默认调起的为前置还是后置摄像头。front: 前置，back: 后置，默认 back
      */
     camera?: string
 }
@@ -327,9 +333,9 @@ export interface ChooseVideoRes {
      */
     height: number
 
-     /**
-      * 返回选定视频的宽
-      */
+    /**
+     * 返回选定视频的宽
+     */
     width: number
 }
 
@@ -367,9 +373,7 @@ export interface RemoveStorageOpts extends Options<RemoveStorageRes> {
     key: string
 }
 
-export interface RemoveStorageRes {
-
-}
+export interface RemoveStorageRes {}
 
 export interface GetLocationOpts extends Options<GetLocationRes> {
     /**
@@ -469,7 +473,7 @@ export interface Coordinate {
      * 经度
      */
     longitude: number
-    
+
     /**
      * 纬度
      */
@@ -539,7 +543,6 @@ export interface Scale {
 }
 
 export interface MapContext {
-
     /**
      * 获取当前地图中心的经纬度，返回的是 gcj02 坐标系，可以用于 wx.openLocation
      */
@@ -566,7 +569,7 @@ export interface MapContext {
     getRegion: Options<CoordinateSouthwestNorthEast>
 
     /**
-     * 获取当前地图的缩放级别	
+     * 获取当前地图的缩放级别
      */
     getScale: Options<Scale>
 }
@@ -713,7 +716,6 @@ export interface SetClipboardDataRes {
 }
 
 export interface AddPhoneContactOpts {
-
     /**
      * 头像本地文件路径
      */
@@ -813,7 +815,7 @@ export interface AddPhoneContactOpts {
      * 网站
      */
     url?: string
-    
+
     /**
      * 工作地址国家
      */
@@ -880,15 +882,14 @@ export interface AddPhoneContactOpts {
     success?(cb: (res: ErrMsg<'ok'>) => void): void
 
     /**
-     * 
+     *
      */
     fail?(cb: (res: ErrMsg<string>) => void): void
 
     /**
-     * 
+     *
      */
     complete?(cb: () => void): void
-
 }
 
 export interface StartPullDownRefreshRes {
@@ -1019,8 +1020,7 @@ export interface SetTopBarTextOpts extends Options<SetTopBarTextRes> {
     text: string
 }
 
-export interface SetTopBarTextRes {
-}
+export interface SetTopBarTextRes {}
 
 export interface NavigateToOpts extends Options<void> {
     /**
@@ -1029,7 +1029,7 @@ export interface NavigateToOpts extends Options<void> {
     url: string
 }
 
-export interface RedirectToOpts extends Options<void>{
+export interface RedirectToOpts extends Options<void> {
     /**
      * 需要跳转的应用内非 tabBar 的页面的路径，路径后可以带参数。参数与路径之间使用?分隔，参数键与参数值用=相连，不同参数用&分隔；如 'path?key=value&key2=value2'
      */
@@ -1063,7 +1063,7 @@ export interface LoginRes {
     code: string
 }
 
-export interface GetUserInfoOpts extends Options<GetUserInfoRes>{
+export interface GetUserInfoOpts extends Options<GetUserInfoRes> {
     /**
      * 是否带上登录态信息
      */
@@ -1166,7 +1166,7 @@ export interface RequestPaymentOpts {
     paySign: string
 
     /**
-     * 
+     *
      */
     success(cb: (res: RequestPaymentRes) => void): void
 
@@ -1179,7 +1179,7 @@ export interface RequestPaymentRes {
     errMsg: 'requestPayment:ok' | 'requestPayment:fail cancel' | string
 }
 
-export interface ShowShareMenuOpts extends Options<void>{
+export interface ShowShareMenuOpts extends Options<void> {
     /**
      * 是否使用带 shareTicket 的转发
      */
@@ -1210,18 +1210,26 @@ export interface GetShareInfoRes {
     iv: string
 }
 
-export type Scope = 'userInfo' | 'userLocation' | 'address' | 'invoiceTitle' | 'werun' | 'record' | 'writePhotosAlbum'
+export type Scope =
+    | 'userInfo'
+    | 'userLocation'
+    | 'address'
+    | 'invoiceTitle'
+    | 'werun'
+    | 'record'
+    | 'writePhotosAlbum'
 export interface OpenSettingRes {
     /**
      * 用户授权结果，其中 key 为 scope 值，value 为 Bool 值，表示用户是否允许授权，详见 scope 列表
      */
     authSetting: {
-        key: Scope,
+        key: Scope
         value: boolean
     }
 }
 
-export interface NavigateToMiniProgramOpts extends Options<NavigateToMiniProgramRes>{
+export interface NavigateToMiniProgramOpts
+    extends Options<NavigateToMiniProgramRes> {
     /**
      * 要打开的小程序 appId
      */
@@ -1250,7 +1258,8 @@ export interface NavigateToMiniProgramRes {
     errMsg: string
 }
 
-export interface NavigateBackMiniProgramOpts extends Options<NavigateToMiniProgramRes> {
+export interface NavigateBackMiniProgramOpts
+    extends Options<NavigateToMiniProgramRes> {
     /**
      * 需要返回给上一个小程序的数据，上一个小程序可在 App.onShow() 中获取到这份数据。
      */

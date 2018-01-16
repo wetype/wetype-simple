@@ -1,35 +1,36 @@
 {
-  "name": "wetype-simple",
-  "version": "0.0.2-alpha-1",
-  "author": "GrePuG",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "scripts": {
-    "start": "rm -rf dist && npm run build",
-    "build": "rollup -c && tsc",
-    "postbuild": "uglifyjs --compress --mangle -o ./dist/wetype.min.js -- ./dist/wetype.js"
-  },
-  "devDependencies": {
-    "@types/lodash": "^4.14.92",
-    "@types/lodash-es": "^4.17.0",
-    "@types/node": "^9.3.0",
-    "@types/rollup": "^0.51.4",
-    "babel-core": "^6.26.0",
-    "babel-plugin-external-helpers": "^6.22.0",
-    "babel-preset-env": "^1.6.1",
-    "gulp": "^3.9.1",
-    "is-extendable": "^1.0.1",
-    "isobject": "^3.0.1",
-    "rollup": "^0.54.0",
-    "rollup-plugin-babel": "^3.0.3",
-    "rollup-plugin-node-resolve": "^3.0.2",
-    "rollup-plugin-typescript2": "^0.10.0",
-    "through2": "^2.0.3",
-    "typescript": "^2.6.2",
-    "uglify-js": "^3.3.6"
-  },
-  "dependencies": {
-    "lodash-es": "^4.17.4",
-    "tslib": "^1.8.1"
-  }
+    "name": "wetype-simple",
+    "version": "0.0.2-alpha-1",
+    "author": "GrePuG",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "start": "rm -rf dist && npm run build",
+        "build": "rollup -c && tsc",
+        "postbuild":
+            "uglifyjs --compress --mangle -o ./dist/wetype.min.js -- ./dist/wetype.js"
+    },
+    "devDependencies": {
+        "@types/lodash": "^4.14.92",
+        "@types/lodash-es": "^4.17.0",
+        "@types/node": "^9.3.0",
+        "@types/rollup": "^0.51.4",
+        "babel-core": "^6.26.0",
+        "babel-plugin-external-helpers": "^6.22.0",
+        "babel-preset-env": "^1.6.1",
+        "gulp": "^3.9.1",
+        "is-extendable": "^1.0.1",
+        "isobject": "^3.0.1",
+        "rollup": "^0.54.0",
+        "rollup-plugin-babel": "^3.0.3",
+        "rollup-plugin-node-resolve": "^3.0.2",
+        "rollup-plugin-typescript2": "^0.10.0",
+        "through2": "^2.0.3",
+        "typescript": "^2.6.2",
+        "uglify-js": "^3.3.6"
+    },
+    "dependencies": {
+        "lodash-es": "^4.17.4",
+        "tslib": "^1.8.1"
+    }
 }

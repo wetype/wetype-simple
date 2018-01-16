@@ -2,7 +2,6 @@ import { wx } from './wx'
 import { store } from './store'
 
 export class Router {
-
     paths: string[] = []
 
     currentRoute: string = 'index'
@@ -11,9 +10,7 @@ export class Router {
 
     pages: string[] = []
 
-    init() {
-
-    }
+    init() {}
 
     addPage(path: string) {
         this.pages.push(path)
@@ -29,10 +26,7 @@ export class Router {
         store.mutate({ requestData: { path: res } })
     }
 
-    navigateBack() {
-
-    }
-
+    navigateBack() {}
 }
 
-export const router = new Router
+export const router = new Router()

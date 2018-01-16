@@ -2,7 +2,7 @@ import { ErrMsg, WindowConfig, ObjectLiteral } from './common'
 
 export interface OnloadOptions {
     /**
-     * 
+     *
      */
     query?: any
 }
@@ -21,7 +21,7 @@ export interface ShareAppMessageOptions {
 
 export interface ShareAppMessageRes {
     /**
-     * 转发标题	
+     * 转发标题
      * 默认：当前小程序名称
      */
     title?: string
@@ -46,24 +46,23 @@ export interface ShareAppMessageRes {
 }
 
 export interface PageOptions {
-    /** 
+    /**
      * 页面配置
-    */
+     */
     config?: PageConfig
 
-    /** 
+    /**
      * 混合
-    */
+     */
     mixins?: any[]
 
-    /** 
+    /**
      * 页面路径
-    */
+     */
     // path: string
 }
 
 export interface PageConfig extends WindowConfig {
-
     /**
      * 设置为 true 则页面整体不能上下滚动；只在 page.json 中有效，无法在 app.json 中设置该项
      * default: false
@@ -77,21 +76,18 @@ export interface PageConfig extends WindowConfig {
 }
 
 export interface WatchObj {
-
-    /** 
+    /**
      * data name
-    */
+     */
     dataName: string
 
     /**
-     * 
+     *
      */
     func(val: any, old: any): void
-
 }
 
 export interface InputObj {
-
     propName: string
 
     inputEventHandlerName: string
@@ -100,7 +96,6 @@ export interface InputObj {
         // 截流
         debounce: number
     }
-
 }
 
 export interface WxEventObj {
@@ -108,8 +103,8 @@ export interface WxEventObj {
 }
 
 export interface PageDecors {
-    listenerMethodNames: string[],
-    watchObjs: WatchObj[],
+    listenerMethodNames: string[]
+    watchObjs: WatchObj[]
     inputObjs: InputObj[]
     wxEventObjs: string[]
 }

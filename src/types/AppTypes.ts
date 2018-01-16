@@ -1,7 +1,6 @@
 import { WindowConfig } from './common'
 
 export interface OnLaunchOptions {
-    
     /**
      * 打开小程序的路径
      */
@@ -39,13 +38,12 @@ export interface OnLaunchOptions {
 }
 
 export interface App {
-
     onLaunch(options: OnLaunchOptions): void
 
     onShow?(options: OnLaunchOptions): void
-    
+
     onHide?(): void
-    
+
     onError?(): void
 }
 
@@ -60,15 +58,15 @@ export interface AppConfig {
      */
     pages?: string[]
 
-    /** 
-     * 主页 
+    /**
+     * 主页
      * 默认 index
-    */
+     */
     mainPage?: string
 
-    /** 
+    /**
      * 排除的页面
-    */
+     */
     excludePages?: string[]
 
     /**
@@ -91,7 +89,7 @@ export interface AppConfig {
          * tab 上的文字选中时的颜色
          */
         selectedColor: string
-        
+
         /**
          * tab 的背景色
          */

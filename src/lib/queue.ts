@@ -1,7 +1,6 @@
 declare const console: any
 
 export class Queue {
-
     queue: Promise<any>[] = []
 
     curIndex = 0
@@ -16,7 +15,7 @@ export class Queue {
 
     private async resolve() {
         console.log('len', this.curIndex, this.queue.length)
-        if ((this.curIndex + 1) > this.queue.length) {
+        if (this.curIndex + 1 > this.queue.length) {
             console.log('idle!!')
             this.changeState('idle')
         } else {
@@ -49,4 +48,4 @@ export class Queue {
     }
 }
 
-export const queue = new Queue
+export const queue = new Queue()

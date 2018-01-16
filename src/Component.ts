@@ -5,7 +5,6 @@ import { Behavior } from './Behavior'
 import { ComOptions } from './types/ComponentTypes'
 
 export abstract class Component {
-
     type = 'component'
 
     data: any
@@ -17,9 +16,18 @@ export abstract class Component {
                     comConstructor.config = comOptions.config
                 }
             } else {
-                let lifeCycleMethodNames = ['attached', 'moved', 'detached', 'created', 'ready']
-                let { data, methods, lifeCycleMethods } = handleAppConstr(comConstructor, lifeCycleMethodNames)
-    
+                let lifeCycleMethodNames = [
+                    'attached',
+                    'moved',
+                    'detached',
+                    'created',
+                    'ready'
+                ]
+                let { data, methods, lifeCycleMethods } = handleAppConstr(
+                    comConstructor,
+                    lifeCycleMethodNames
+                )
+
                 if (comOptions) {
                     // 去掉config
                     delete comOptions.config
@@ -36,7 +44,6 @@ export abstract class Component {
                     ...lifeCycleMethods,
                     ...comOptions
                 })
-    
             }
         }
     }
@@ -44,9 +51,7 @@ export abstract class Component {
     /**
      * 用于将数据从逻辑层发送到视图层（异步），同时改变对应的 this.data 的值（同步）。
      */
-    setData(arg: any): void {
-        
-    }
+    setData(arg: any): void {}
 
     /**
      * 异步setData
@@ -54,15 +59,11 @@ export abstract class Component {
     setDataAsync(arg: any): Promise<void> {
         return Promise.resolve()
     }
-    
 }
 
 export interface Component {
-
     // 生命周期函数
     attached?(): void
     moved?(): void
     detached?(): void
-
 }
-

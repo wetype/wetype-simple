@@ -1,6 +1,10 @@
 export type Properties = {
     [key: string]: {
-        type?: StringConstructor | ArrayConstructor | ObjectConstructor | NumberConstructor
+        type?:
+            | StringConstructor
+            | ArrayConstructor
+            | ObjectConstructor
+            | NumberConstructor
         value: any
     }
 }

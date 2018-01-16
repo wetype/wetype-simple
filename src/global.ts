@@ -1,4 +1,3 @@
-
 export interface Global {
     user: null | any
 }

@@ -21,7 +21,7 @@ export interface WindowConfig {
      * default: #000000
      */
     navigationBarBackgroundColor?: string
-    
+
     /**
      * 导航栏标题颜色，仅支持 black/white
      * default: white
@@ -51,7 +51,7 @@ export interface WindowConfig {
      */
     enablePullDownRefresh?: boolean
 
-     /**
+    /**
      * 页面上拉触底事件触发时距页面底部距离，单位为px
      * default: 50
      */

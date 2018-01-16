@@ -1,18 +1,19 @@
 import * as _ from 'lodash-es'
 
 export abstract class AppContext {
-
     /**
      * # wetype
      * data
      */
     [key: string]: any
-
 }
 
-export const handleAppConstr = (Constr: any, lifeCycleMethodNames: string[], mixins?: any[]) => {
-
-    let ins = new Constr
+export const handleAppConstr = (
+    Constr: any,
+    lifeCycleMethodNames: string[],
+    mixins?: any[]
+) => {
+    let ins = new Constr()
     let proto = Constr.prototype
 
     let methods: any = {}
