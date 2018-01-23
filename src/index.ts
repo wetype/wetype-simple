@@ -7,6 +7,7 @@ import { wx, App as nativeApp, Page as nativePage } from './lib/wx'
 import * as wt from './lib/wetype'
 import * as types from './types'
 import * as _ from 'lodash-es'
+import { Http } from './lib/http'
 
 export {
     _,
@@ -22,5 +23,6 @@ export {
     wx,
     nativeApp,
     nativePage,
-    types
+    types,
+    Http
 }

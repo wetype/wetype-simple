@@ -22,6 +22,7 @@ export interface RequestOpts extends Options<RequestRes> {
         | 'DELETE'
         | 'TRACE'
         | 'CONNECT'
+        | string
     /**
      * 默认：json，如果设为json，会尝试对返回的数据做一次 JSON.parse
      */
