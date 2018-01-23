@@ -22,7 +22,7 @@
 ```typescript
 // app.ts
 
-import { App } from 'wetype-simple'
+import { App } from 'wetype'
 
 @App.decor({
     config: {
@@ -42,7 +42,7 @@ class APP extends App {
 ```typescript
 // myPage.ts
 
-import { Page, wx, wt, types } from 'wetype-simple'
+import { Page, wx, wt, types } from 'wetype'
 import { MyMixin } from './myMixin'
 
 @Page.decor({
@@ -90,7 +90,7 @@ class MyPage extends Page {
 ```typescript
 // myMixin.ts
 
-import { Page, wx } from 'wetype-simple'
+import { Page, wx } from 'wetype'
 
 export class MyMixin extends Page {
     onLoad() {
@@ -127,14 +127,14 @@ export class MyMixin extends Page {
 
 ## 用法
 
-推荐使用 wetype 提供的开发模板`wetype-simple-template`
+推荐使用 wetype 提供的开发模板`wetype-template`
 
 ```bash
-$ git clone https://github.com/wetype/wetype-simple-template
+$ git clone https://github.com/wetype/wetype-template
 ```
 
 ```bash
-$ cd wetype-simple-template
+$ cd wetype-template
 ```
 
 ```bash
