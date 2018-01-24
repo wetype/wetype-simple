@@ -1014,6 +1014,77 @@ export interface SetNavigationBarTitleOpts extends Options<void> {
     title: string
 }
 
+export interface SetTabBarBadgeOpts extends Options<void> {
+    /**
+     * tabBar的哪一项，从左边算起
+     */
+    index: number
+
+    /**
+     * 显示的文本，超过 3 个字符则显示成“…”
+     */
+    text: string
+}
+
+export interface RemoveTabBarBadgeOpts extends Options<void> {
+    /**
+     * tabBar的哪一项，从左边算起
+     */
+    index: number
+}
+
+export interface SetTabBarStyleOpts extends Options<void> {
+    /**
+     * tab 上的文字默认颜色
+     */
+    color: string
+    /**
+     * tab 上的文字选中时的颜色
+     */
+    selectedColor: string
+    /**
+     * tab 的背景色
+     */
+    backgroundColor: string
+    /**
+     * tabbar上边框的颜色， 仅支持 black/white
+     */
+    borderStyle: string
+}
+
+export interface SetTabBarItemOpts extends Options<void> {
+    /**
+     * tabBar 的哪一项，从左边算起
+     */
+    index: number
+    /**
+     * tab 上按钮文字
+     */
+    text?: string
+    /**
+     * 图片路径，icon 大小限制为40kb，建议尺寸为 81px * 81px，当 postion 为 top 时，此参数无效，不支持网络图片
+     */
+    iconPath?: string
+    /**
+     * 选中时的图片路径，icon 大小限制为40kb，建议尺寸为 81px * 81px ，当 postion 为 top 时，此参数无效
+     */
+    selectedIconPath?: string
+}
+
+export interface ShowTabBarOpts extends Options<void> {
+    /**
+     * 是否需要动画效果，默认无
+     */
+    animation?: boolean
+}
+
+export interface HideTabBarOpts extends Options<void> {
+    /**
+     * 是否需要动画效果，默认无
+     */
+    animation?: boolean
+}
+
 export interface SetTopBarTextOpts extends Options<SetTopBarTextRes> {
     /**
      * 置顶栏文字内容

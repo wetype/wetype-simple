@@ -367,6 +367,48 @@ declare namespace wx {
     export function setTopBarText(opts: wxx.SetTopBarTextOpts): void
 }
 
+declare namespace wx {
+    /**
+     * 为 tabBar 某一项的右上角添加文本
+     */
+    export function setTabBarBadge(opts: wxx.SetTabBarBadgeOpts): void
+
+    /**
+     * 移除 tabBar 某一项右上角的文本
+     */
+    export function removeTabBarBadge(opts: wxx.RemoveTabBarBadgeOpts): void
+
+    /**
+     * 显示 tabBar 某一项的右上角的红点
+     */
+    export function showTabBarRedDot(opts: Options<void>): void
+
+    /**
+     * 隐藏 tabBar 某一项的右上角的红点
+     */
+    export function hideTabBarRedDot(opts: Options<void>): void
+
+    /**
+     * 动态设置 tabBar 的整体样式
+     */
+    export function setTabBarStyle(opts: wxx.SetTabBarStyleOpts): void
+
+    /**
+     * 动态设置 tabBar 某一项的内容
+     */
+    export function setTabBarItem(opts: wxx.SetTabBarItemOpts): void
+
+    /**
+     * 显示 tabBar
+     */
+    export function showTabBar(opts: wxx.ShowTabBarOpts): void
+
+    /**
+     * 隐藏 tabBar
+     */
+    export function hideTabBar(opts: wxx.HideTabBarOpts): void
+}
+
 /**
  * 页面导航
  */

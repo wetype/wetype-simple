@@ -157,4 +157,9 @@ export interface Page {
      * wetype事件
      */
     onPreload?(): void
+
+    /**
+     * 点击 tab 时触发，见 链接
+     */
+    onTabItemTap?(): void
 }
