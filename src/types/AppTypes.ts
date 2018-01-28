@@ -56,7 +56,7 @@ export interface AppWindowConfig extends WindowConfig {
      * 导航栏样式，仅支持 default/custom。custom 模式可自定义导航栏，只保留右上角胶囊状的按钮
      * 默认 default
      */
-    navgationStyle: string
+    navigationStyle: string
 }
 
 export interface AppConfig {
