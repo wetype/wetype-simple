@@ -51,6 +51,14 @@ export interface AppOptions {
     config: AppConfig
 }
 
+export interface AppWindowConfig extends WindowConfig {
+    /**
+     * 导航栏样式，仅支持 default/custom。custom 模式可自定义导航栏，只保留右上角胶囊状的按钮
+     * 默认 default
+     */
+    navgationStyle: string
+}
+
 export interface AppConfig {
     /**
      * 接受一个数组，每一项都是字符串，来指定小程序由哪些页面组成。每一项代表对应页面的【路径+文件名】信息，数组的第一项代表小程序的初始页面。小程序中新增/减少页面，都需要对 pages 数组进行修改。
@@ -72,7 +80,7 @@ export interface AppConfig {
     /**
      * 用于设置小程序的状态栏、导航条、标题、窗口背景色。
      */
-    window?: WindowConfig
+    window?: AppWindowConfig
 
     /**
      * 如果小程序是一个多 tab 应用（客户端窗口的底部或顶部有 tab 栏可以切换页面），可以通过 tabBar 配置项指定 tab 栏的表现，以及 tab 切换时显示的对应页面。

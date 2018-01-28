@@ -8,8 +8,7 @@
         "start": "rm -rf dist && npm run build",
         "build": "rollup -c && tsc",
         "postbuild":
-            "uglifyjs --compress --mangle -o ./dist/wetype.min.js -- ./dist/wetype.js",
-        "precommit": "pretty-quick --staged"
+            "uglifyjs --compress --mangle -o ./dist/wetype.min.js -- ./dist/wetype.js"
     },
     "devDependencies": {
         "@types/lodash": "^4.14.92",
