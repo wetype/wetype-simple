@@ -1013,6 +1013,33 @@ export interface SetNavigationBarTitleOpts extends Options<void> {
      */
     title: string
 }
+export interface AnimationObj {
+    /**
+     * 动画变化时间，默认0，单位：毫秒
+     */
+    duration?: number
+
+    /**
+     * 动画变化方式，默认 linear
+     */
+    timingFunc?: 'linear' | 'easeIn' | 'easeOut' | 'easeInOut'
+}
+export interface SetNavigationBarColorOpts extends Options<void> {
+    /**
+     * 前景颜色值，包括按钮、标题、状态栏的颜色，仅支持 #ffffff 和 #000000
+     */
+    frontColor: string
+
+    /**
+     * 背景颜色值，有效值为十六进制颜色
+     */
+    backgroundColor: string
+
+    /**
+     * 是否有动画效果
+     */
+    animation?: AnimationObj
+}
 
 export interface SetTabBarBadgeOpts extends Options<void> {
     /**

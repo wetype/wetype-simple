@@ -357,6 +357,14 @@ declare namespace wx {
     export function showNavigationBarLoading(): void
 
     /**
+     * 设置状态栏字体颜色
+     * 只支持 #fff #000
+     */
+    export function setNavigationBarColor(
+        opts: wxx.SetNavigationBarColorOpts
+    ): void
+
+    /**
      * 隐藏导航条加载动画
      */
     export function hideNavigationBarLoading(): void
