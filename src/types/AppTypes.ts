@@ -118,7 +118,7 @@ export interface AppConfig {
          * 可选值 bottom、top
          * default: bottom
          */
-        position: string
+        position?: string
     }
 
     /**
