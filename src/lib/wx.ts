@@ -305,6 +305,10 @@ declare namespace wx {
     export function stopPullDownRefresh(): void
 }
 
+declare namespace wx {
+    export function createSelectorQuery(): wxx.SelectorQuery
+}
+
 /**
  * 交互反馈
  */

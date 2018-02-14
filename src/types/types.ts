@@ -897,6 +897,80 @@ export interface StartPullDownRefreshRes {
     errMsg: ErrMsg<string>
 }
 
+export interface SelectorQuery {
+    /**
+     * 将选择器的选取范围更改为自定义组件component内。（初始时，选择器仅选取页面范围的节点，不会选取任何自定义组件中的节点。）
+     */
+    in(): any
+
+    /**
+     * 在当前页面下选择第一个匹配选择器selector的节点，返回一个NodesRef对象实例，可以用于获取节点信息。
+     * @param selector
+     */
+    select(selector: string): NodeRef
+
+    selectAll(selector: string): NodeRef
+
+    selectViewport(): NodeRef
+
+    exec(callback?: () => void): void
+}
+
+export interface NodeRef {
+    boundingClientRect(callback: (rect: Rect | Rect[]) => void): SelectorQuery
+
+    scrollOffset(callback: (res: ScrollOffsetRes) => void): SelectorQuery
+
+    fields(
+        fields: FieldsOpts,
+        callback: (res: FieldsRes) => void
+    ): SelectorQuery
+}
+
+export interface Rect {
+    id: string
+
+    dataset: any
+
+    left: number
+
+    right: number
+
+    top: number
+
+    bottom: number
+
+    width: number
+
+    height: number
+}
+
+export interface ScrollOffsetRes {
+    id: string
+    dataset: any
+    scrollLeft: number
+    scrollTop: number
+}
+
+export interface FieldsOpts {
+    id?: string
+    dataset?: boolean
+    size?: boolean
+    rect?: boolean
+    scrollOffset?: boolean
+    properties?: string[]
+}
+
+export interface FieldsRes {
+    dataset: any
+    width: number
+    height: number
+    scrollLeft: number
+    scrollTop: number
+    scrollX: number
+    scrollY: number
+}
+
 export interface ShowToastOpts extends Options<void> {
     /**
      * 提示的内容
