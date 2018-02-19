@@ -114,3 +114,15 @@ export const showActionSheet = (
     opts: wxTypes.ShowActionSheetOpts
 ): Promise<wxTypes.ShowActionSheetRes> =>
     promisify<wxTypes.ShowActionSheetRes>(opts, wx.showActionSheet)
+
+export const select = (
+    selector: string
+): Promise<wxTypes.Rect | wxTypes.Rect[]> => {
+    return new Promise((resolve, reject) => {
+        let query = wx.createSelectorQuery()
+        query
+            .select(selector)
+            .boundingClientRect(rect => resolve(rect))
+            .exec()
+    })
+}
