@@ -141,9 +141,13 @@ export const handleConstructor = (
                     // promisify setData
                     if (this.setData) {
                         this.setDataAsync = arg => {
-                            return new Promise(resolve =>
-                                this.setData(arg, resolve)
-                            )
+                            return new Promise(resolve => {
+                                try {
+                                    this.setData(arg, resolve)
+                                } catch (e) {
+                                    console.error('setData error')
+                                }
+                            })
                         }
                     }
                     this.applyData = (isHandleWatcher: string = '') => {
@@ -290,11 +294,14 @@ function handleGetters(
 ) {
     let changes: any = {}
     _.each(getters, (func, k) => {
-        console.log('handlegetters', this)
         let computed = func.call(this)
-        if (!_.isEqual(computed, this[k])) {
-            changes[k] = computed
-            this[k] = computed
+        if (computed !== void 0) {
+            if (!_.isEqual(computed, this[k])) {
+                changes[k] = computed
+                this[k] = computed
+            }
+        } else {
+            throw Error('computed property cannot retur a value of undefined')
         }
     })
     return changes
