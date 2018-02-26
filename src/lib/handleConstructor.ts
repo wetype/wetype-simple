@@ -91,15 +91,22 @@ export const handleConstructor = (
     // 加入router
     // router.addPage(path)
 
+    // 遍历属性
+    _.each(ins, (v, k) => {
+        // 排除route 和 type function 和 getters
+        if (!_.isFunction(v) && k !== 'route') {
+            data[k] = v
+        }
+    })
+
     // 先遍历原型获取getters 和 setters
-    _.each(proto, (v, k) => {
-        if (!_.isFunction(v)) {
-            let descriptor = Object.getOwnPropertyDescriptor(proto, k)
-            if (descriptor) {
-                getters[k] = descriptor.get
-                // setters[k] = descriptor.set
-                data[k] = v
-            }
+    Object.getOwnPropertyNames(proto).forEach(k => {
+        let descriptor = Object.getOwnPropertyDescriptor(proto, k)
+        if (descriptor && descriptor.get && !descriptor.value) {
+            getters[k] = descriptor.get
+            delete proto[k]
+            // setters[k] = descriptor.set
+            data[k] = null
         }
     })
 
@@ -198,13 +205,6 @@ export const handleConstructor = (
         }
     })
 
-    _.each(ins, (v, k) => {
-        // 排除route 和 type function
-        if (!_.isFunction(v) && k !== 'route') {
-            data[k] = v
-        }
-    })
-
     // 处理inputObj
     _.each(inputObjs, ({ propName, inputEventHandlerName, opts }) => {
         methods[inputEventHandlerName] = function(
@@ -290,6 +290,7 @@ function handleGetters(
 ) {
     let changes: any = {}
     _.each(getters, (func, k) => {
+        console.log('handlegetters', this)
         let computed = func.call(this)
         if (!_.isEqual(computed, this[k])) {
             changes[k] = computed
