@@ -301,7 +301,7 @@ function handleGetters(
                 this[k] = computed
             }
         } else {
-            throw Error('computed property cannot retur a value of undefined')
+            throw Error('computed property cannot return a value of undefined')
         }
     })
     return changes
