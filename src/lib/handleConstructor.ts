@@ -91,15 +91,22 @@ export const handleConstructor = (
     // 加入router
     // router.addPage(path)
 
+    // 遍历属性
+    _.each(ins, (v, k) => {
+        // 排除route 和 type function 和 getters
+        if (!_.isFunction(v) && k !== 'route') {
+            data[k] = v
+        }
+    })
+
     // 先遍历原型获取getters 和 setters
-    _.each(proto, (v, k) => {
-        if (!_.isFunction(v)) {
-            let descriptor = Object.getOwnPropertyDescriptor(proto, k)
-            if (descriptor) {
-                getters[k] = descriptor.get
-                // setters[k] = descriptor.set
-                data[k] = v
-            }
+    Object.getOwnPropertyNames(proto).forEach(k => {
+        let descriptor = Object.getOwnPropertyDescriptor(proto, k)
+        if (descriptor && descriptor.get && !descriptor.value) {
+            getters[k] = descriptor.get
+            delete proto[k]
+            // setters[k] = descriptor.set
+            data[k] = null
         }
     })
 
@@ -134,9 +141,13 @@ export const handleConstructor = (
                     // promisify setData
                     if (this.setData) {
                         this.setDataAsync = arg => {
-                            return new Promise(resolve =>
-                                this.setData(arg, resolve)
-                            )
+                            return new Promise(resolve => {
+                                try {
+                                    this.setData(arg, resolve)
+                                } catch (e) {
+                                    console.error('setData error')
+                                }
+                            })
                         }
                     }
                     this.applyData = (isHandleWatcher: string = '') => {
@@ -195,13 +206,6 @@ export const handleConstructor = (
                     type === 'page' && this.applyData()
                 }
             }
-        }
-    })
-
-    _.each(ins, (v, k) => {
-        // 排除route 和 type function
-        if (!_.isFunction(v) && k !== 'route') {
-            data[k] = v
         }
     })
 
@@ -291,9 +295,13 @@ function handleGetters(
     let changes: any = {}
     _.each(getters, (func, k) => {
         let computed = func.call(this)
-        if (!_.isEqual(computed, this[k])) {
-            changes[k] = computed
-            this[k] = computed
+        if (computed !== void 0) {
+            if (!_.isEqual(computed, this[k])) {
+                changes[k] = computed
+                this[k] = computed
+            }
+        } else {
+            throw Error('computed property cannot retur a value of undefined')
         }
     })
     return changes
