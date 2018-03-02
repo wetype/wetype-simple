@@ -4,7 +4,8 @@ export interface OnloadOptions {
     /**
      *
      */
-    query?: any
+    // query?: any
+    [key: string]: string
 }
 
 export interface ShareAppMessageOptions {
