@@ -106,9 +106,9 @@ export const showLoading = (opts: wxTypes.ShowLoadingOpts): Promise<void> =>
     promisify<void>(opts, wx.showLoading)
 
 export const getUserInfo = (
-    opts: wxTypes.GetUserInfoOpts
+    opts?: wxTypes.GetUserInfoOpts
 ): Promise<wxTypes.GetUserInfoRes> =>
-    promisify<wxTypes.GetUserInfoRes>(opts, wx.getUserInfo)
+    promisify<wxTypes.GetUserInfoRes>(opts || {}, wx.getUserInfo)
 
 export const showActionSheet = (
     opts: wxTypes.ShowActionSheetOpts
@@ -126,3 +126,5 @@ export const select = (
             .exec()
     })
 }
+
+// export const requestPayment = ()
