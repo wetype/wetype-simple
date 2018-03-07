@@ -106,7 +106,7 @@ export const handleConstructor = (
             getters[k] = descriptor.get
             delete proto[k]
             // setters[k] = descriptor.set
-            data[k] = null
+            data[k] = ''
         }
     })
 
