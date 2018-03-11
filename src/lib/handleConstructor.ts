@@ -2,6 +2,7 @@ import * as _ from 'lodash-es'
 import { WatchObj, InputObj, PageConfig } from '../types/PageTypes'
 import { WxEvent } from '../types/eventTypes'
 import { alphabet } from './util'
+import { listeners } from './listeners'
 // import { router } from './router'
 
 export abstract class PageContext {
@@ -45,12 +46,12 @@ export abstract class PageContext {
     /**
      * listener
      */
-    $listener: any
+    // $listener: any
 
     /**
      * 发射时间
      */
-    abstract emit(listenerName: string, ...args: any[]): any
+    abstract emit(listenerName: string, path: string, ...args: any[]): any
 }
 
 export const handleConstructor = (
@@ -121,17 +122,22 @@ export const handleConstructor = (
                     // 初始化getters
                     _.extend(this, _.mapValues(getters, v => v.call(this)))
                     // 初始化$listener
-                    this.$listeners = {}
+                    // this.$listeners = {}
                     /**
                      * 实现emit
                      */
-                    this.emit = (listenerName: string, ...args: any[]) => {
-                        let listener = this.$listeners[listenerName]
+                    this.emit = (
+                        listenerName: string,
+                        path: string,
+                        ...args: any[]
+                    ) => {
+                        let listener = listeners[`${path}-${listenerName}`]
                         if (listener) {
-                            listener.call(this, ...args)
+                            listener.method.call(listener.context, ...args)
+                            listener.context.applyData()
                         } else {
                             throw Error(
-                                `no such listener ${listenerName} registered!`
+                                `no such listener ${listenerName} in page ${path} registered!`
                             )
                         }
                     }
@@ -281,7 +287,10 @@ function handleListener(
 ) {
     _.each(proto, (method, k) => {
         if (_.includes(listenerMethodNames, k)) {
-            this.$listeners[k] = method
+            listeners[`${this.route}-${k}`] = {
+                method,
+                context: this
+            }
         }
     })
 }

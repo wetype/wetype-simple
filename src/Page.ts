@@ -107,13 +107,13 @@ export interface Page {
     /**
      * 发射事件
      */
-    emit(eventName: string, ...args: any[]): any
+    emit(eventName: string, path: string, ...args: any[]): any
 
     /**
      * 生命周期函数--监听页面初次渲染完成
     /**
-     * 
-     * 
+     *
+     *
      * @memberof Page
      */
     onReady?(): void
