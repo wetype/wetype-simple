@@ -91,9 +91,10 @@ export interface WatchObj {
 export interface InputObj {
     propName: string
 
-    inputEventHandlerName: string
+    handler?: Function
 
     opts?: {
+        eventName: string
         // 截流
         debounce: number
     }

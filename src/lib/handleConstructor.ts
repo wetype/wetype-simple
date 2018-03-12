@@ -72,12 +72,9 @@ export const handleConstructor = (
     let proto = Constr.prototype
 
     // 事件、监听方法名
-    let {
-        listenerMethodNames,
-        watchObjs,
-        inputObjs,
-        wxEventObjs
-    } = Constr.decors
+    let { listenerMethodNames, watchObjs, wxEventObjs } = Constr.decors
+
+    let inputObjs: InputObj[] = Constr.decors.inputObjs
     /**
      * app || page || component
      */
@@ -216,12 +213,19 @@ export const handleConstructor = (
     })
 
     // 处理inputObj
-    _.each(inputObjs, ({ propName, inputEventHandlerName, opts }) => {
+    _.each(inputObjs, ({ propName, opts, handler }) => {
+        let inputEventHandlerName =
+            (opts && opts.eventName) || `${propName}Input`
         methods[inputEventHandlerName] = function(
             this: PageContext,
             e: WxEvent
         ) {
             let value = e.detail.value
+            if (handler) {
+                handler.call(this, value, e)
+                this.applyData()
+                return
+            }
             this[propName] = value
             this.applyData()
         }

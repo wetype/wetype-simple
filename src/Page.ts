@@ -68,12 +68,12 @@ export abstract class Page {
         }
     }
 
-    static input(inputEventHandlerName: string, opts?: any) {
+    static input(handler?: Function, opts?: any) {
         return function(proto: Object, propName: string) {
             Page.decors.inputObjs.push({
                 propName,
-                inputEventHandlerName,
-                opts
+                opts,
+                handler
             })
         }
     }
