@@ -3,7 +3,7 @@ import { WatchObj, InputObj, PageConfig } from '../types/PageTypes'
 import { WxEvent } from '../types/eventTypes'
 import { alphabet } from './util'
 import { listeners } from './listeners'
-// import { router } from './router'
+import { setDataAsync, emit, applyData } from './pageMethods'
 
 export abstract class PageContext {
     /**
@@ -123,62 +123,17 @@ export const handleConstructor = (
                     /**
                      * 实现emit
                      */
-                    this.emit = (
-                        listenerName: string,
-                        path: string,
-                        ...args: any[]
-                    ) => {
-                        let listener = listeners[`${path}-${listenerName}`]
-                        if (listener) {
-                            listener.method.call(listener.context, ...args)
-                            listener.context.applyData()
-                        } else {
-                            throw Error(
-                                `no such listener ${listenerName} in page ${path} registered!`
-                            )
-                        }
-                    }
+
+                    this.emit = emit.bind(this)
 
                     handleListener.call(this, listenerMethodNames, proto)
 
                     // promisify setData
                     if (this.setData) {
-                        this.setDataAsync = arg => {
-                            return new Promise(resolve => {
-                                try {
-                                    this.setData(arg, resolve)
-                                } catch (e) {
-                                    console.error('setData error')
-                                }
-                            })
-                        }
+                        this.setDataAsync = setDataAsync.bind(this)
                     }
-                    this.applyData = (isHandleWatcher: string = '') => {
-                        let toSetData: any = {}
-                        _.each(this.data, (v, k) => {
-                            if (!_.isEqual(v, this[k])) {
-                                toSetData[k] = _.cloneDeep(this[k])
-                            }
-                        })
-                        if (!_.isEmpty(toSetData)) {
-                            // TODO: 可能有bug
-                            if (!/nowatch/i.test(isHandleWatcher)) {
-                                handleWatcher.call(this, watchObjs, toSetData)
-                            }
 
-                            let getterChanges = handleGetters.call(
-                                this,
-                                getters,
-                                toSetData
-                            )
-
-                            return this.setDataAsync({
-                                ...toSetData,
-                                ...getterChanges
-                            })
-                        }
-                        return Promise.resolve()
-                    }
+                    this.applyData = applyData.bind(this, watchObjs, getters)
 
                     // 先依次执行mixin中的onLoad事件
                     _.each(mixinOnLoads, (prop, i) => {
@@ -271,19 +226,6 @@ function applyMixins(
     }
 }
 
-function handleWatcher(
-    this: PageContext,
-    watchObj: WatchObj[],
-    toSetData: any
-) {
-    _.each(watchObj, ({ dataName, func }) => {
-        if (dataName in toSetData) {
-            func.call(this, toSetData[dataName], this.data[dataName])
-            this.applyData('nowatch')
-        }
-    })
-}
-
 function handleListener(
     this: PageContext,
     listenerMethodNames: string[],
@@ -297,25 +239,4 @@ function handleListener(
             }
         }
     })
-}
-
-function handleGetters(
-    this: PageContext,
-    getters: any,
-    toSetData: any,
-    setters: any
-) {
-    let changes: any = {}
-    _.each(getters, (func, k) => {
-        let computed = func.call(this)
-        if (computed !== void 0) {
-            if (!_.isEqual(computed, this[k])) {
-                changes[k] = computed
-                this[k] = computed
-            }
-        } else {
-            throw Error('computed property cannot return a value of undefined')
-        }
-    })
-    return changes
 }
