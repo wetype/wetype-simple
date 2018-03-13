@@ -64,7 +64,9 @@ export const handleConstructor = (
     lifeCycleMethodNames: string[],
     mixins?: any[]
 ) => {
-    let data: any = {}
+    let data: any = {
+        $valid: {}
+    }
     let mixinOnLoads: any[] = []
 
     if (mixins) {
@@ -89,6 +91,7 @@ export const handleConstructor = (
     let lifeCycleMethods: any = {}
 
     let getters: any = {}
+
     // let setters: any = {}
 
     // 加入router
@@ -113,6 +116,48 @@ export const handleConstructor = (
         }
     })
 
+    // 处理inputObj
+    _.each(inputObjs, ({ propName, opts, handler }) => {
+        if (opts) {
+            let { valid } = opts
+            if (valid) {
+                let value = data[propName]
+                let validRes = valid.call(void 0, value)
+                data.$valid[propName] = _.isRegExp(validRes)
+                    ? validRes.test(value)
+                    : !!validRes
+            }
+        }
+        let inputEventHandlerName =
+            (opts && opts.eventName) || `${propName}Input`
+        methods[inputEventHandlerName] = function(
+            this: PageContext,
+            e: WxEvent
+        ) {
+            let value = e.detail.value
+            if (/^\d+$/.test(value)) {
+                value = parseInt(value)
+            }
+            if (opts) {
+                let { valid } = opts
+                // 验证表单
+                if (valid) {
+                    let res = valid.call(void 0, value)
+                    this.$valid[propName] = _.isRegExp(res)
+                        ? res.test(value)
+                        : !!res
+                }
+            }
+            if (handler) {
+                handler.call(this, value, e)
+                this.applyData()
+                return
+            }
+            this[propName] = value
+            this.applyData()
+        }
+    })
+
     _.each(proto, (prop, k) => {
         if (_.isFunction(prop) && k !== 'constructor') {
             let isLifeCycleMethod = _.includes(lifeCycleMethodNames, k)
@@ -125,8 +170,6 @@ export const handleConstructor = (
                     _.extend(this, _.mapValues(getters, v => v.call(this)))
                     // 初始化$listener
                     // this.$listeners = {}
-                    // 初始化表单验证对象
-                    this.$valid = {}
                     /**
                      * 实现emit
                      */
@@ -170,34 +213,6 @@ export const handleConstructor = (
                     type === 'page' && this.applyData()
                 }
             }
-        }
-    })
-
-    // 处理inputObj
-    _.each(inputObjs, ({ propName, opts, handler }) => {
-        let inputEventHandlerName =
-            (opts && opts.eventName) || `${propName}Input`
-        methods[inputEventHandlerName] = function(
-            this: PageContext,
-            e: WxEvent
-        ) {
-            let value = e.detail.value
-            if (/^\d+$/.test(value)) {
-                value = parseInt(value)
-            }
-            if (opts) {
-                let { reg } = opts
-                if (reg) {
-                    this.$valid[propName] = reg.test(value)
-                }
-            }
-            if (handler) {
-                handler.call(this, value, e)
-                this.applyData()
-                return
-            }
-            this[propName] = value
-            this.applyData()
         }
     })
 

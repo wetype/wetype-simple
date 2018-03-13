@@ -1,4 +1,5 @@
 import { ErrMsg, WindowConfig, ObjectLiteral } from './common'
+import { PageContext } from '../lib/handleConstructor'
 
 export interface OnloadOptions {
     /**
@@ -94,7 +95,8 @@ export interface InputObjOpts {
     debounce?: number
     isParseInt?: boolean
     isParseFloat?: boolean
-    reg?: RegExp
+    // reg?: RegExp
+    valid?(this: void, value: any): boolean | RegExp
 }
 
 export interface InputObj {
