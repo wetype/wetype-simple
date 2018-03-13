@@ -88,16 +88,26 @@ export interface WatchObj {
     func(val: any, old: any): void
 }
 
+export interface InputObjOpts {
+    eventName?: string
+    // 截流
+    debounce?: number
+    isParseInt?: boolean
+    isParseFloat?: boolean
+    reg?: RegExp
+}
+
 export interface InputObj {
     propName: string
 
     handler?: Function
 
-    opts?: {
-        eventName: string
-        // 截流
-        debounce: number
-    }
+    opts?: InputObjOpts
+}
+
+export interface InputObjParam {
+    handler?: Function
+    opts?: InputObjOpts
 }
 
 export interface WxEventObj {

@@ -9,8 +9,10 @@ import {
     OnloadOptions,
     WatchObj,
     InputObj,
-    PageDecors
+    PageDecors,
+    InputObjOpts
 } from './types/PageTypes'
+import * as _ from 'lodash'
 
 export abstract class Page {
     readonly type = 'page'
@@ -24,6 +26,13 @@ export abstract class Page {
      * 数据
      */
     readonly data: any
+
+    /**
+     * 表单验证
+     */
+    readonly $valid: {
+        [key: string]: boolean
+    } = {}
 
     /**
      * 初始化Page
@@ -68,7 +77,9 @@ export abstract class Page {
         }
     }
 
-    static input(handler?: Function, opts?: any) {
+    static input(arg1?: Function | InputObjOpts, arg2?: InputObjOpts) {
+        let handler = typeof arg1 === 'function' ? arg1 : void 0
+        let opts = typeof arg1 === 'function' ? arg2 : arg1
         return function(proto: Object, propName: string) {
             Page.decors.inputObjs.push({
                 propName,

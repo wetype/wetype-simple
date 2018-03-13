@@ -22,6 +22,11 @@ export abstract class PageContext {
     abstract setData(arg: any, cb?: () => void): void
 
     /**
+     * 表单验证
+     */
+    abstract $valid: any
+
+    /**
      * # wetype
      * data
      */
@@ -120,10 +125,11 @@ export const handleConstructor = (
                     _.extend(this, _.mapValues(getters, v => v.call(this)))
                     // 初始化$listener
                     // this.$listeners = {}
+                    // 初始化表单验证对象
+                    this.$valid = {}
                     /**
                      * 实现emit
                      */
-
                     this.emit = emit.bind(this)
 
                     handleListener.call(this, listenerMethodNames, proto)
@@ -176,6 +182,15 @@ export const handleConstructor = (
             e: WxEvent
         ) {
             let value = e.detail.value
+            if (/^\d+$/.test(value)) {
+                value = parseInt(value)
+            }
+            if (opts) {
+                let { reg } = opts
+                if (reg) {
+                    this.$valid[propName] = reg.test(value)
+                }
+            }
             if (handler) {
                 handler.call(this, value, e)
                 this.applyData()
