@@ -188,6 +188,24 @@ export interface GetImageInfoRes {
      * 返回图片的本地路径
      */
     path: string
+
+    /**
+     * 返回图片的方向，有效值见下表
+     */
+    orientation:
+        | 'up'
+        | 'down'
+        | 'left'
+        | 'right'
+        | 'up-mirrored'
+        | 'down-mirrored'
+        | 'left-mirrored'
+        | 'right-mirrored'
+
+    /**
+     * 返回图片的格式
+     */
+    type: string
 }
 
 export interface SaveImageToPhotosAlbumOpts
