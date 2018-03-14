@@ -1,6 +1,5 @@
 import { Page as nativePage } from './lib/wx'
 import { global } from './global'
-import { isInNode } from './lib/util'
 import { handleConstructor } from './lib/handleConstructor'
 import {
     PageOptions,
@@ -42,22 +41,18 @@ export abstract class Page {
      */
     static decor(pageOptions: PageOptions) {
         return function(pageConstructor: any) {
-            if (isInNode) {
-                pageConstructor.config = pageOptions && pageOptions.config
-            } else {
-                let lifeCycleMethodNames = ['onLoad', 'onShow', 'onUnload']
-                let { methods, lifeCycleMethods, data } = handleConstructor(
-                    pageConstructor,
-                    lifeCycleMethodNames,
-                    pageOptions && pageOptions.mixins
-                )
-                if (!pageOptions.isMixin) {
-                    nativePage({
-                        data,
-                        ...methods,
-                        ...lifeCycleMethods
-                    })
-                }
+            let lifeCycleMethodNames = ['onLoad', 'onShow', 'onUnload']
+            let { methods, lifeCycleMethods, data } = handleConstructor(
+                pageConstructor,
+                lifeCycleMethodNames,
+                pageOptions && pageOptions.mixins
+            )
+            if (!pageOptions.isMixin) {
+                nativePage({
+                    data,
+                    ...methods,
+                    ...lifeCycleMethods
+                })
             }
         }
     }

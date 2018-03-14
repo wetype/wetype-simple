@@ -1,5 +1,4 @@
 import { Properties } from './types/ComponentTypes'
-import { isInNode } from './lib/util'
 import { handleAppConstr } from './lib/handleAppConstr'
 import { Behavior as nativeBehavior } from './lib/wx'
 
@@ -8,9 +7,6 @@ export abstract class Behavior {
 
     static decor(behaviorOptions?: BehaviorOptions) {
         return function(constr: any) {
-            if (isInNode) {
-                return
-            }
             let lifeCycleMethodNames = ['attached']
             let { data, methods, lifeCycleMethods } = handleAppConstr(
                 constr,
