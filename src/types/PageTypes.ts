@@ -58,6 +58,8 @@ export interface PageOptions {
      */
     mixins?: any[]
 
+    isMixin?: boolean
+
     /**
      * 页面路径
      */

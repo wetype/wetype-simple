@@ -61,12 +61,12 @@ export interface AppWindowConfig extends WindowConfig {
     /**
      * 顶部窗口的背景色，仅 iOS 支持
      */
-    backgroundColorTop: string
+    backgroundColorTop?: string
 
     /**
      * 底部窗口的背景色，仅 iOS 支持
      */
-    backgroundColorBottom: string
+    backgroundColorBottom?: string
 }
 
 export interface AppConfig {

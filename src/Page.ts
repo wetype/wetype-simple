@@ -48,11 +48,13 @@ export abstract class Page {
                     lifeCycleMethodNames,
                     pageOptions && pageOptions.mixins
                 )
-                nativePage({
-                    data,
-                    ...methods,
-                    ...lifeCycleMethods
-                })
+                if (!pageOptions.isMixin) {
+                    nativePage({
+                        data,
+                        ...methods,
+                        ...lifeCycleMethods
+                    })
+                }
             }
         }
     }
