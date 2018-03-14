@@ -12,7 +12,7 @@ import {
     PageDecors,
     InputObjOpts
 } from './types/PageTypes'
-import * as _ from 'lodash'
+import * as _ from 'lodash-es'
 
 export abstract class Page {
     readonly $type = 'page'

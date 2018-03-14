@@ -11,7 +11,6 @@
             "uglifyjs --compress --mangle -o ./dist/wetype.min.js -- ./dist/wetype.js"
     },
     "devDependencies": {
-        "@types/lodash": "^4.14.102",
         "@types/lodash-es": "^4.17.0",
         "@types/node": "^9.4.5",
         "@types/rollup": "^0.54.0",
