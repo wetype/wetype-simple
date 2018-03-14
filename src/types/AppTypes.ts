@@ -57,6 +57,16 @@ export interface AppWindowConfig extends WindowConfig {
      * 默认 default
      */
     navigationStyle: string
+
+    /**
+     * 顶部窗口的背景色，仅 iOS 支持
+     */
+    backgroundColorTop: string
+
+    /**
+     * 底部窗口的背景色，仅 iOS 支持
+     */
+    backgroundColorBottom: string
 }
 
 export interface AppConfig {
