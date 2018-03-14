@@ -43,8 +43,10 @@ export const applyData = function(
 ) {
     let toSetData: any = {}
     _.each(this.data, (v, k) => {
-        if (!_.isEqual(v, this[k])) {
-            toSetData[k] = _.cloneDeep(this[k])
+        if (!_.includes(pureProps, k)) {
+            if (!_.isEqual(v, this[k])) {
+                toSetData[k] = _.cloneDeep(this[k])
+            }
         }
     })
     if (!_.isEmpty(toSetData)) {
@@ -81,12 +83,7 @@ function handleWatcher(
     })
 }
 
-function handleGetters(
-    this: PageContext,
-    getters: any,
-    toSetData: any,
-    setters: any
-) {
+function handleGetters(this: PageContext, getters: any, toSetData: any) {
     let changes: any = {}
     _.each(getters, (func, k) => {
         let computed = func.call(this)

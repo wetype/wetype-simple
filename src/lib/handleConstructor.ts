@@ -93,16 +93,15 @@ export const handleConstructor = (
 
     let getters: any = {}
 
-    // let setters: any = {}
-
-    // 加入router
-    // router.addPage(path)
+    let purePropsObj: any = {}
 
     // 遍历属性
     _.each(ins, (v, k) => {
         // 排除route 和 type function 和 getters
         if (!_.isFunction(v) && k !== 'route' && !_.includes(pureProps, k)) {
             data[k] = v
+        } else if (_.includes(pureProps, k)) {
+            purePropsObj[k] = v
         }
     })
 
@@ -173,6 +172,8 @@ export const handleConstructor = (
                     _.extend(this, {
                         $route: { path: this.route, query: args[0] }
                     })
+
+                    _.extend(this, purePropsObj)
 
                     /**
                      * 实现emit
