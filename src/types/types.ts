@@ -658,6 +658,11 @@ export interface GetSystemInfoRes {
      * 客户端基础库版本
      */
     SDKVersion: string | number
+
+    /**
+     * 电池剩余电量百分比
+     */
+    batteryLevel: number
 }
 
 export type NetworkType = 'wifi' | '2g' | '3g' | '4g' | 'unknown' | 'none'
