@@ -14,7 +14,10 @@ export abstract class PageContext {
     /**
      * 获取当前页面路径
      */
-    abstract $route: string
+    abstract $route: {
+        path: string
+        query: any
+    }
 
     /**
      * 用于将数据从逻辑层发送到视图层（异步），同时改变对应的 this.data 的值（同步）
@@ -60,8 +63,7 @@ export const handleConstructor = (
     mixins?: any[]
 ) => {
     let data: any = {
-        $valid: {},
-        $route: ''
+        $valid: {}
     }
     let mixinOnLoads: any[] = []
 
@@ -98,8 +100,6 @@ export const handleConstructor = (
         // 排除route 和 type function 和 getters
         if (!_.isFunction(v) && k !== 'route') {
             data[k] = v
-        } else if (k === 'route') {
-            data.$route = v
         }
     })
 
@@ -166,6 +166,10 @@ export const handleConstructor = (
                     _.extend(this, this.data)
                     // 初始化getters
                     _.extend(this, _.mapValues(getters, v => v.call(this)))
+
+                    _.extend(this, {
+                        $route: { path: this.route, query: args[0] }
+                    })
 
                     /**
                      * 实现emit

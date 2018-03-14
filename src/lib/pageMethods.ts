@@ -45,7 +45,7 @@ export const applyData = function(
 
         let getterChanges = handleGetters.call(this, getters, toSetData)
 
-        return this.setDataAsync({
+        return this.$setDataAsync({
             ...toSetData,
             ...getterChanges
         })

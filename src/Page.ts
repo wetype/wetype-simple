@@ -20,7 +20,10 @@ export abstract class Page {
     /**
      * 获取到当前页面的路径
      */
-    readonly $route: string = ''
+    readonly $route: {
+        path: string
+        query: any
+    } = { path: '', query: {} }
 
     /**
      * 数据
