@@ -80,6 +80,9 @@ export const handleConstructor = (
     let { listenerMethodNames, watchObjs, wxEventObjs } = Constr.decors
 
     let inputObjs: InputObj[] = Constr.decors.inputObjs
+
+    let pureProps: string[] = Constr.decors.pureProps
+
     /**
      * app || page || component
      */
@@ -98,7 +101,7 @@ export const handleConstructor = (
     // 遍历属性
     _.each(ins, (v, k) => {
         // 排除route 和 type function 和 getters
-        if (!_.isFunction(v) && k !== 'route') {
+        if (!_.isFunction(v) && k !== 'route' && !_.includes(pureProps, k)) {
             data[k] = v
         }
     })
@@ -185,7 +188,12 @@ export const handleConstructor = (
                         delete this.setData
                     }
 
-                    this.$applyData = applyData.bind(this, watchObjs, getters)
+                    this.$applyData = applyData.bind(
+                        this,
+                        watchObjs,
+                        getters,
+                        pureProps
+                    )
 
                     // 先依次执行mixin中的onLoad事件
                     _.each(mixinOnLoads, (prop, i) => {

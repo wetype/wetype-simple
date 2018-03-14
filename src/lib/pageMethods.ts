@@ -25,10 +25,20 @@ export const emit = (listenerName: string, path: string, ...args: any[]) => {
     }
 }
 
+const deleteProps = (obj, arr) => {
+    for (let p in obj) {
+        if (_.includes(arr, p)) {
+            delete obj[p]
+        }
+    }
+    return obj
+}
+
 export const applyData = function(
     this: PageContext,
     watchObjs: any,
     getters: any,
+    pureProps: string[],
     isHandleWatcher: string = ''
 ) {
     let toSetData: any = {}
@@ -45,10 +55,15 @@ export const applyData = function(
 
         let getterChanges = handleGetters.call(this, getters, toSetData)
 
-        return this.$setDataAsync({
-            ...toSetData,
-            ...getterChanges
-        })
+        let data = deleteProps(
+            {
+                ...toSetData,
+                ...getterChanges
+            },
+            pureProps
+        )
+
+        return this.$setDataAsync(data)
     }
     return Promise.resolve()
 }

@@ -123,4 +123,5 @@ export interface PageDecors {
     watchObjs: WatchObj[]
     inputObjs: InputObj[]
     wxEventObjs: string[]
+    pureProps: string[]
 }
