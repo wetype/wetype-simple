@@ -14,12 +14,12 @@ export abstract class PageContext {
     /**
      * 获取当前页面路径
      */
-    abstract route: string
+    abstract $route: string
 
     /**
      * 用于将数据从逻辑层发送到视图层（异步），同时改变对应的 this.data 的值（同步）
      */
-    abstract setData(arg: any, cb?: () => void): void
+    abstract $setData(arg: any, cb?: () => void): void
 
     /**
      * 表单验证
@@ -36,7 +36,7 @@ export abstract class PageContext {
      * # wetype
      * setData异步形式
      */
-    abstract setDataAsync(arg: any): Promise<void>
+    abstract $setDataAsync(arg: any): Promise<void>
 
     /**
      * setData缓存
@@ -46,17 +46,12 @@ export abstract class PageContext {
     /**
      * 使dataCache中的数据生效
      */
-    abstract applyData(isHandleWatcher?: string): Promise<void>
-
-    /**
-     * listener
-     */
-    // $listener: any
+    abstract $applyData(isHandleWatcher?: string): Promise<void>
 
     /**
      * 发射时间
      */
-    abstract emit(listenerName: string, path: string, ...args: any[]): any
+    abstract $emit(listenerName: string, path: string, ...args: any[]): any
 }
 
 export const handleConstructor = (
@@ -65,7 +60,8 @@ export const handleConstructor = (
     mixins?: any[]
 ) => {
     let data: any = {
-        $valid: {}
+        $valid: {},
+        $route: ''
     }
     let mixinOnLoads: any[] = []
 
@@ -102,6 +98,8 @@ export const handleConstructor = (
         // 排除route 和 type function 和 getters
         if (!_.isFunction(v) && k !== 'route') {
             data[k] = v
+        } else if (k === 'route') {
+            data.$route = v
         }
     })
 
@@ -150,11 +148,11 @@ export const handleConstructor = (
             }
             if (handler) {
                 handler.call(this, value, e)
-                this.applyData()
+                this.$applyData()
                 return
             }
             this[propName] = value
-            this.applyData()
+            this.$applyData()
         }
     })
 
@@ -168,28 +166,29 @@ export const handleConstructor = (
                     _.extend(this, this.data)
                     // 初始化getters
                     _.extend(this, _.mapValues(getters, v => v.call(this)))
-                    // 初始化$listener
-                    // this.$listeners = {}
+
                     /**
                      * 实现emit
                      */
-                    this.emit = emit.bind(this)
+                    this.$emit = emit.bind(this)
 
                     handleListener.call(this, listenerMethodNames, proto)
 
                     // promisify setData
                     if (this.setData) {
-                        this.setDataAsync = setDataAsync.bind(this)
+                        this.$setData = this.setData
+                        this.$setDataAsync = setDataAsync.bind(this)
+                        delete this.setData
                     }
 
-                    this.applyData = applyData.bind(this, watchObjs, getters)
+                    this.$applyData = applyData.bind(this, watchObjs, getters)
 
                     // 先依次执行mixin中的onLoad事件
                     _.each(mixinOnLoads, (prop, i) => {
                         prop.call(this, ...args)
                     })
                     prop.call(this, ...args)
-                    this.applyData('nowatch')
+                    this.$applyData('nowatch')
                 }
             } else if (k === 'onPreload') {
                 // router.addEvent('', key[k])
@@ -205,12 +204,12 @@ export const handleConstructor = (
                         }
                     })
                     prop.call(this, ...args, e)
-                    type === 'page' && this.applyData()
+                    type === 'page' && this.$applyData()
                 }
             } else {
                 key[k] = function(this: PageContext, ...args) {
                     prop.call(this, ...args)
-                    type === 'page' && this.applyData()
+                    type === 'page' && this.$applyData()
                 }
             }
         }

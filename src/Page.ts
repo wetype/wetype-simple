@@ -15,12 +15,12 @@ import {
 import * as _ from 'lodash'
 
 export abstract class Page {
-    readonly type = 'page'
+    readonly $type = 'page'
 
     /**
      * 获取到当前页面的路径
      */
-    readonly route: any
+    readonly $route: string = ''
 
     /**
      * 数据
@@ -105,22 +105,22 @@ export interface Page {
     /**
      * 用于将数据从逻辑层发送到视图层（异步），同时改变对应的 this.data 的值（同步）。
      */
-    setData(arg: any): void
+    $setData(arg: any): void
 
     /**
      * 异步setData
      */
-    setDataAsync(arg: any): Promise<void>
+    $setDataAsync(arg: any): Promise<void>
 
     /**
      *
      */
-    applyData(): Promise<void>
+    $applyData(): Promise<void>
 
     /**
      * 发射事件
      */
-    emit(eventName: string, path: string, ...args: any[]): any
+    $emit(eventName: string, path: string, ...args: any[]): any
 
     /**
      * 生命周期函数--监听页面初次渲染完成

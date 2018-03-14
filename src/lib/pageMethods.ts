@@ -6,7 +6,7 @@ import { WatchObj, InputObj, PageConfig } from '../types/PageTypes'
 export const setDataAsync = function(this: PageContext, arg) {
     return new Promise(resolve => {
         try {
-            this.setData(arg, resolve)
+            this.$setData(arg, resolve)
         } catch (e) {
             console.error('setData error')
         }
