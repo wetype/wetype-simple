@@ -45,6 +45,7 @@ export abstract class Page {
             let pageProperties = handleConstructor(
                 pageConstructor,
                 lifeCycleMethodNames,
+                pageOptions && pageOptions.isMixin,
                 pageOptions && pageOptions.mixins
             )
             if (!pageOptions.isMixin) {

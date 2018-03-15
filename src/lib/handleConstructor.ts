@@ -67,6 +67,7 @@ export abstract class PageContext {
 export const handleConstructor = (
     Constr: any,
     lifeCycleMethodNames: string[],
+    isMixin?: boolean,
     mixins?: any[]
 ) => {
     let mixinOnLoads: any[] = []
@@ -204,12 +205,12 @@ export const handleConstructor = (
                         )
                         .map(el => dataset[el])
                     prop.call(this, ...args, e)
-                    type === 'page' && this.$applyData()
+                    !isMixin && this.$applyData()
                 }
             } else {
                 key[k] = function(this: PageContext, ...args) {
                     prop.call(this, ...args)
-                    type === 'page' && this.$applyData()
+                    !isMixin && this.$applyData()
                 }
             }
         }
