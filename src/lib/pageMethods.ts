@@ -98,3 +98,60 @@ function handleGetters(this: PageContext, getters: any, toSetData: any) {
     })
     return changes
 }
+
+/**
+ *
+ * @param derivedCtor
+ * @param baseCtors
+ * @param lifeCycleMethodNames
+ * @returns 返回data
+ */
+export function applyMixins(
+    derivedCtor: any,
+    baseCtors: any[],
+    lifeCycleMethodNames: string[]
+) {
+    let data = {}
+    let onLoads: any[] = []
+    baseCtors.forEach(baseCtor => {
+        let ins = new baseCtor()
+        _.each(ins, (v, k) => {
+            if (!_.isFunction(v) && k !== 'route') {
+                data[k] = v
+            }
+        })
+        _.each(baseCtor.prototype, (v, k) => {
+            if (!_.includes(lifeCycleMethodNames, k)) {
+                derivedCtor.prototype[k] = v
+            }
+        })
+
+        if (baseCtor.prototype.onLoad) {
+            onLoads.push(baseCtor.prototype.onLoad)
+        }
+    })
+    return {
+        data,
+        onLoads
+    }
+}
+
+export function handleListener(
+    this: PageContext,
+    listenerMethodNames: string[],
+    proto: Object
+) {
+    _.each(proto, (method, k) => {
+        if (_.includes(listenerMethodNames, k)) {
+            listeners[`${this.route}-${k}`] = {
+                method,
+                context: this
+            }
+        }
+    })
+}
+
+export const validate = (valid, value) => {
+    let validRes = valid.call(void 0, value)
+    return _.isRegExp(validRes) ? validRes.test(value) : !!validRes
+}

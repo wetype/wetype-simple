@@ -98,7 +98,7 @@ export interface InputObjOpts {
     isParseInt?: boolean
     isParseFloat?: boolean
     // reg?: RegExp
-    valid?(this: void, value: any): boolean | RegExp
+    valid?: (this: void, value: any) => boolean | RegExp
 }
 
 export interface InputObj {
@@ -114,14 +114,10 @@ export interface InputObjParam {
     opts?: InputObjOpts
 }
 
-export interface WxEventObj {
-    propName: string
-}
-
 export interface PageDecors {
     listenerMethodNames: string[]
     watchObjs: WatchObj[]
     inputObjs: InputObj[]
-    wxEventObjs: string[]
+    wxEventNames: string[]
     pureProps: string[]
 }

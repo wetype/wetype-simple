@@ -42,17 +42,13 @@ export abstract class Page {
     static decor(pageOptions: PageOptions) {
         return function(pageConstructor: any) {
             let lifeCycleMethodNames = ['onLoad', 'onShow', 'onUnload']
-            let { methods, lifeCycleMethods, data } = handleConstructor(
+            let pageProperties = handleConstructor(
                 pageConstructor,
                 lifeCycleMethodNames,
                 pageOptions && pageOptions.mixins
             )
             if (!pageOptions.isMixin) {
-                nativePage({
-                    data,
-                    ...methods,
-                    ...lifeCycleMethods
-                })
+                nativePage(pageProperties)
             }
         }
     }
@@ -61,7 +57,7 @@ export abstract class Page {
         listenerMethodNames: [],
         watchObjs: [],
         inputObjs: [],
-        wxEventObjs: [],
+        wxEventNames: [],
         pureProps: []
     }
 
@@ -91,7 +87,7 @@ export abstract class Page {
     }
 
     static event(pro: Object, methodName: string) {
-        Page.decors.wxEventObjs.push(methodName)
+        Page.decors.wxEventNames.push(methodName)
     }
 
     static pure(prop, name: string) {

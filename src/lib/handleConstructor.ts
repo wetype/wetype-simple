@@ -3,7 +3,14 @@ import { WatchObj, InputObj, PageConfig } from '../types/PageTypes'
 import { WxEvent } from '../types/eventTypes'
 import { alphabet } from './util'
 import { listeners } from './listeners'
-import { setDataAsync, emit, applyData } from './pageMethods'
+import {
+    setDataAsync,
+    emit,
+    applyData,
+    handleListener,
+    applyMixins,
+    validate
+} from './pageMethods'
 
 export abstract class PageContext {
     /**
@@ -62,39 +69,35 @@ export const handleConstructor = (
     lifeCycleMethodNames: string[],
     mixins?: any[]
 ) => {
+    let mixinOnLoads: any[] = []
     let data: any = {
         $valid: {}
     }
-    let mixinOnLoads: any[] = []
+    // 实例化
+    let ins = new Constr()
+    let type = ins.type
+    let proto = Constr.prototype
+    // 事件、监听方法名
+    let wxEventNames: string[] = Constr.decors.wxEventNames
+    let watchObjs: WatchObj[] = Constr.decors.watchObjs
+    let listenerMethodNames: string[] = Constr.decors.listenerMethodNames
+    let inputObjs: InputObj[] = Constr.decors.inputObjs
+    let pureProps: string[] = Constr.decors.pureProps
+    // 初始化methods
+    let methods: any = {}
+    // 初始化生命周期函数对象
+    let lifeCycleMethods: any = {}
+    // 初始化计算属性 getters
+    let getters: any = {}
+    // 初始化普通data
+    let purePropsObj: any = {}
 
+    // 处理mixin
     if (mixins) {
         let res = applyMixins(Constr, mixins, lifeCycleMethodNames)
         data = res.data
         mixinOnLoads = res.onLoads
     }
-
-    let ins = new Constr()
-    let proto = Constr.prototype
-
-    // 事件、监听方法名
-    let { listenerMethodNames, watchObjs, wxEventObjs } = Constr.decors
-
-    let inputObjs: InputObj[] = Constr.decors.inputObjs
-
-    let pureProps: string[] = Constr.decors.pureProps
-
-    /**
-     * app || page || component
-     */
-    let type = ins.type
-
-    let methods: any = {}
-    let lifeCycleMethods: any = {}
-
-    let getters: any = {}
-
-    let purePropsObj: any = {}
-
     // 遍历属性
     _.each(ins, (v, k) => {
         // 排除route 和 type function 和 getters
@@ -105,28 +108,21 @@ export const handleConstructor = (
         }
     })
 
-    // 先遍历原型获取getters 和 setters
+    // 先遍历原型获取getters
     Object.getOwnPropertyNames(proto).forEach(k => {
         let descriptor = Object.getOwnPropertyDescriptor(proto, k)
         if (descriptor && descriptor.get && !descriptor.value) {
             getters[k] = descriptor.get
             delete proto[k]
-            // setters[k] = descriptor.set
             data[k] = ''
         }
     })
 
     // 处理inputObj
     _.each(inputObjs, ({ propName, opts, handler }) => {
-        if (opts) {
-            let { valid } = opts
-            if (valid) {
-                let value = data[propName]
-                let validRes = valid.call(void 0, value)
-                data.$valid[propName] = _.isRegExp(validRes)
-                    ? validRes.test(value)
-                    : !!validRes
-            }
+        if (opts && opts.valid) {
+            let value = data[propName]
+            data.$valid[propName] = validate(opts.valid, value)
         }
         let inputEventHandlerName =
             (opts && opts.eventName) || `${propName}Input`
@@ -138,15 +134,9 @@ export const handleConstructor = (
             if (/^\d+$/.test(value)) {
                 value = parseInt(value)
             }
-            if (opts) {
-                let { valid } = opts
+            if (opts && opts.valid) {
                 // 验证表单
-                if (valid) {
-                    let res = valid.call(void 0, value)
-                    this.$valid[propName] = _.isRegExp(res)
-                        ? res.test(value)
-                        : !!res
-                }
+                this.$valid[propName] = validate(opts.valid, value)
             }
             if (handler) {
                 handler.call(this, value, e)
@@ -168,34 +158,29 @@ export const handleConstructor = (
                     _.extend(this, this.data)
                     // 初始化getters
                     _.extend(this, _.mapValues(getters, v => v.call(this)))
-
+                    // 设置router
                     _.extend(this, {
                         $route: { path: this.route, query: args[0] }
                     })
-
+                    // 设置普通data
                     _.extend(this, purePropsObj)
-
-                    /**
-                     * 实现emit
-                     */
+                    // 实现emit
                     this.$emit = emit.bind(this)
-
+                    // 处理监听器
                     handleListener.call(this, listenerMethodNames, proto)
-
                     // promisify setData
                     if (this.setData) {
                         this.$setData = this.setData
                         this.$setDataAsync = setDataAsync.bind(this)
                         delete this.setData
                     }
-
+                    // 实现applyData
                     this.$applyData = applyData.bind(
                         this,
                         watchObjs,
                         getters,
                         pureProps
                     )
-
                     // 先依次执行mixin中的onLoad事件
                     _.each(mixinOnLoads, (prop, i) => {
                         prop.call(this, ...args)
@@ -205,17 +190,19 @@ export const handleConstructor = (
                 }
             } else if (k === 'onPreload') {
                 // router.addEvent('', key[k])
-            } else if (_.includes(wxEventObjs, k)) {
-                // 处理wxEventObj
+            } else if (_.includes(wxEventNames, k)) {
+                // 处理wxEvent
+                // 类似于html属性 data-arg-a=""
                 key[k] = function(this: PageContext, e: WxEvent) {
-                    let args: any[] = []
-                    _.each(e.currentTarget.dataset, (v, k) => {
-                        let last = k.slice(-1)
-                        if (/[A-Z]{1}/.test(last)) {
-                            let index = alphabet(last)
-                            args[index] = v
-                        }
-                    })
+                    let dataset = e.currentTarget.dataset
+                    let args = Object.keys(dataset)
+                        .sort(
+                            (x, y) =>
+                                alphabet(x.slice(-1)) > alphabet(y.slice(-1))
+                                    ? 1
+                                    : -1
+                        )
+                        .map(el => dataset[el])
                     prop.call(this, ...args, e)
                     type === 'page' && this.$applyData()
                 }
@@ -228,57 +215,5 @@ export const handleConstructor = (
         }
     })
 
-    return { methods, lifeCycleMethods, data }
-}
-
-/**
- *
- * @param derivedCtor
- * @param baseCtors
- * @param lifeCycleMethodNames
- * @returns 返回data
- */
-function applyMixins(
-    derivedCtor: any,
-    baseCtors: any[],
-    lifeCycleMethodNames: string[]
-) {
-    let data = {}
-    let onLoads: any[] = []
-    baseCtors.forEach(baseCtor => {
-        let ins = new baseCtor()
-        _.each(ins, (v, k) => {
-            if (!_.isFunction(v) && k !== 'route') {
-                data[k] = v
-            }
-        })
-        _.each(baseCtor.prototype, (v, k) => {
-            if (!_.includes(lifeCycleMethodNames, k)) {
-                derivedCtor.prototype[k] = v
-            }
-        })
-
-        if (baseCtor.prototype.onLoad) {
-            onLoads.push(baseCtor.prototype.onLoad)
-        }
-    })
-    return {
-        data,
-        onLoads
-    }
-}
-
-function handleListener(
-    this: PageContext,
-    listenerMethodNames: string[],
-    proto: Object
-) {
-    _.each(proto, (method, k) => {
-        if (_.includes(listenerMethodNames, k)) {
-            listeners[`${this.route}-${k}`] = {
-                method,
-                context: this
-            }
-        }
-    })
+    return { ...methods, ...lifeCycleMethods, data }
 }
