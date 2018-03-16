@@ -18,7 +18,7 @@ declare function getApp(): any
 /**
  * 获取当前页面栈的实例，以数组形式按栈的顺序给出，第一个元素为首页，最后一个元素为当前页面
  */
-declare function getCurrentPages(): any[]
+declare function getCurrentPages(): string[]
 
 /**
  * #网络
@@ -226,6 +226,50 @@ declare namespace wx {
     export function onNetworkStatusChange(
         cb: (isConnected: boolean, networkType: wxx.NetworkType) => void
     ): void
+}
+
+/**
+ * 加速度计
+ */
+declare namespace wx {
+    /**
+     * 监听加速度数据，频率：5次/秒，接口调用后会自动开始监听，可使用 wx.stopAccelerometer 停止监听。
+     */
+    export function onAccelerometerChange(
+        callback: (res: wxx.AccelerometerChangeRes) => void
+    ): void
+
+    /**
+     * 开始监听加速度数据。
+     */
+    export function startAccelerometer(opts: Options<void>): void
+
+    /**
+     * 停止监听加速度数据。
+     */
+    export function stopAccelerometer(opts: Options<void>): void
+}
+
+/**
+ * 罗盘
+ */
+declare namespace wx {
+    /**
+     * 监听罗盘数据，频率：5次/秒，接口调用后会自动开始监听，可使用wx.stopCompass停止监听。
+     */
+    export function onCompassChange(
+        callback: (res: wxx.CompassChangeRes) => void
+    ): void
+
+    /**
+     * 开始监听罗盘数据。
+     */
+    export function startCompass(opts: Options<void>): void
+
+    /**
+     * 停止监听罗盘数据。
+     */
+    export function stopCompass(opts: Options<void>): void
 }
 
 /**
@@ -578,4 +622,4 @@ declare namespace wx {
     export function setEnableDebug(opts: wxx.SetEnableDebugOpts): void
 }
 
-export { wx, App, Page, Component, Behavior }
+export { wx, App, Page, Component, Behavior, getCurrentPages }

@@ -675,6 +675,19 @@ export interface GetNetworkTypeRes {
     networkType: NetworkType
 }
 
+export interface AccelerometerChangeRes {
+    x: number
+    y: number
+    z: number
+}
+
+export interface CompassChangeRes {
+    /**
+     * 面对的方向度数
+     */
+    direction: number
+}
+
 export interface SetScreenBrightnessOpts extends Options<void> {
     /**
      * 屏幕亮度值，范围 0~1，0 最暗，1 最亮
