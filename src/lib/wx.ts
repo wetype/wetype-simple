@@ -89,7 +89,37 @@ declare namespace wx {
  * # 文件
  */
 declare namespace wx {
+    /**
+     * 保存文件到本地。注意：saveFile 会把临时文件移动，因此调用成功后传入的 tempFilePath 将不可用
+     */
+    export function saveFile(opts: wxx.SaveFileOpts): void
 
+    /**
+     * 获取文件信息
+     */
+    export function getFileInfo(opts: wxx.GetFileInfoOpts): void
+
+    /**
+     * 获取本地已保存的文件列表
+     */
+    export function getSavedFileList(
+        opts: Options<wxx.GetSavedFileListRes>
+    ): void
+
+    /**
+     * 获取本地文件的文件信息。此接口只能用于获取已保存到本地的文件，若需要获取临时文件信息，请使用 wx.getFileInfo 接口。
+     */
+    export function getSavedFileInfo(opts: wxx.GetSavedFileInfoOpts): void
+
+    /**
+     * 删除本地存储的文件
+     */
+    export function removeSavedFile(opts: wxx.RemoveSavedFileOpts): void
+
+    /**
+     * 新开页面打开文档，支持格式：doc, xls, ppt, pdf, docx, xlsx, pptx
+     */
+    export function openDocument(opts: wxx.OpenDocumentOpts): void
 }
 
 /**
@@ -517,7 +547,7 @@ declare namespace wx {
      */
     export function getUserInfo(opts: wxx.GetUserInfoOpts): void
 
-    // export function getPhoneNumber(opts: ): void
+    export function authorize(opts: wxx.AuthorizeOpts): void
 }
 
 /**

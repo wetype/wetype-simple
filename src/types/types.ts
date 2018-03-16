@@ -358,6 +358,112 @@ export interface ChooseVideoRes {
     width: number
 }
 
+export interface SaveFileRes {
+    savedFilePath: string
+}
+
+export interface SaveFileOpts extends Options<SaveFileRes> {
+    /**
+     * 需要保存的文件的临时路径
+     */
+    tempFilePath: string
+}
+
+export interface GetFileInfoRes {
+    /**
+     * 文件大小，单位：B
+     */
+    size: number
+
+    /**
+     * 按照传入的 digestAlgorithm 计算得出的的文件摘要
+     */
+    digest: string
+
+    /**
+     * 调用结果
+     *
+     */
+    errMsg: string
+}
+export interface GetFileInfoOpts extends Options<GetFileInfoRes> {
+    /**
+     * 本地文件路径
+     */
+    filePath: string
+
+    /**
+     * 计算文件摘要的算法，默认值 md5，有效值：md5，sha1
+     */
+    digestAlgorithm?: string
+}
+
+export interface GetSavedFileListRes {
+    /**
+     * 接口调用结果
+     */
+    errMsg: string
+    /**
+     * 文件列表
+     */
+    fileList: {
+        /**
+         * 文件的本地路径
+         */
+        filePath: string
+        /**
+         * 文件的保存时的时间戳，从1970/01/01 08:00:00 到当前时间的秒数
+         */
+        createTime: number
+        /**
+         * 文件大小，单位B
+         */
+        size: number
+    }[]
+}
+
+export interface GetSavedFileInfoRes {
+    /**
+     * 接口调用结果
+     */
+    errMsg: string
+
+    /**
+     * 文件大小，单位B
+     */
+    size: number
+
+    /**
+     * 文件保存时的时间戳，从1970/01/01 08:00:00 到该时刻的秒数
+     */
+    createTime: number
+}
+
+export interface GetSavedFileInfoOpts extends Options<GetSavedFileInfoRes> {
+    /**
+     * 文件路径
+     */
+    filePath: string
+}
+
+export interface RemoveSavedFileOpts extends Options<void> {
+    /**
+     * 需要删除的文件路径
+     */
+    filePath: string
+}
+
+export interface OpenDocumentOpts extends Options<void> {
+    /**
+     * 文件路径，可通过 downFile 获得
+     */
+    filePath: string
+
+    /**
+     * 文件类型，指定文件类型打开文件，有效值 doc, xls, ppt, pdf, docx, xlsx, pptx
+     */
+    fileType?: string
+}
 export interface SetStorageOpts extends Options<void> {
     key: string
     data: ObjectLiteral | string
@@ -1270,6 +1376,20 @@ export interface LoginRes {
      * 用户登录凭证（有效期五分钟）。开发者需要在开发者服务器后台调用 api，使用 code 换取 openid 和 session_key 等信息
      */
     code: string
+}
+
+export interface AuthorizeRes {
+    /**
+     * 调用结果
+     */
+    errMsg: string
+}
+
+export interface AuthorizeOpts extends Options<AuthorizeRes> {
+    /**
+     * 需要获取权限的scope，详见 scope 列表
+     */
+    scope: string
 }
 
 export interface GetUserInfoOpts extends Options<GetUserInfoRes> {
