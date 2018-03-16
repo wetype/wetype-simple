@@ -1481,3 +1481,43 @@ export interface SetEnableDebugOpts extends Options<ErrMsg<string>> {
      */
     enableDebug: boolean
 }
+
+export interface UpdateManager {
+    /**
+     * 当向微信后台请求完新版本信息，会进行回调
+     * hasUpdate: 是否有新的版本
+     */
+    onCheckForUpdate: (callback: (res: { hasUpdate: boolean }) => void) => void
+
+    /**
+     * 当新版本下载完成，会进行回调
+     */
+    onUpdateReady: (callback: () => void) => void
+
+    /**
+     * 当新版本下载失败，会进行回调
+     */
+    onUpdateFailed: (callback: () => void) => void
+
+    /**
+     * 当新版本下载完成，调用该方法会强制当前小程序应用上新版本并重启
+     */
+    applyUpdate: () => void
+}
+
+export interface Worker {
+    /**
+     * 向 Worker 线程发送的消息。
+     */
+    postMessage: (message: ObjectLiteral) => void
+
+    /**
+     * 监听 Worker 线程向当前线程发送的消息
+     */
+    onMessage: (callback: (obj: ObjectLiteral) => void) => void
+
+    /**
+     * 结束当前 Worker 线程，仅限在主线程 Worker 实例上调用。
+     */
+    terminate: () => void
+}

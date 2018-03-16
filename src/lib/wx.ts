@@ -555,6 +555,20 @@ declare namespace wx {
 }
 
 /**
+ * 更新
+ */
+declare namespace wx {
+    export function getUpdateManager(): wxx.UpdateManager
+}
+
+/**
+ * 多线程
+ */
+declare namespace wx {
+    export function createWorker(path: string): wxx.Worker
+}
+
+/**
  * 调试
  */
 declare namespace wx {
