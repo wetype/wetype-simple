@@ -1,5 +1,5 @@
 import { PageContext } from './handleConstructor'
-import { listeners } from './listeners'
+import { listeners } from './globalObjs'
 import * as _ from 'lodash-es'
 import { WatchObj, InputObj, PageConfig } from '../types/PageTypes'
 

@@ -36,6 +36,10 @@ export abstract class Page {
         [key: string]: boolean
     } = {}
 
+    readonly $pages: {
+        [key: string]: any
+    } = {}
+
     /**
      * 初始化Page
      */
