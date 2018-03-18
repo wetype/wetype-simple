@@ -11,6 +11,7 @@ import {
     applyMixins,
     validate
 } from './pageMethods'
+import { getCurrentPages } from './wx'
 
 export abstract class PageContext {
     /**
@@ -36,7 +37,7 @@ export abstract class PageContext {
      */
     abstract $valid: any
 
-    abstract $pages: any
+    abstract $pages: any[]
 
     /**
      * # wetype
@@ -169,8 +170,7 @@ export const handleConstructor = (
                     })
 
                     // 保存全局pages
-                    pages[this.route] = this
-                    this.$pages = pages
+                    this.$pages = getCurrentPages()
                     // 设置普通data
                     _.extend(this, purePropsObj)
                     // 实现emit

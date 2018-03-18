@@ -36,9 +36,7 @@ export abstract class Page {
         [key: string]: boolean
     } = {}
 
-    readonly $pages: {
-        [key: string]: any
-    } = {}
+    readonly $pages: any[] = []
 
     /**
      * 初始化Page
