@@ -2,7 +2,7 @@ import * as _ from 'lodash-es'
 import { WatchObj, InputObj, PageConfig } from '../types/PageTypes'
 import { WxEvent } from '../types/eventTypes'
 import { alphabet } from './util'
-import { listeners, pages } from './globalObjs'
+import { listeners } from './globalObjs'
 import {
     setDataAsync,
     emit,
@@ -37,7 +37,7 @@ export abstract class PageContext {
      */
     abstract $valid: any
 
-    abstract $pages: any[]
+    // abstract $pages: any[]
 
     /**
      * # wetype
@@ -103,7 +103,7 @@ export const handleConstructor = (
         mixinOnLoads = res.onLoads
     }
 
-    const excludedProperties = ['route', '$pages'].concat(pureProps)
+    const excludedProperties = ['route'].concat(pureProps)
     // 遍历属性
     _.each(ins, (v, k) => {
         // 排除route 和 type function 和 getters
@@ -170,7 +170,7 @@ export const handleConstructor = (
                     })
 
                     // 保存全局pages
-                    this.$pages = getCurrentPages()
+                    // this.$pages = getCurrentPages()
                     // 设置普通data
                     _.extend(this, purePropsObj)
                     // 实现emit
