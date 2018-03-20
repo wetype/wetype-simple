@@ -137,7 +137,7 @@ export const handleConstructor = (
             e: WxEvent
         ) {
             let value = e.detail.value
-            if (/^\d+$/.test(value)) {
+            if (/^\d+$/.test(value) && opts && opts.isParseInt !== false) {
                 value = parseInt(value)
             }
             if (opts && opts.valid) {
