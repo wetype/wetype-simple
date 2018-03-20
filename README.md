@@ -8,7 +8,6 @@
 
 * API 未使用 Promise 封装
 * setData 很繁琐
-*
 
 很快在社区里发现了[wepy](https://github.com/tencent/wepy)这样的小程序开发框架，一番尝试后决定用它来开发我的第一款小程序。但在开发过程中，仍然觉得 wepy 不能满足我的要求：
 
@@ -25,17 +24,17 @@
 import { App } from 'wetype'
 
 @App.decor({
-    config: {
-        pages: ['index'],
-        window: {
-            backgroundTextStyle: 'light',
-            navigationBarBackgroundColor: '#3cf',
-            navigationBarTitleText: 'WeType'
-        }
+  config: {
+    pages: ['index'],
+    window: {
+      backgroundTextStyle: 'light',
+      navigationBarBackgroundColor: '#3cf',
+      navigationBarTitleText: 'WeType'
     }
+  }
 })
 class APP extends App {
-    onLaunch() {}
+  onLaunch() {}
 }
 ```
 
@@ -46,44 +45,44 @@ import { Page, wx, wt, types } from 'wetype'
 import { MyMixin } from './myMixin'
 
 @Page.decor({
-    config: {
-        navigationBarTitleText: '我的标题'
-    },
-    mixins: [MyMixin]
+  config: {
+    navigationBarTitleText: '我的标题'
+  },
+  mixins: [MyMixin]
 })
 class MyPage extends Page {
-    list: string[] = []
-    title: string = ''
+  list: string[] = []
+  title: string = ''
 
-    @Page.watch(newVal => {
-        console.log('newVal', newVal)
-    })
-    myName: string = 'GrePuG'
+  @Page.watch(newVal => {
+    console.log('newVal', newVal)
+  })
+  myName: string = 'GrePuG'
 
-    /**
-     * 相当于手写一个
-     * onInput(e) {
-     *     this.inputVal = e.detail.value
-     * }
-     */
-    @Page.input('onInput') inputVal: string = ''
+  /**
+   * 相当于手写一个
+   * onInput(e) {
+   *     this.inputVal = e.detail.value
+   * }
+   */
+  @Page.input('onInput') inputVal: string = ''
 
-    onLoad(options: types.OnloadOptions) {
-        this.list.push('hello, world')
-        this.title = 'hi'
-    }
+  onLoad(options: types.OnloadOptions) {
+    this.list.push('hello, world')
+    this.title = 'hi'
+  }
 
-    /**
-     * 计算属性
-     * */
-    get myComputedValue() {
-        return this.inputVal + 1
-    }
+  /**
+   * 计算属性
+   * */
+  get myComputedValue() {
+    return this.inputVal + 1
+  }
 
-    @Page.on
-    myMixinLoaded() {}
+  @Page.on
+  myMixinLoaded() {}
 
-    tapItem(e: types.wxEvent) {}
+  tapItem(e: types.wxEvent) {}
 }
 ```
 
@@ -93,9 +92,9 @@ class MyPage extends Page {
 import { Page, wx } from 'wetype'
 
 export class MyMixin extends Page {
-    onLoad() {
-        this.emit('myMixinLoaded', true)
-    }
+  onLoad() {
+    this.emit('myMixinLoaded', true)
+  }
 }
 ```
 
@@ -130,19 +129,19 @@ export class MyMixin extends Page {
 推荐使用 wetype 提供的开发模板`wetype-template`
 
 ```bash
-$ git clone https://github.com/wetype/wetype-template
+git clone https://github.com/wetype/wetype-template
 ```
 
 ```bash
-$ cd wetype-template
+cd wetype-template
 ```
 
 ```bash
-$ npm i
+npm i
 ```
 
 ```bash
-$ npm start
+npm start
 ```
 
 ## 申明
