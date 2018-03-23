@@ -101,6 +101,7 @@ export const handleConstructor = (
         let res = applyMixins(Constr, mixins, lifeCycleMethodNames)
         data = res.data
         mixinOnLoads = res.onLoads
+        getters = res.getters
     }
 
     const excludedProperties = ['route'].concat(pureProps)
@@ -119,8 +120,10 @@ export const handleConstructor = (
         let descriptor = Object.getOwnPropertyDescriptor(proto, k)
         if (descriptor && descriptor.get && !descriptor.value) {
             getters[k] = descriptor.get
-            delete proto[k]
-            data[k] = ''
+            if (!isMixin) {
+                delete proto[k]
+                data[k] = ''
+            }
         }
     })
 
@@ -154,71 +157,75 @@ export const handleConstructor = (
         }
     })
 
-    _.each(proto, (prop, k) => {
-        if (_.isFunction(prop) && k !== 'constructor') {
-            let isLifeCycleMethod = _.includes(lifeCycleMethodNames, k)
-            let key = isLifeCycleMethod ? lifeCycleMethods : methods
-            if (k === 'onLoad') {
-                key['onLoad'] = function(this: PageContext, ...args) {
-                    // 初始化data
-                    _.extend(this, this.data)
-                    // 初始化getters
-                    _.extend(this, _.mapValues(getters, v => v.call(this)))
-                    // 设置router
-                    _.extend(this, {
-                        $route: { path: this.route, query: args[0] }
-                    })
+    Object.getOwnPropertyNames(proto).forEach(k => {
+        if (!(k in getters)) {
+            let prop = proto[k]
+            if (_.isFunction(prop) && k !== 'constructor') {
+                let isLifeCycleMethod = _.includes(lifeCycleMethodNames, k)
+                let key = isLifeCycleMethod ? lifeCycleMethods : methods
+                if (k === 'onLoad') {
+                    key['onLoad'] = function(this: PageContext, ...args) {
+                        // 初始化data
+                        _.extend(this, this.data)
+                        // 初始化getters
+                        _.extend(this, _.mapValues(getters, v => v.call(this)))
+                        // 设置router
+                        _.extend(this, {
+                            $route: { path: this.route, query: args[0] }
+                        })
 
-                    // 保存全局pages
-                    // this.$pages = getCurrentPages()
-                    // 设置普通data
-                    _.extend(this, purePropsObj)
-                    // 实现emit
-                    this.$emit = emit.bind(this)
-                    // 处理监听器
-                    handleListener.call(this, listenerMethodNames, proto)
-                    // promisify setData
-                    if (this.setData) {
-                        this.$setData = this.setData
-                        this.$setDataAsync = setDataAsync.bind(this)
-                        delete this.setData
-                    }
-                    // 实现applyData
-                    this.$applyData = applyData.bind(
-                        this,
-                        watchObjs,
-                        getters,
-                        pureProps
-                    )
-                    // 先依次执行mixin中的onLoad事件
-                    _.each(mixinOnLoads, (prop, i) => {
-                        prop.call(this, ...args)
-                    })
-                    prop.call(this, ...args)
-                    this.$applyData('nowatch')
-                }
-            } else if (k === 'onPreload') {
-                // router.addEvent('', key[k])
-            } else if (_.includes(wxEventNames, k)) {
-                // 处理wxEvent
-                // 类似于html属性 data-arg-a=""
-                key[k] = function(this: PageContext, e: WxEvent) {
-                    let dataset = e.currentTarget.dataset
-                    let args = Object.keys(dataset)
-                        .sort(
-                            (x, y) =>
-                                alphabet(x.slice(-1)) > alphabet(y.slice(-1))
-                                    ? 1
-                                    : -1
+                        // 保存全局pages
+                        // this.$pages = getCurrentPages()
+                        // 设置普通data
+                        _.extend(this, purePropsObj)
+                        // 实现emit
+                        this.$emit = emit.bind(this)
+                        // 处理监听器
+                        handleListener.call(this, listenerMethodNames, proto)
+                        // promisify setData
+                        if (this.setData) {
+                            this.$setData = this.setData
+                            this.$setDataAsync = setDataAsync.bind(this)
+                            delete this.setData
+                        }
+                        // 实现applyData
+                        this.$applyData = applyData.bind(
+                            this,
+                            watchObjs,
+                            getters,
+                            pureProps
                         )
-                        .map(el => dataset[el])
-                    prop.call(this, ...args, e)
-                    !isMixin && this.$applyData()
-                }
-            } else {
-                key[k] = function(this: PageContext, ...args) {
-                    prop.call(this, ...args)
-                    !isMixin && this.$applyData()
+                        // 先依次执行mixin中的onLoad事件
+                        _.each(mixinOnLoads, (prop, i) => {
+                            prop.call(this, ...args)
+                        })
+                        prop.call(this, ...args)
+                        this.$applyData('nowatch')
+                    }
+                } else if (k === 'onPreload') {
+                    // router.addEvent('', key[k])
+                } else if (_.includes(wxEventNames, k)) {
+                    // 处理wxEvent
+                    // 类似于html属性 data-arg-a=""
+                    key[k] = function(this: PageContext, e: WxEvent) {
+                        let dataset = e.currentTarget.dataset
+                        let args = Object.keys(dataset)
+                            .sort(
+                                (x, y) =>
+                                    alphabet(x.slice(-1)) >
+                                    alphabet(y.slice(-1))
+                                        ? 1
+                                        : -1
+                            )
+                            .map(el => dataset[el])
+                        prop.call(this, ...args, e)
+                        !isMixin && this.$applyData()
+                    }
+                } else {
+                    key[k] = function(this: PageContext, ...args) {
+                        prop.call(this, ...args)
+                        !isMixin && this.$applyData()
+                    }
                 }
             }
         }

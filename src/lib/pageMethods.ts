@@ -113,15 +113,23 @@ export function applyMixins(
 ) {
     let data = {}
     let onLoads: any[] = []
+    let getters = {}
     baseCtors.forEach(baseCtor => {
         let ins = new baseCtor()
+        let proto = baseCtor.prototype
         _.each(ins, (v, k) => {
             if (!_.isFunction(v) && k !== 'route') {
                 data[k] = v
             }
         })
-        _.each(baseCtor.prototype, (v, k) => {
-            if (!_.includes(lifeCycleMethodNames, k)) {
+        Object.getOwnPropertyNames(proto).forEach(k => {
+            let descriptor = Object.getOwnPropertyDescriptor(proto, k)
+            if (descriptor && descriptor.get && !descriptor.value) {
+                getters[k] = descriptor.get
+                // delete proto[k]
+                data[k] = ''
+            } else if (!_.includes(lifeCycleMethodNames, k)) {
+                let v = proto[k]
                 derivedCtor.prototype[k] = v
             }
         })
@@ -132,6 +140,7 @@ export function applyMixins(
     })
     return {
         data,
+        getters,
         onLoads
     }
 }
