@@ -34,22 +34,32 @@ export const showModal = (
 /**
  * 弹出提示框
  */
-export const alert = (content: string, title?: string) => {
+export const alert = (
+    content: string,
+    title?: string,
+    confirmColor?: string
+) => {
     return showModal({
         content,
         title: title || '提示',
-        showCancel: false
+        showCancel: false,
+        confirmColor
     })
 }
 
 /**
  * 弹出确认对话框
  */
-export const confirm = (content: string, title?: string) => {
+export const confirm = (
+    content: string,
+    title?: string,
+    confirmColor?: string
+) => {
     return showModal({
         content,
         title: title || '提示',
-        showCancel: true
+        showCancel: true,
+        confirmColor
     })
 }
 
