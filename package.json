@@ -7,8 +7,7 @@
     "scripts": {
         "start": "rm -rf dist && npm run build",
         "build": "rollup -c && tsc",
-        "postbuild":
-            "uglifyjs --compress --mangle -o ./dist/wetype.min.js -- ./dist/wetype.js"
+        "postbuild": "node build.js"
     },
     "devDependencies": {
         "@types/lodash-es": "^4.17.0",
