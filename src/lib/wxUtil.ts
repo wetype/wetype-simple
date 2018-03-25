@@ -137,4 +137,7 @@ export const select = (
     })
 }
 
+export const chooseLocation = (): Promise<wxTypes.ChooseLocationRes> =>
+    promisify<wxTypes.ChooseLocationRes>({}, wx.chooseLocation)
+
 // export const requestPayment = ()
