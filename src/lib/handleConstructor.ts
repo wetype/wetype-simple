@@ -148,8 +148,7 @@ export const handleConstructor = (
                 this.$valid[propName] = validate(opts.valid, value)
             }
             if (handler) {
-                handler.call(this, value, e)
-                this.$applyData()
+                handleRes.call(this, handler.call(this, value, e))
                 return
             }
             this[propName] = value
@@ -199,8 +198,7 @@ export const handleConstructor = (
                         _.each(mixinOnLoads, (prop, i) => {
                             prop.call(this, ...args)
                         })
-                        prop.call(this, ...args)
-                        this.$applyData('nowatch')
+                        handleRes.call(this, prop.call(this, ...args))
                     }
                 } else if (k === 'onPreload') {
                     // router.addEvent('', key[k])
@@ -218,13 +216,14 @@ export const handleConstructor = (
                                         : -1
                             )
                             .map(el => dataset[el])
-                        prop.call(this, ...args, e)
-                        !isMixin && this.$applyData()
+                        !isMixin &&
+                            handleRes.call(this, prop.call(this, ...args, e))
                     }
                 } else {
                     key[k] = function(this: PageContext, ...args) {
-                        prop.call(this, ...args)
-                        !isMixin && this.$applyData()
+                        if (!isMixin) {
+                            handleRes.call(this, prop.call(this, ...args))
+                        }
                     }
                 }
             }
@@ -232,4 +231,8 @@ export const handleConstructor = (
     })
 
     return { ...methods, ...lifeCycleMethods, data }
+}
+
+function handleRes(this: PageContext, res) {
+    res.then ? res.then(() => this.$applyData()) : this.$applyData('nowatch')
 }
