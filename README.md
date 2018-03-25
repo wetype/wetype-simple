@@ -1,7 +1,6 @@
 # 小程序框架 Wetype Simple 文档
 
-作者微信号：grepug
-![author_wechat](https://github.com/wetype/wetype-simple/blob/dev/docs/author_wechat_qrcode.jpg?raw=true)
+<img src="https://github.com/wetype/wetype-simple/blob/dev/docs/author_wechat_qrcode.jpg?raw=true" width="300px">
 
 ## 介绍
 
