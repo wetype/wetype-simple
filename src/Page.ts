@@ -10,7 +10,8 @@ import {
     InputObj,
     PageDecors,
     InputObjOpts,
-    Func
+    Func,
+    DebounceOpts
 } from './types/PageTypes'
 import * as _ from 'lodash-es'
 
@@ -62,7 +63,8 @@ export abstract class Page {
         watchObjs: [],
         inputObjs: [],
         wxEventNames: [],
-        pureProps: []
+        pureProps: [],
+        debounceMethods: []
     }
 
     static on(proto: Object, methodName: string) {
@@ -96,6 +98,16 @@ export abstract class Page {
 
     static pure(prop, name: string) {
         Page.decors.pureProps.push(name)
+    }
+
+    static debounce(wait: number, options?: DebounceOpts) {
+        return function(proto: Object, methodName: string) {
+            Page.decors.debounceMethods.push({
+                methodName,
+                wait,
+                options
+            })
+        }
     }
 
     /**

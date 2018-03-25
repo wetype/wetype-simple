@@ -1,5 +1,10 @@
 import * as _ from 'lodash-es'
-import { WatchObj, InputObj, PageConfig } from '../types/PageTypes'
+import {
+    WatchObj,
+    InputObj,
+    PageConfig,
+    DebounceMethod
+} from '../types/PageTypes'
 import { WxEvent } from '../types/eventTypes'
 import { alphabet } from './util'
 import { listeners } from './globalObjs'
@@ -87,6 +92,7 @@ export const handleConstructor = (
     let listenerMethodNames: string[] = Constr.decors.listenerMethodNames
     let inputObjs: InputObj[] = Constr.decors.inputObjs
     let pureProps: string[] = Constr.decors.pureProps
+    let debounceMethods: DebounceMethod[] = Constr.decors.debounceMethods
     // 初始化methods
     let methods: any = {}
     // 初始化生命周期函数对象
@@ -167,6 +173,10 @@ export const handleConstructor = (
             if (_.isFunction(prop) && k !== 'constructor') {
                 let isLifeCycleMethod = _.includes(lifeCycleMethodNames, k)
                 let key = isLifeCycleMethod ? lifeCycleMethods : methods
+                let debounceMethodNames = debounceMethods.map(
+                    el => el.methodName
+                )
+                let debounceMethodIndex = debounceMethodNames.indexOf(k)
                 if (k === 'onLoad') {
                     key['onLoad'] = function(this: PageContext, ...args) {
                         // 初始化data
@@ -175,7 +185,10 @@ export const handleConstructor = (
                         _.extend(this, _.mapValues(getters, v => v.call(this)))
                         // 设置router
                         _.extend(this, {
-                            $route: { path: this.route, query: args[0] }
+                            $route: {
+                                path: this.route,
+                                query: args[0]
+                            }
                         })
 
                         // 保存全局pages
@@ -205,6 +218,14 @@ export const handleConstructor = (
                         })
                         handleRes.call(this, prop.call(this, ...args))
                     }
+                } else if (debounceMethodIndex > -1) {
+                    let method = debounceMethods[debounceMethodIndex]
+                    let options = method.options
+                    let wait = method.wait || 100
+                    let handler = function(this: PageContext, ...args: any[]) {
+                        handleRes.call(this, prop.call(this, ...args))
+                    }
+                    key[k] = _.debounce(handler, wait, options)
                 } else if (k === 'onPreload') {
                     // router.addEvent('', key[k])
                 } else if (_.includes(wxEventNames, k)) {
