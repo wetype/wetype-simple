@@ -196,7 +196,7 @@ export const handleConstructor = (
                         )
                         // 先依次执行mixin中的onLoad事件
                         _.each(mixinOnLoads, (prop, i) => {
-                            prop.call(this, ...args)
+                            handleRes.call(this, prop.call(this, ...args))
                         })
                         handleRes.call(this, prop.call(this, ...args))
                     }
@@ -234,5 +234,7 @@ export const handleConstructor = (
 }
 
 function handleRes(this: PageContext, res) {
-    res.then ? res.then(() => this.$applyData()) : this.$applyData('nowatch')
+    res && res.then
+        ? res.then(() => this.$applyData())
+        : this.$applyData('nowatch')
 }
