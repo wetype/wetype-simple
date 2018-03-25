@@ -1,19 +1,20 @@
 # 小程序框架 Wetype Simple 文档
 
-![wetype_group](http://ac-29n1vuqk.clouddn.com/ab3025c1e159febe3d98.png)
+作者微信号：grepug
+![author_wechat](https://github.com/wetype/wetype-simple/blob/dev/docs/author_wechat_qrcode.jpg?raw=true)
 
 ## 介绍
 
 自微信小程序发布以来，作为一名前端开发者，就一直在关注，并尝试做一款自己的小程序。首先尝试的是官方的开发框架，在开发过程中发现官方框架在许多地方使得代码写得很不舒服，包括不仅限于：
 
-* API 未使用 Promise 封装
-* setData 很繁琐
+*   API 未使用 Promise 封装
+*   setData 很繁琐
 *
 
 很快在社区里发现了[wepy](https://github.com/tencent/wepy)这样的小程序开发框架，一番尝试后决定用它来开发我的第一款小程序。但在开发过程中，仍然觉得 wepy 不能满足我的要求：
 
-* 没有代码提示，用惯了 TypeScript 再去写纯 JS，没有代码提示是很不舒服的事情
-* 定义对 class API 不太友好
+*   没有代码提示，用惯了 TypeScript 再去写纯 JS，没有代码提示是很不舒服的事情
+*   定义对 class API 不太友好
 
 于是我在 wepy 的启发下，着手开发出 wetype 这样的小程序框架，全程用 TypeScript 开发。
 
@@ -111,19 +112,19 @@ export class MyMixin extends Page {
 
 从 demo 不难看出，实际上 wetype 就是封装了一层语法糖，把一些很繁琐的语法精简了一下：
 
-* class 属性直接用作`data`
+*   class 属性直接用作`data`
 
-* `get`语法用作计算属性
+*   `get`语法用作计算属性
 
-* class 方法直接用作`Page`对象的方法
+*   class 方法直接用作`Page`对象的方法
 
-* 装饰器`@Page.watch`可以直接对`data`对象的属性进行监听变化；
+*   装饰器`@Page.watch`可以直接对`data`对象的属性进行监听变化；
 
-* 装饰器`@Page.input(eventName)`可以直接将表单输入的值对被修饰的`data`对象属性进行赋值；
+*   装饰器`@Page.input(eventName)`可以直接将表单输入的值对被修饰的`data`对象属性进行赋值；
 
-* 装饰器`@Page.on`可以监听 mixin 发生的事件；
+*   装饰器`@Page.on`可以监听 mixin 发生的事件；
 
-* ...
+*   ...
 
 ## 用法
 
@@ -151,8 +152,8 @@ wetype 目前并没有强大的后盾去支持，现阶段只是本人一个对�
 
 ## TODO
 
-* [ ] 文档
-* [ ] 单元测试
-* [ ] 代码精简
-* [ ] 打包工具优化
-* [ ] 库体积优化
+*   [ ] 文档
+*   [ ] 单元测试
+*   [ ] 代码精简
+*   [ ] 打包工具优化
+*   [ ] 库体积优化
