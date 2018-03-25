@@ -11,7 +11,7 @@ import {
     PageDecors,
     InputObjOpts,
     Func,
-    DebounceOpts
+    ControlOpts
 } from './types/PageTypes'
 import * as _ from 'lodash-es'
 
@@ -64,7 +64,7 @@ export abstract class Page {
         inputObjs: [],
         wxEventNames: [],
         pureProps: [],
-        debounceMethods: []
+        controlMethods: []
     }
 
     static on(proto: Object, methodName: string) {
@@ -100,14 +100,25 @@ export abstract class Page {
         Page.decors.pureProps.push(name)
     }
 
-    static debounce(wait: number, options?: DebounceOpts) {
+    static control(
+        method: 'debounce' | 'throttle' = 'debounce',
+        options?: ControlOpts
+    ) {
         return function(proto: Object, methodName: string) {
-            Page.decors.debounceMethods.push({
+            Page.decors.controlMethods.push({
                 methodName,
-                wait,
+                method,
                 options
             })
         }
+    }
+
+    static debounce(options?: ControlOpts) {
+        return Page.control('debounce', options)
+    }
+
+    static throttle(options?: ControlOpts) {
+        return Page.control('throttle', options)
     }
 
     /**

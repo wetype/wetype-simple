@@ -3,7 +3,7 @@ import {
     WatchObj,
     InputObj,
     PageConfig,
-    DebounceMethod
+    ControlMethod
 } from '../types/PageTypes'
 import { WxEvent } from '../types/eventTypes'
 import { alphabet } from './util'
@@ -92,7 +92,7 @@ export const handleConstructor = (
     let listenerMethodNames: string[] = Constr.decors.listenerMethodNames
     let inputObjs: InputObj[] = Constr.decors.inputObjs
     let pureProps: string[] = Constr.decors.pureProps
-    let debounceMethods: DebounceMethod[] = Constr.decors.debounceMethods
+    let controlMethods: ControlMethod[] = Constr.decors.controlMethods
     // 初始化methods
     let methods: any = {}
     // 初始化生命周期函数对象
@@ -173,10 +173,10 @@ export const handleConstructor = (
             if (_.isFunction(prop) && k !== 'constructor') {
                 let isLifeCycleMethod = _.includes(lifeCycleMethodNames, k)
                 let key = isLifeCycleMethod ? lifeCycleMethods : methods
-                let debounceMethodNames = debounceMethods.map(
+                let controlMethodsNames = controlMethods.map(
                     el => el.methodName
                 )
-                let debounceMethodIndex = debounceMethodNames.indexOf(k)
+                let controlMethodIndex = controlMethodsNames.indexOf(k)
                 if (k === 'onLoad') {
                     key['onLoad'] = function(this: PageContext, ...args) {
                         // 初始化data
@@ -218,14 +218,21 @@ export const handleConstructor = (
                         })
                         handleRes.call(this, prop.call(this, ...args))
                     }
-                } else if (debounceMethodIndex > -1) {
-                    let method = debounceMethods[debounceMethodIndex]
-                    let options = method.options
-                    let wait = method.wait || 100
+                } else if (controlMethodIndex > -1) {
+                    let method = controlMethods[controlMethodIndex]
+                    let options = {
+                        ...{ leading: true, trailing: false },
+                        ...(method.options || {})
+                    }
+                    let wait = options.wait || 100
+                    delete options.wait
                     let handler = function(this: PageContext, ...args: any[]) {
                         handleRes.call(this, prop.call(this, ...args))
                     }
-                    key[k] = _.debounce(handler, wait, options)
+                    key[k] =
+                        method.method === 'debounce'
+                            ? _.debounce(handler, wait, options)
+                            : _.throttle(handler, wait, options)
                 } else if (k === 'onPreload') {
                     // router.addEvent('', key[k])
                 } else if (_.includes(wxEventNames, k)) {

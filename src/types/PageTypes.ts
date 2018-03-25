@@ -109,7 +109,8 @@ export interface InputObj {
     opts?: InputObjOpts
 }
 
-export interface DebounceOpts {
+export interface ControlOpts {
+    wait?: number
     leading?: boolean
     maxWait?: number
     trailing?: boolean
@@ -120,10 +121,10 @@ export interface InputObjParam {
     opts?: InputObjOpts
 }
 
-export interface DebounceMethod {
+export interface ControlMethod {
     methodName: string
-    wait?: number
-    options?: DebounceOpts
+    method: 'debounce' | 'throttle'
+    options?: ControlOpts
 }
 
 export interface PageDecors {
@@ -132,7 +133,7 @@ export interface PageDecors {
     inputObjs: InputObj[]
     wxEventNames: string[]
     pureProps: string[]
-    debounceMethods: DebounceMethod[]
+    controlMethods: ControlMethod[]
 }
 
 export type Func = (...args: any[]) => any
