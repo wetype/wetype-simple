@@ -135,10 +135,7 @@ export const handleConstructor = (
         }
         let inputEventHandlerName =
             (opts && opts.eventName) || `${propName}Input`
-        methods[inputEventHandlerName] = function(
-            this: PageContext,
-            e: WxEvent
-        ) {
+        let eventHandler = function(this: PageContext, e: WxEvent) {
             let value = e.detail.value
             if (/^\d+$/.test(value) && opts && opts.isParseInt !== false) {
                 value = parseInt(value)
@@ -153,6 +150,14 @@ export const handleConstructor = (
             }
             this[propName] = value
             this.$applyData()
+        }
+        if (opts && opts.debounce) {
+            methods[inputEventHandlerName] = _.debounce(
+                eventHandler,
+                opts.debounce
+            )
+        } else {
+            methods[inputEventHandlerName] = eventHandler
         }
     })
 

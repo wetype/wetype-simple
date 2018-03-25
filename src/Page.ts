@@ -9,7 +9,8 @@ import {
     WatchObj,
     InputObj,
     PageDecors,
-    InputObjOpts
+    InputObjOpts,
+    Func
 } from './types/PageTypes'
 import * as _ from 'lodash-es'
 
@@ -77,7 +78,7 @@ export abstract class Page {
         }
     }
 
-    static input(arg1?: Function | InputObjOpts, arg2?: InputObjOpts) {
+    static input(arg1?: Func | InputObjOpts, arg2?: InputObjOpts) {
         let handler = typeof arg1 === 'function' ? arg1 : void 0
         let opts = typeof arg1 === 'function' ? arg2 : arg1
         return function(proto: Object, propName: string) {

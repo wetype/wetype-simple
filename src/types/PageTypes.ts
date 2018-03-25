@@ -104,7 +104,7 @@ export interface InputObjOpts {
 export interface InputObj {
     propName: string
 
-    handler?: Function
+    handler?: (...args: any[]) => any
 
     opts?: InputObjOpts
 }
@@ -121,3 +121,5 @@ export interface PageDecors {
     wxEventNames: string[]
     pureProps: string[]
 }
+
+export type Func = (...args: any[]) => any
