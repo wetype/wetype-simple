@@ -124,7 +124,7 @@ export abstract class Page {
     /**
      * 生命周期函数--监听页面加载
      */
-    abstract onLoad(options: OnloadOptions): void
+    abstract onLoad(options?: OnloadOptions): void
 }
 
 export interface Page {
@@ -201,4 +201,9 @@ export interface Page {
      * 点击 tab 时触发，见 链接
      */
     onTabItemTap?(): void
+
+    /**
+     * methods
+     */
+    [key: string]: any
 }

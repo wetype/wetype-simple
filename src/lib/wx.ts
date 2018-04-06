@@ -1,5 +1,6 @@
 import { Options, ObjectLiteral, ErrMsg } from '../types/common'
 import * as wxx from '../types/types'
+import { Page as PageConstr } from '../Page'
 
 declare const App: Function
 declare const Page: Function
@@ -18,7 +19,7 @@ declare function getApp(): any
 /**
  * 获取当前页面栈的实例，以数组形式按栈的顺序给出，第一个元素为首页，最后一个元素为当前页面
  */
-declare function getCurrentPages(): any[]
+declare function getCurrentPages(): PageConstr[]
 
 /**
  * #网络
@@ -254,7 +255,9 @@ declare namespace wx {
      * 监听网络状态变化
      */
     export function onNetworkStatusChange(
-        cb: (isConnected: boolean, networkType: wxx.NetworkType) => void
+        cb: (
+            res: { isConnected: boolean; networkType: wxx.NetworkType }
+        ) => void
     ): void
 }
 

@@ -140,4 +140,6 @@ export const select = (
 export const chooseLocation = (): Promise<wxTypes.ChooseLocationRes> =>
     promisify<wxTypes.ChooseLocationRes>({}, wx.chooseLocation)
 
+export const getNetworkType = (): Promise<wxTypes.GetNetworkTypeRes> =>
+    promisify<wxTypes.GetNetworkTypeRes>({}, wx.getNetworkType)
 // export const requestPayment = ()
