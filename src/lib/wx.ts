@@ -655,4 +655,30 @@ declare namespace wx {
     export function setEnableDebug(opts: wxx.SetEnableDebugOpts): void
 }
 
+declare namespace wx {
+    /**
+     * 创建 canvas 绘图上下文（指定 canvasId）。在自定义组件下，第二个参数传入组件实例this，以操作组件内 <canvas/> 组件
+     */
+    export function createCanvasContext(
+        canvasId: string,
+        context?: any
+    ): wxx.CanvasIns
+
+    /**
+     * 把当前画布指定区域的内容导出生成指定大小的图片，并返回文件路径。
+     * tip: 在 draw 回调里调用该方法才能保证图片导出成功。
+     */
+    export function canvasToTempFilePath(
+        opts: wxx.CanvasToTempFilePathOpts,
+        context?: any
+    ): void
+
+    /**
+     * 返回一个数组，用来描述 canvas 区域隐含的像素数据
+     */
+    export function canvasGetImageData(opts: wxx.CanvasGetImageDataOpts): void
+
+    export function canvasPutImageData(opts: wxx.CanvasPutImageDataOpts): void
+}
+
 export { wx, App, Page, Component, Behavior, getCurrentPages }

@@ -1,4 +1,5 @@
 import { Options, ErrMsg, ObjectLiteral } from './common'
+import { fill } from 'lodash-es'
 
 export interface RequestOpts extends Options<RequestRes> {
     url: string
@@ -1653,4 +1654,430 @@ export interface Worker {
      * 结束当前 Worker 线程，仅限在主线程 Worker 实例上调用。
      */
     terminate: () => void
+}
+
+export interface CanvasToTempFilePathOpts extends Options<void> {
+    /**
+     * 画布x轴起点（默认0）
+     */
+    x?: number
+    /**
+     * 画布y轴起点（默认0）
+     */
+    y?: number
+    /**
+     * 画布宽度（默认为canvas宽度-x）
+     */
+    width?: number
+    /**
+     * 画布高度（默认为canvas高度-y）
+     */
+    height?: number
+    /**
+     * 输出图片宽度（默认为width）
+     */
+    destWidth?: number
+    /**
+     * 输出图片高度（默认为height）
+     */
+    destHeight?: number
+    /**
+     * 画布标识，传入 <canvas/> 的 canvas-id
+     */
+    canvasId: string
+    /**
+     * 目标文件的类型，只支持 'jpg' 或 'png'。默认为 'png'
+     */
+    fileType?: string
+    /**
+     * 图片的质量，取值范围为 (0, 1]，不在范围内时当作1.0处理
+     */
+    quality?: number
+}
+
+export interface CanvasGetImageDataRes {
+    errMsg: string
+    /**
+     * 图像数据矩形的宽度
+     */
+    width: number
+
+    /**
+     * 图像数据矩形的高度
+     */
+    height: number
+
+    /**
+     * 图像像素点数据，一维数组，每四项表示一个像素点的rgba
+     */
+    data: string[]
+}
+export interface CanvasGetImageDataOpts extends Options<CanvasGetImageDataRes> {
+    /**
+     * 画布标识，传入 <canvas /> 的 canvas-id
+     */
+    canvasId: string
+    /**
+     * 将要被提取的图像数据矩形区域的左上角 x 坐标
+     */
+    x: number
+    /**
+     * 将要被提取的图像数据矩形区域的左上角 y 坐标
+     */
+    y: number
+    /**
+     * 将要被提取的图像数据矩形区域的宽度
+     */
+    width: number
+    /**
+     * 将要被提取的图像数据矩形区域的高度
+     */
+    height: number
+}
+
+export interface CanvasPutImageDataOpts extends Options<void> {
+    /**
+     * 画布标识，传入 <canvas /> 的 canvas-id
+     */
+    canvasId: string
+    /**
+     * 图像像素点数据，一维数组，每四项表示一个像素点的rgba
+     */
+    data: string[]
+    /**
+     * 源图像数据在目标画布中的位置偏移量（x 轴方向的偏移量）
+     */
+    x: number
+    /**
+     * 源图像数据在目标画布中的位置偏移量（y 轴方向的偏移量）
+     */
+    y: number
+    /**
+     * 源图像数据矩形区域的宽度
+     */
+    width: number
+    /**
+     * 源图像数据矩形区域的高度
+     */
+    height: number
+}
+
+export interface Grd {
+    /**
+     * 用于指定颜色渐变点的位置和颜色，位置必须位于0到1之间。
+     */
+    addColorStop(postion: number, color: string)
+}
+export interface CanvasIns {
+    /**
+     * 设置填充色。
+     */
+    fillStyle: string
+    setFillStyle(color: string | Grd): void
+
+    /**
+     * 设置边框颜色。
+     */
+    strokeStyle: string
+    setStrokeStyle(color: string): void
+
+    /**
+     * 设置阴影样式。
+     * Tip: 如果没有设置，offsetX 默认值为0， offsetY 默认值为0， blur 默认值为0，color 默认值为 black。
+     */
+    shadowOffsetX: number
+    shadowOffsetY: number
+    shadowColor: string
+    shadowBlur: number
+    setShadow(
+        /**
+         * 阴影相对于形状在水平方向的偏移
+         */
+        offsetX: number,
+        /**
+         * 阴影相对于形状在竖直方向的偏移
+         */
+        offsetY: number,
+        /**
+         * 阴影的模糊级别，数值越大越模糊
+         * 范围：0~100
+         */
+        blur: number,
+        /**
+         * 阴影的颜色
+         */
+        color: string
+    ): void
+
+    createLinearGradient(
+        /**
+         * 起点的x坐标
+         */
+        x0: number,
+        /**
+         * 起点的y坐标
+         */
+        y0: number,
+        /**
+         * 终点的x坐标
+         */
+        x1: number,
+        /**
+         * 终点的y坐标
+         */
+        y: number
+    ): CanvasIns
+
+    createCircularGradient(
+        /**
+         * 圆心的x坐标
+         */
+        x: number,
+        /**
+         * 圆心的y坐标
+         */
+        y: number,
+        /**
+         * 圆的半径
+         */
+        r: number
+    ): CanvasIns
+
+    /**
+     * 用于指定颜色渐变点的位置和颜色，位置必须位于0到1之间。
+     */
+    addColorStop(postion: number, color: string): void
+
+    /**
+     * 设置线条的宽度。
+     */
+    lineWidth: number
+    setLineWidth(lineWidth: number): void
+
+    /**
+     * 设置线条的端点样式。
+     */
+    lineCap: 'butt' | 'round' | 'square'
+    setLineCap(lineCap: 'butt' | 'round' | 'square'): void
+
+    /**
+     * 设置线条的交点样式。
+     */
+    lineJoin: 'bevel' | 'round' | 'miter'
+    setLineJoin(lineJoin: 'bevel' | 'round' | 'miter'): void
+
+    /**
+     * 设置线条的宽度。
+     */
+    setLineDash(pattern: number[], offset: number): void
+
+    /**
+     * 设置最大斜接长度，斜接长度指的是在两条线交汇处内角和外角之间的距离。 当 setLineJoin() 为 miter 时才有效。超过最大倾斜长度的，连接处将以 lineJoin 为 bevel 来显示
+     */
+    miterLimit: number
+    setMiterLimit(miterLimit: number): void
+
+    /**
+     * 创建一个矩形。
+     */
+    rect(
+        /**
+         * 矩形路径左上角的x坐标
+         */
+        x: number,
+        /**
+         * 矩形路径左上角的y坐标
+         */
+        y: number,
+        /**
+         * 矩形路径的宽度
+         */
+        width: number,
+        /**
+         * 矩形路径的高度
+         */
+        height: number
+    ): void
+
+    /**
+     * 填充一个矩形。
+     */
+    setFillStyle(
+        /**
+         * 矩形路径左上角的x坐标
+         */
+        x: number,
+        /**
+         * 矩形路径左上角的y坐标
+         */
+        y: number,
+        /**
+         * 矩形路径的宽度
+         */
+        width: number,
+        /**
+         * 矩形路径的高度
+         */
+        height: number
+    ): void
+
+    /**
+     * 画一个矩形(非填充)。
+     */
+    setFillStroke(
+        /**
+         * 矩形路径左上角的x坐标
+         */
+        x: number,
+        /**
+         * 矩形路径左上角的y坐标
+         */
+        y: number,
+        /**
+         * 矩形路径的宽度
+         */
+        width: number,
+        /**
+         * 矩形路径的高度
+         */
+        height: number
+    ): void
+
+    /**
+     * 清除画布上在该矩形区域内的内容。
+     */
+    clearRect(
+        /**
+         * 矩形路径左上角的x坐标
+         */
+        x: number,
+        /**
+         * 矩形路径左上角的y坐标
+         */
+        y: number,
+        /**
+         * 矩形路径的宽度
+         */
+        width: number,
+        /**
+         * 矩形路径的高度
+         */
+        height: number
+    )
+
+    /**
+     * 对当前路径中的内容进行填充。默认的填充色为黑色。
+     */
+    fill(): void
+
+    /**
+     * 画出当前路径的边框。默认颜色色为黑色。
+     */
+    stroke(): void
+
+    /**
+     * 开始创建一个路径，需要调用fill或者stroke才会使用路径进行填充或描边。
+     */
+    beginPath(): void
+
+    /**
+     * 关闭一个路径
+     */
+    closePath(): void
+
+    /**
+     * 把路径移动到画布中的指定点，不创建线条。
+     */
+    moveTo(x: number, y: number): void
+
+    /**
+     * lineTo 方法增加一个新点，然后创建一条从上次指定点到目标点的线。
+     */
+    lineTo(x: number, y: number): void
+
+    /**
+     * 画一条弧线。
+     */
+    arc(
+        x: number,
+        y: number,
+        r: number,
+        sAngle: number,
+        eAngle: number,
+        counterclockwise?: boolean
+    ): void
+
+    /**
+     * 创建三次方贝塞尔曲线路径。
+     */
+    bezierCurveTo(
+        cp1x: number,
+        cp1y: number,
+        cp2x: number,
+        cp2y: number,
+        x: number,
+        y: number
+    ): void
+
+    /**
+     * 创建二次贝塞尔曲线路径。
+     */
+    quadraticCurveTo(cpx: number, cpy: number, x: number, y: number): void
+
+    /**
+     * 在调用scale方法后，之后创建的路径其横纵坐标会被缩放。多次调用scale，倍数会相乘。
+     */
+    scale(scaleWidth: number, scaleHeight: number): void
+
+    /**
+     * 以原点为中心，原点可以用 translate方法修改。顺时针旋转当前坐标轴。多次调用rotate，旋转的角度会叠加。
+     */
+    rotate(rotate: number): void
+
+    /**
+     * 对当前坐标系的原点(0, 0)进行变换，默认的坐标系原点为页面左上角。
+     */
+    translate(x: number, y: number): void
+
+    /**
+     * clip() 方法从原始画布中剪切任意形状和尺寸。一旦剪切了某个区域，则所有之后的绘图都会被限制在被剪切的区域内（不能访问画布上的其他区域）。可以在使用 clip() 方法前通过使用 save() 方法对当前画布区域进行保存，并在以后的任意时间对其进行恢复（通过 restore() 方法）。
+     */
+    clip(): void
+
+    /**
+     * 设置字体的字号。
+     */
+    setFontSize(fontSize: number): void
+
+    /**
+     * 在画布上绘制被填充的文本。
+     */
+    fillText(text: string, x: number, y: number, maxWidth?: number): void
+
+    /**
+     * 用于设置文字的对齐
+     */
+    textAlign: 'left' | 'center' | 'right'
+    setTextAlign(align: 'left' | 'center' | 'right'): void
+
+    /**
+     * 用于设置文字的水平对齐
+     */
+    textBaseline: 'top' | 'bottom' | 'middle' | 'normal'
+    setTextBaseline(textBaseline: 'top' | 'bottom' | 'middle' | 'normal'): void
+
+    /**
+     * 绘制图像到画布。
+     */
+    drawImage(
+        imageResource: string,
+        dx: number,
+        dy: number,
+        dWidth?: number,
+        dHeight?: number,
+        sx?: number,
+        sy?: number,
+        sWidth?: number,
+        sHeight?: number
+    ): void
 }
