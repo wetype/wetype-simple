@@ -1,6 +1,6 @@
 export interface Options<T> {
     success?(res: T): void
-    fail?(): void
+    fail?(err?: any): void
     complete?(): void
 }
 

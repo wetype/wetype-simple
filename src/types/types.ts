@@ -1657,7 +1657,8 @@ export interface Worker {
     terminate: () => void
 }
 
-export interface CanvasToTempFilePathOpts extends Options<void> {
+export interface CanvasToTempFilePathOpts
+    extends Options<{ tempFilePath: string }> {
     /**
      * 画布x轴起点（默认0）
      */
@@ -1903,7 +1904,7 @@ export interface CanvasIns {
     /**
      * 填充一个矩形。
      */
-    setFillStyle(
+    fillRect(
         /**
          * 矩形路径左上角的x坐标
          */
@@ -1925,7 +1926,7 @@ export interface CanvasIns {
     /**
      * 画一个矩形(非填充)。
      */
-    setFillStroke(
+    strokeRect: (
         /**
          * 矩形路径左上角的x坐标
          */
@@ -1942,7 +1943,7 @@ export interface CanvasIns {
          * 矩形路径的高度
          */
         height: number
-    ): void
+    ) => void
 
     /**
      * 清除画布上在该矩形区域内的内容。
@@ -2101,7 +2102,7 @@ export interface CanvasIns {
     /**
      * 将之前在绘图上下文中的描述（路径、变形、样式）画到 canvas 中。
      */
-    draw(reserveOrCallback?: boolean | (() => void)): void
+    draw: (reserveOrCallback?: boolean | (() => void)) => void
 
     /**
      * 测量文本尺寸信息，目前仅返回文本宽度。同步接口。
@@ -2165,6 +2166,7 @@ export interface CanvasIns {
      * @param {number} translateY
      * @memberof CanvasIns
      */
+
     setTransform(
         scaleX: number,
         skewX: number,

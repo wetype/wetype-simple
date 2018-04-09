@@ -58,7 +58,7 @@ declare namespace wx {
      * 保存图片到系统相册。需要用户授权 scope.writePhotosAlbum
      * 基础库 1.2.0 开始支持，低版本需做兼容处理
      */
-    export function saveImageToPhotosAlbumave(
+    export function saveImageToPhotosAlbum(
         opts: wxx.SaveImageToPhotosAlbumOpts
     ): wxx.SaveImageToPhotosAlbumRes
 
