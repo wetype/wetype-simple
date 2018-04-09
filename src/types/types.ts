@@ -1,5 +1,6 @@
 import { Options, ErrMsg, ObjectLiteral } from './common'
 import { fill } from 'lodash-es'
+import { deflateRaw } from 'zlib'
 
 export interface RequestOpts extends Options<RequestRes> {
     url: string
@@ -1656,7 +1657,8 @@ export interface Worker {
     terminate: () => void
 }
 
-export interface CanvasToTempFilePathOpts extends Options<void> {
+export interface CanvasToTempFilePathOpts
+    extends Options<{ tempFilePath: string }> {
     /**
      * 画布x轴起点（默认0）
      */
@@ -1902,7 +1904,7 @@ export interface CanvasIns {
     /**
      * 填充一个矩形。
      */
-    setFillStyle(
+    fillRect(
         /**
          * 矩形路径左上角的x坐标
          */
@@ -1924,7 +1926,7 @@ export interface CanvasIns {
     /**
      * 画一个矩形(非填充)。
      */
-    setFillStroke(
+    strokeRect: (
         /**
          * 矩形路径左上角的x坐标
          */
@@ -1941,7 +1943,7 @@ export interface CanvasIns {
          * 矩形路径的高度
          */
         height: number
-    ): void
+    ) => void
 
     /**
      * 清除画布上在该矩形区域内的内容。
@@ -2079,5 +2081,98 @@ export interface CanvasIns {
         sy?: number,
         sWidth?: number,
         sHeight?: number
+    ): void
+
+    /**
+     * 设置全局画笔透明度。
+     */
+    globalAlpha: number
+    setGlobalAlpha(alpha: number): void
+
+    /**
+     * 保存当前绘图的上下文
+     */
+    save(): void
+
+    /**
+     * 恢复当前绘图的上下文
+     */
+    restore(): void
+
+    /**
+     * 将之前在绘图上下文中的描述（路径、变形、样式）画到 canvas 中。
+     */
+    draw: (reserveOrCallback?: boolean | (() => void)) => void
+
+    /**
+     * 测量文本尺寸信息，目前仅返回文本宽度。同步接口。
+     */
+    measureText(text: string): { width: number }
+
+    /**
+     * 该属性是设置要在绘制新形状时应用的合成操作的类型。
+     */
+    globalCompositeOperation: number
+
+    /**
+     * 根据控制点和半径绘制圆弧路径。
+     */
+    arcTo(x1: number, y1: number, x2: number, y2: number, radius: number): void
+
+    /**
+     * 给定的 (x, y) 位置绘制文本描边的方法
+     */
+    strokeText(text: number, x: number, y: number, maxWidth?: number): void
+
+    /**
+     * 设置虚线偏移量的属性
+     */
+    lineDashOffset: number
+
+    /**
+     * 对指定的图像创建模式的方法，可在指定的方向上重复元图像
+     *
+     * @param {string} image
+     * @param {('repeat' | 'repeat-x' | 'repeat-y' | 'no-repeat')} repetition
+     * @memberof CanvasIns
+     */
+    createPattern(
+        /**
+         * 重复的图像源，仅支持包内路径和临时路径
+         */
+        image: string,
+        /**
+         * 指定如何重复图像
+         */
+        repetition: 'repeat' | 'repeat-x' | 'repeat-y' | 'no-repeat'
+    ): void
+
+    /**
+     * 设置当前字体样式的属性
+     *
+     * @type {string} 符合 CSS font 语法的 DOMString 字符串，至少需要提供字体大小和字体族名。默认值为 10px sans-serif
+     * @memberof CanvasIns
+     */
+    font: string
+
+    /**
+     * 使用矩阵重新设置（覆盖）当前变换的方法
+     *
+     * @param {number} scaleX
+     * @param {number} skewX
+     * @param {number} skewY
+     * @param {number} scaleY
+     * @param {number} translateX
+     * @param {number} translateY
+     * @memberof CanvasIns
+     */
+
+    setTransform(
+        scaleX: number,
+        skewX: number,
+        skewY: number,
+        scaleY: number,
+        translateX: number,
+        translateY: number
     ): void
 }
