@@ -235,6 +235,12 @@ export const handleConstructor = (
                             : _.throttle(handler, wait, options)
                 } else if (k === 'onPreload') {
                     // router.addEvent('', key[k])
+                } else if (k === 'onShareAppMessage') {
+                    key[k] = function(...args) {
+                        let res = prop.call(this, ...args)
+                        handleRes.call(this, res)
+                        return res
+                    }
                 } else if (_.includes(wxEventNames, k)) {
                     // 处理wxEvent
                     // 类似于html属性 data-arg-a=""
