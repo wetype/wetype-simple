@@ -187,7 +187,9 @@ export const handleConstructor = (
                         _.extend(this, {
                             $route: {
                                 path: this.route,
-                                query: args[0]
+                                query: _.mapValues(args[0], v =>
+                                    decodeURIComponent(v)
+                                )
                             }
                         })
 
