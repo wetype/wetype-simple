@@ -753,6 +753,11 @@ export interface GetSystemInfoRes {
     system: string
 
     /**
+     * 状态栏的高度
+     */
+    statusBarHeight: number
+
+    /**
      * 客户端平台
      */
     platform: string
