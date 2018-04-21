@@ -43,7 +43,7 @@ export const alert = (
         content,
         title: title || '提示',
         showCancel: false,
-        confirmColor
+        confirmColor: confirmColor || '#3CC51F'
     })
 }
 
@@ -59,7 +59,7 @@ export const confirm = (
         content,
         title: title || '提示',
         showCancel: true,
-        confirmColor
+        confirmColor: confirmColor || '#3CC51F'
     })
 }
 
