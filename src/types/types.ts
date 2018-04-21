@@ -1662,8 +1662,12 @@ export interface Worker {
     terminate: () => void
 }
 
+export interface CanvasToTempFilePathRes {
+    tempFilePath: string
+}
+
 export interface CanvasToTempFilePathOpts
-    extends Options<{ tempFilePath: string }> {
+    extends Options<CanvasToTempFilePathRes> {
     /**
      * 画布x轴起点（默认0）
      */
