@@ -180,7 +180,7 @@ export const handleConstructor = (
                 if (k === 'onLoad') {
                     key['onLoad'] = function(this: PageContext, ...args) {
                         // 初始化data
-                        _.extend(this, this.data)
+                        _.extend(this, _.cloneDeep(this.data))
                         // 初始化getters
                         _.extend(this, _.mapValues(getters, v => v.call(this)))
                         // 设置router
