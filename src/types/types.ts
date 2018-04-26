@@ -100,7 +100,7 @@ export interface DownloadFileOpts extends Options<DownloadFileRes> {
     /**
      * HTTP 请求 Header，header 中不能设置 Referer
      */
-    header: ObjectLiteral
+    header?: ObjectLiteral
 }
 
 export interface DownloadFileRes {
