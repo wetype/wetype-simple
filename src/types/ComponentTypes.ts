@@ -5,6 +5,7 @@ export type Properties = {
             | ArrayConstructor
             | ObjectConstructor
             | NumberConstructor
+            | BooleanConstructor
         value: any
     }
 }
