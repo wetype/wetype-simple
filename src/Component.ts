@@ -54,9 +54,29 @@ export abstract class Component {
     }
 }
 
+export interface TriggerEventOpts {
+    /**
+     * 事件是否冒泡
+     */
+    bubbles: boolean
+
+    /**
+     * 事件是否可以穿越组件边界，为false时，事件将只能在引用组件的节点树上触发，不进入其他任何组件内部
+     */
+    composed: boolean
+
+    /**
+     * 事件是否拥有捕获阶段
+     */
+    capturePhase: boolean
+}
+
 export interface Component {
     // 生命周期函数
     attached?(): void
     moved?(): void
     detached?(): void
+
+    // 触发事件
+    triggerEvent(eventName: string, arg?: any, opts?: TriggerEventOpts): void
 }
