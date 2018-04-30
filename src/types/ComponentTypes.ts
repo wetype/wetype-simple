@@ -1,12 +1,13 @@
 export type Properties = {
     [key: string]: {
-        type?:
+        type:
             | StringConstructor
             | ArrayConstructor
             | ObjectConstructor
             | NumberConstructor
             | BooleanConstructor
-        value: any
+        value?: any
+        observer?: (newVal: any, oldVal: any) => void
     }
 }
 
@@ -18,7 +19,19 @@ export interface ComOptions {
     config?: ComponentConfig
     properties?: Properties
     behaviors?: any[]
-    options?: any
+    options?: {
+        multipleSlots?: boolean
+    }
+    relations?: {
+        [key: string]: {
+            type: 'parent' | 'child' | 'ancestor' | 'descendant'
+            linked?: () => void
+            linkChanged?: () => void
+            unlinked?: () => void
+            target?: string
+        }
+    }
+    externalClasses?: string[]
 }
 
 // export interface ComObj {

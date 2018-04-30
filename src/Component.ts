@@ -1,9 +1,11 @@
-import { handleAppConstr } from './lib/handleAppConstr'
+// import { handleAppConstr } from './lib/handleAppConstr'
 import { Component as nativeComponent } from './lib/wx'
 import { Behavior } from './Behavior'
 import { ComOptions } from './types/ComponentTypes'
+import { handleConstructor } from './lib/handleConstructor'
+import { DecorMethods } from './lib/DecorMethods'
 
-export abstract class Component {
+export abstract class Component extends DecorMethods {
     type = 'component'
 
     data: any
@@ -17,12 +19,14 @@ export abstract class Component {
                 'created',
                 'ready'
             ]
-            let { data, methods, lifeCycleMethods } = handleAppConstr(
+            let properties = handleConstructor(
+                'component',
                 comConstructor,
                 lifeCycleMethodNames
             )
 
             if (comOptions) {
+                Object.assign(properties, comOptions)
                 // 去掉config
                 delete comOptions.config
                 // 处理behaviors
@@ -32,26 +36,14 @@ export abstract class Component {
                 }
             }
 
-            nativeComponent({
-                data,
-                methods,
-                ...lifeCycleMethods,
-                ...comOptions
-            })
+            nativeComponent(properties)
         }
     }
 
     /**
-     * 用于将数据从逻辑层发送到视图层（异步），同时改变对应的 this.data 的值（同步）。
+     * 组件生命周期函数，在组件实例进入页面节点树时执行
      */
-    $setData(arg: any): void {}
-
-    /**
-     * 异步setData
-     */
-    $setDataAsync(arg: any): Promise<void> {
-        return Promise.resolve()
-    }
+    abstract attached(): void
 }
 
 export interface TriggerEventOpts {
@@ -73,9 +65,24 @@ export interface TriggerEventOpts {
 
 export interface Component {
     // 生命周期函数
-    attached?(): void
+    ready?(): void
     moved?(): void
     detached?(): void
+
+    /**
+     * 用于将数据从逻辑层发送到视图层（异步），同时改变对应的 this.data 的值（同步）。
+     */
+    $setData(arg: any): void
+
+    /**
+     * 异步setData
+     */
+    $setDataAsync(arg: any): Promise<void>
+
+    /**
+     *
+     */
+    $applyData(): Promise<void>
 
     // 触发事件
     triggerEvent(eventName: string, arg?: any, opts?: TriggerEventOpts): void

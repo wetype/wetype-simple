@@ -14,8 +14,9 @@ import {
     ControlOpts
 } from './types/PageTypes'
 import * as _ from 'lodash-es'
+import { DecorMethods } from './lib/DecorMethods'
 
-export abstract class Page {
+export abstract class Page extends DecorMethods {
     readonly $type = 'page'
 
     /**
@@ -47,6 +48,7 @@ export abstract class Page {
         return function(pageConstructor: any) {
             let lifeCycleMethodNames = ['onLoad', 'onShow', 'onUnload']
             let pageProperties = handleConstructor(
+                'page',
                 pageConstructor,
                 lifeCycleMethodNames,
                 pageOptions && pageOptions.isMixin,
@@ -58,68 +60,68 @@ export abstract class Page {
         }
     }
 
-    private static decors: PageDecors = {
-        listenerMethodNames: [],
-        watchObjs: [],
-        inputObjs: [],
-        wxEventNames: [],
-        pureProps: [],
-        controlMethods: []
-    }
+    // private static decors: PageDecors = {
+    //     listenerMethodNames: [],
+    //     watchObjs: [],
+    //     inputObjs: [],
+    //     wxEventNames: [],
+    //     pureProps: [],
+    //     controlMethods: []
+    // }
 
-    static on(proto: Object, methodName: string) {
-        Page.decors.listenerMethodNames.push(methodName)
-    }
+    // static on(proto: Object, methodName: string) {
+    //     Page.decors.listenerMethodNames.push(methodName)
+    // }
 
-    static watch(func: (val: any, old?: any) => void) {
-        return function(proto: Object, dataName: string) {
-            Page.decors.watchObjs.push({
-                dataName,
-                func
-            })
-        }
-    }
+    // static watch(func: (val: any, old?: any) => void) {
+    //     return function(proto: Object, dataName: string) {
+    //         Page.decors.watchObjs.push({
+    //             dataName,
+    //             func
+    //         })
+    //     }
+    // }
 
-    static input(arg1?: Func | InputObjOpts, arg2?: InputObjOpts) {
-        let handler = typeof arg1 === 'function' ? arg1 : void 0
-        let opts = typeof arg1 === 'function' ? arg2 : arg1
-        return function(proto: Object, propName: string) {
-            Page.decors.inputObjs.push({
-                propName,
-                opts,
-                handler
-            })
-        }
-    }
+    // static input(arg1?: Func | InputObjOpts, arg2?: InputObjOpts) {
+    //     let handler = typeof arg1 === 'function' ? arg1 : void 0
+    //     let opts = typeof arg1 === 'function' ? arg2 : arg1
+    //     return function(proto: Object, propName: string) {
+    //         Page.decors.inputObjs.push({
+    //             propName,
+    //             opts,
+    //             handler
+    //         })
+    //     }
+    // }
 
-    static event(pro: Object, methodName: string) {
-        Page.decors.wxEventNames.push(methodName)
-    }
+    // static event(pro: Object, methodName: string) {
+    //     Page.decors.wxEventNames.push(methodName)
+    // }
 
-    static pure(prop, name: string) {
-        Page.decors.pureProps.push(name)
-    }
+    // static pure(prop, name: string) {
+    //     Page.decors.pureProps.push(name)
+    // }
 
-    static control(
-        method: 'debounce' | 'throttle' = 'debounce',
-        options?: ControlOpts
-    ) {
-        return function(proto: Object, methodName: string) {
-            Page.decors.controlMethods.push({
-                methodName,
-                method,
-                options
-            })
-        }
-    }
+    // static control(
+    //     method: 'debounce' | 'throttle' = 'debounce',
+    //     options?: ControlOpts
+    // ) {
+    //     return function(proto: Object, methodName: string) {
+    //         Page.decors.controlMethods.push({
+    //             methodName,
+    //             method,
+    //             options
+    //         })
+    //     }
+    // }
 
-    static debounce(options?: ControlOpts) {
-        return Page.control('debounce', options)
-    }
+    // static debounce(options?: ControlOpts) {
+    //     return Page.control('debounce', options)
+    // }
 
-    static throttle(options?: ControlOpts) {
-        return Page.control('throttle', options)
-    }
+    // static throttle(options?: ControlOpts) {
+    //     return Page.control('throttle', options)
+    // }
 
     /**
      * 生命周期函数--监听页面加载

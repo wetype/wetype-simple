@@ -7,7 +7,7 @@ import {
 } from '../types/PageTypes'
 import { WxEvent } from '../types/eventTypes'
 import { alphabet } from './util'
-import { listeners } from './globalObjs'
+// import { listeners } from './globalObjs'
 import {
     setDataAsync,
     emit,
@@ -16,7 +16,7 @@ import {
     applyMixins,
     validate
 } from './pageMethods'
-import { getCurrentPages } from './wx'
+// import { getCurrentPages } from './wx'
 
 export abstract class PageContext {
     /**
@@ -73,6 +73,7 @@ export abstract class PageContext {
 }
 
 export const handleConstructor = (
+    constrType: 'page' | 'component',
     Constr: any,
     lifeCycleMethodNames: string[],
     isMixin?: boolean,
@@ -177,8 +178,10 @@ export const handleConstructor = (
                     el => el.methodName
                 )
                 let controlMethodIndex = controlMethodsNames.indexOf(k)
-                if (k === 'onLoad') {
-                    key['onLoad'] = function(this: PageContext, ...args) {
+                let initialMethod =
+                    constrType === 'page' ? 'onLoad' : 'attached'
+                if (k === initialMethod) {
+                    key[initialMethod] = function(this: PageContext, ...args) {
                         // 初始化data
                         _.extend(this, _.cloneDeep(this.data))
                         // 初始化getters
@@ -270,12 +273,15 @@ export const handleConstructor = (
             }
         }
     })
-
-    return { ...methods, ...lifeCycleMethods, data }
+    return constrType === 'page'
+        ? { ...methods, ...lifeCycleMethods, data }
+        : { methods, ...lifeCycleMethods, data }
 }
 
 function handleRes(this: PageContext, res) {
-    res && res.then
-        ? res.then(() => this.$applyData())
-        : this.$applyData('nowatch')
+    if (this.$applyData) {
+        res && res.then
+            ? res.then(() => this.$applyData())
+            : this.$applyData('nowatch')
+    }
 }
