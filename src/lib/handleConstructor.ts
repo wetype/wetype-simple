@@ -136,20 +136,27 @@ export const handleConstructor = (
 
     // 处理inputObj
     _.each(inputObjs, ({ propName, opts, handler }) => {
-        if (opts && opts.valid) {
-            let value = data[propName]
-            data.$valid[propName] = validate(opts.valid, value)
+        if (opts) {
+            if (opts.valid) {
+                let value = data[propName]
+                data.$valid[propName] = validate(opts.valid, value)
+            }
+            // if (opts.isProp) {
+            //     data[`${propName}$prop`] = data[propName]
+            // }
         }
         let inputEventHandlerName =
             (opts && opts.eventName) || `${propName}Input`
         let eventHandler = function(this: PageContext, e: WxEvent) {
-            let value = e.detail.value
+            let value = opts && opts.isProp ? e.detail : e.detail.value
             if (/^\d+$/.test(value) && opts && opts.isParseInt !== false) {
                 value = parseInt(value)
             }
-            if (opts && opts.valid) {
-                // 验证表单
-                this.$valid[propName] = validate(opts.valid, value)
+            if (opts) {
+                if (opts.valid) {
+                    // 验证表单
+                    this.$valid[propName] = validate(opts.valid, value)
+                }
             }
             if (handler) {
                 handleRes.call(this, handler.call(this, value, e))
@@ -157,6 +164,13 @@ export const handleConstructor = (
             }
             this[propName] = value
             this.$applyData()
+            // this.$applyData().then(() => {
+            //     if (opts && opts.isProp) {
+            //         // 同步prop
+            //         this[`${propName}$prop`] = value
+            //         this.$applyData()
+            //     }
+            // })
         }
         if (opts && opts.debounce) {
             methods[inputEventHandlerName] = _.debounce(
@@ -266,7 +280,11 @@ export const handleConstructor = (
                 } else {
                     key[k] = function(this: PageContext, ...args) {
                         if (!isMixin) {
-                            handleRes.call(this, prop.call(this, ...args))
+                            if (/.+\$$/.test(k)) {
+                                prop.call(this, ...args)
+                            } else {
+                                handleRes.call(this, prop.call(this, ...args))
+                            }
                         }
                     }
                 }

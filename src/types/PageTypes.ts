@@ -99,6 +99,8 @@ export interface InputObjOpts {
     isParseFloat?: boolean
     // reg?: RegExp
     valid?: (this: void, value: any) => boolean | RegExp
+
+    isProp?: boolean
 }
 
 export interface InputObj {
