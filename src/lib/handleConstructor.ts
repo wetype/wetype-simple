@@ -278,7 +278,7 @@ export const handleConstructor = (
                             handleRes.call(this, prop.call(this, ...args, e))
                     }
                 } else {
-                    key[k] = function(this: PageContext, ...args) {
+                    let handler = function(this: PageContext, ...args) {
                         if (!isMixin) {
                             if (/.+\$$/.test(k)) {
                                 prop.call(this, ...args)
@@ -287,6 +287,12 @@ export const handleConstructor = (
                             }
                         }
                     }
+                    key[k] = isLifeCycleMethod
+                        ? handler
+                        : _.debounce(handler, 50, {
+                              leading: true,
+                              trailing: false
+                          })
                 }
             }
         }
