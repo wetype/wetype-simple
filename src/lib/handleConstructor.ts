@@ -230,7 +230,8 @@ export const handleConstructor = (
                             this,
                             watchObjs,
                             getters,
-                            pureProps
+                            pureProps,
+                            inputObjs
                         )
                         // 先依次执行mixin中的onLoad事件
                         _.each(mixinOnLoads, (prop, i) => {

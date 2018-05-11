@@ -39,6 +39,7 @@ export const applyData = function(
     watchObjs: any,
     getters: any,
     pureProps: string[],
+    InputObjs: InputObj[],
     isHandleWatcher: string = ''
 ) {
     let toSetData: any = {}
@@ -55,8 +56,23 @@ export const applyData = function(
             handleWatcher.call(this, watchObjs, toSetData)
         }
 
+        // 处理inputObjs其中验证部分
+        InputObjs.forEach(el => {
+            if (el.propName in toSetData) {
+                if (el.opts && el.opts.valid) {
+                    let value = toSetData[el.propName]
+                    let valiRes = validate(el.opts.valid, value)
+                    let $valid = this.$valid || {}
+                    $valid[el.propName] = valiRes
+                    toSetData.$valid = $valid
+                }
+            }
+        })
+
+        // 处理computed getters
         let getterChanges = handleGetters.call(this, getters, toSetData)
 
+        // 删除pureProps
         let data = deleteProps(
             {
                 ...toSetData,
