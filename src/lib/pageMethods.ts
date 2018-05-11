@@ -164,3 +164,11 @@ export const validate = (valid, value) => {
     let validRes = valid.call(void 0, value)
     return _.isRegExp(validRes) ? validRes.test(value) : !!validRes
 }
+
+export function handleRes(this: PageContext, res) {
+    if (this.$applyData) {
+        res && res.then
+            ? res.then(() => this.$applyData())
+            : this.$applyData('nowatch')
+    }
+}

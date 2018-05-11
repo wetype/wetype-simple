@@ -14,7 +14,8 @@ import {
     applyData,
     handleListener,
     applyMixins,
-    validate
+    validate,
+    handleRes
 } from './pageMethods'
 // import { getCurrentPages } from './wx'
 
@@ -300,12 +301,4 @@ export const handleConstructor = (
     return constrType === 'page'
         ? { ...methods, ...lifeCycleMethods, data }
         : { methods, ...lifeCycleMethods, data }
-}
-
-function handleRes(this: PageContext, res) {
-    if (this.$applyData) {
-        res && res.then
-            ? res.then(() => this.$applyData())
-            : this.$applyData('nowatch')
-    }
 }
