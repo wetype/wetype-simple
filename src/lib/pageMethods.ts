@@ -17,7 +17,7 @@ export const emit = (listenerName: string, path: string, ...args: any[]) => {
     let listener = listeners[`${path}-${listenerName}`]
     if (listener) {
         listener.method.call(listener.context, ...args)
-        listener.context.applyData()
+        listener.context.$applyData()
     } else {
         throw Error(
             `no such listener ${listenerName} in page ${path} registered!`
