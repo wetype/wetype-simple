@@ -14,7 +14,7 @@ export const setDataAsync = function(this: PageContext, arg) {
 }
 
 export const emit = (listenerName: string, path: string, ...args: any[]) => {
-    let listener = listeners[`${path}-${listenerName}`]
+    let listener = listeners[`${listenerName}`]
     if (listener) {
         listener.method.call(listener.context, ...args)
         listener.context.$applyData()
@@ -168,7 +168,7 @@ export function handleListener(
 ) {
     _.each(proto, (method, k) => {
         if (_.includes(listenerMethodNames, k)) {
-            listeners[`${this.route}-${k}`] = {
+            listeners[`${k}`] = {
                 method,
                 context: this
             }
