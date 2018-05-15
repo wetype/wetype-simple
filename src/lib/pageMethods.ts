@@ -13,15 +13,13 @@ export const setDataAsync = function(this: PageContext, arg) {
     })
 }
 
-export const emit = (listenerName: string, path: string, ...args: any[]) => {
+export const emit = (listenerName: string, ...args: any[]) => {
     let listener = listeners[`${listenerName}`]
     if (listener) {
         listener.method.call(listener.context, ...args)
         listener.context.$applyData()
     } else {
-        throw Error(
-            `no such listener ${listenerName} in page ${path} registered!`
-        )
+        throw Error(`no such listener ${listenerName} registered!`)
     }
 }
 
