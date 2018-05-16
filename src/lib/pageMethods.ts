@@ -102,7 +102,7 @@ function handleWatcher(
 function handleGetters(this: PageContext, getters: any, toSetData: any) {
     let changes: any = {}
     _.each(getters, (func, k) => {
-        let computed = func.call(this)
+        let computed = _.cloneDeep(func.call(this))
         if (computed !== void 0) {
             if (!_.isEqual(computed, this[k])) {
                 changes[k] = computed

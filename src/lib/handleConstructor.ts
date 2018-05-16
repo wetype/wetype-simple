@@ -200,7 +200,7 @@ export const handleConstructor = (
                         // 初始化data
                         _.extend(this, _.cloneDeep(this.data))
                         // 初始化getters
-                        _.extend(this, _.mapValues(getters, v => v.call(this)))
+                        _.extend(this, _.cloneDeep(_.mapValues(getters, v => v.call(this))))
                         // 设置router
                         _.extend(this, {
                             $route: {
