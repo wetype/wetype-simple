@@ -18,6 +18,7 @@ import {
     handleRes
 } from './pageMethods'
 // import { getCurrentPages } from './wx'
+import { getDecorName } from './DecorMethods'
 
 export abstract class PageContext {
     /**
@@ -86,15 +87,10 @@ export const handleConstructor = (
     }
     // 实例化
     let ins = new Constr()
+    let constrName = Constr.name
     let type = ins.type
     let proto = Constr.prototype
-    // 事件、监听方法名
-    let wxEventNames: string[] = Constr.decors.wxEventNames
-    let watchObjs: WatchObj[] = Constr.decors.watchObjs
-    let listenerMethodNames: string[] = Constr.decors.listenerMethodNames
-    let inputObjs: InputObj[] = Constr.decors.inputObjs
-    let pureProps: string[] = Constr.decors.pureProps
-    let controlMethods: ControlMethod[] = Constr.decors.controlMethods
+
     // 初始化methods
     let methods: any = {}
     // 初始化生命周期函数对象
@@ -111,6 +107,14 @@ export const handleConstructor = (
         mixinOnLoads = res.onLoads
         getters = res.getters
     }
+    // 事件、监听方法名
+    let decors = getDecorName(constrName)
+    let wxEventNames: string[] = decors ? decors.wxEventNames : []
+    let watchObjs: WatchObj[] = decors ? decors.watchObjs : []
+    let listenerMethodNames: string[] = decors ? decors.listenerMethodNames : []
+    let inputObjs: InputObj[] = decors ? decors.inputObjs : []
+    let pureProps: string[] = decors ? decors.pureProps : []
+    let controlMethods: ControlMethod[] = decors ? decors.controlMethods : []
 
     const excludedProperties = ['route'].concat(pureProps)
     // 遍历属性
@@ -200,7 +204,10 @@ export const handleConstructor = (
                         // 初始化data
                         _.extend(this, _.cloneDeep(this.data))
                         // 初始化getters
-                        _.extend(this, _.cloneDeep(_.mapValues(getters, v => v.call(this))))
+                        _.extend(
+                            this,
+                            _.cloneDeep(_.mapValues(getters, v => v.call(this)))
+                        )
                         // 设置router
                         _.extend(this, {
                             $route: {

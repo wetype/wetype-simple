@@ -2,6 +2,7 @@ import { PageContext } from './handleConstructor'
 import { listeners } from './globalObjs'
 import * as _ from 'lodash-es'
 import { WatchObj, InputObj, PageConfig } from '../types/PageTypes'
+import { getDecorName, setDecorName } from './DecorMethods'
 
 export const setDataAsync = function(this: PageContext, arg) {
     return new Promise(resolve => {
@@ -130,6 +131,7 @@ export function applyMixins(
     let data = {}
     let onLoads: any[] = []
     let getters = {}
+    let derivedDecors = getDecorName(derivedCtor.name)
     baseCtors.forEach(baseCtor => {
         let ins = new baseCtor()
         let proto = baseCtor.prototype
@@ -153,7 +155,18 @@ export function applyMixins(
         if (baseCtor.prototype.onLoad) {
             onLoads.push(baseCtor.prototype.onLoad)
         }
+
+        // decors
+        // _.each(ins, )
+        let baseDecors = getDecorName(baseCtor.name)
+        Object.keys(derivedDecors).forEach(name => {
+            derivedDecors[name] = (derivedDecors[name] || []).concat(
+                baseDecors[name] || []
+            )
+        })
+        setDecorName(derivedCtor.name, derivedDecors)
     })
+
     return {
         data,
         getters,
