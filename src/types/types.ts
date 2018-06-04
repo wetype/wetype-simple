@@ -2185,3 +2185,14 @@ export interface CanvasIns {
         translateY: number
     ): void
 }
+
+export interface IPageScrollToOpts {
+    /**
+     * 滚动到页面的目标位置（单位px）
+     */
+    scrollTop: number
+    /**
+     * 滚动动画的时长，默认300ms，单位 ms
+     */
+    duration?: number
+}

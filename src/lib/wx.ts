@@ -681,4 +681,8 @@ declare namespace wx {
     export function canvasPutImageData(opts: wxx.CanvasPutImageDataOpts): void
 }
 
+declare namespace wx {
+    export function pageScrollTo(opts: wxx.IPageScrollToOpts): void
+}
+
 export { wx, App, Page, Component, Behavior, getCurrentPages }
