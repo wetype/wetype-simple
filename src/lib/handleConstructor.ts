@@ -304,12 +304,13 @@ export const handleConstructor = (
                             }
                         }
                     }
-                    key[k] = isLifeCycleMethod
-                        ? handler
-                        : _.debounce(handler, 50, {
-                              leading: true,
-                              trailing: false
-                          })
+                    key[k] =
+                        isLifeCycleMethod || k[0] === '_'
+                            ? handler
+                            : _.debounce(handler, 50, {
+                                  leading: true,
+                                  trailing: false
+                              })
                 }
             }
         }

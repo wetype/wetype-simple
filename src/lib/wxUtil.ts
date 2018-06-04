@@ -125,7 +125,7 @@ export const showActionSheet = (
 ): Promise<wxTypes.ShowActionSheetRes> =>
     promisify<wxTypes.ShowActionSheetRes>(opts, wx.showActionSheet)
 
-export const select = (
+    export const select = (
     selector: string
 ): Promise<wxTypes.Rect | wxTypes.Rect[]> => {
     return new Promise((resolve, reject) => {
@@ -145,3 +145,9 @@ export const getNetworkType = (): Promise<wxTypes.GetNetworkTypeRes> =>
 
 export const getImageInfo = (opts: wxTypes.GetImageInfoOpts) =>
     promisify<wxTypes.GetImageInfoRes>(opts, wx.getImageInfo)
+
+export const navigateBack = (opts: wxTypes.NavigateBackOpts) =>
+    promisify<void>(opts, wx.navigateBack)
+
+export const navigateTo = (opts: wxTypes.NavigateToOpts) =>
+    promisify<void>(opts, wx.navigateTo)
