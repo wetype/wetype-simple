@@ -1134,7 +1134,7 @@ export interface ShowToastOpts extends Options<void> {
     /**
      * 自定义图标的本地路径，image 的优先级高于 icon
      */
-    images?: string
+    image?: string
 
     /**
      * 提示的延迟时间，单位毫秒
