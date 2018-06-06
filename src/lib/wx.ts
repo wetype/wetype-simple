@@ -393,7 +393,7 @@ declare namespace wx {
     /**
      * 显示消息提示框
      */
-    export function showtToast(opts: wxx.ShowToastOpts): void
+    export function showToast(opts: wxx.ShowToastOpts): void
 
     /**
      * 隐藏消息提示框

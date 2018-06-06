@@ -110,7 +110,7 @@ export const login = (): Promise<wxTypes.LoginRes> =>
     promisify<wxTypes.LoginRes>({}, wx.login)
 
 export const showToast = (opts: wxTypes.ShowToastOpts): Promise<void> =>
-    promisify<void>(opts, wx.showtToast)
+    promisify<void>(opts, wx.showToast)
 
 export const showLoading = (opts: wxTypes.ShowLoadingOpts): Promise<void> =>
     promisify<void>(opts, wx.showLoading)
@@ -125,7 +125,7 @@ export const showActionSheet = (
 ): Promise<wxTypes.ShowActionSheetRes> =>
     promisify<wxTypes.ShowActionSheetRes>(opts, wx.showActionSheet)
 
-    export const select = (
+export const select = (
     selector: string
 ): Promise<wxTypes.Rect | wxTypes.Rect[]> => {
     return new Promise((resolve, reject) => {
