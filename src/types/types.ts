@@ -1072,7 +1072,7 @@ export interface NodeRef {
 
     fields(
         fields: FieldsOpts,
-        callback: (res: FieldsRes) => void
+        callback: (res: FieldsRes | FieldsRes[]) => void
     ): SelectorQuery
 }
 
