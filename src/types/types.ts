@@ -1547,20 +1547,19 @@ export interface GetShareInfoRes {
 }
 
 export type Scope =
-    | 'userInfo'
-    | 'userLocation'
-    | 'address'
-    | 'invoiceTitle'
-    | 'werun'
-    | 'record'
-    | 'writePhotosAlbum'
+    | 'scope.userInfo'
+    | 'scope.userLocation'
+    | 'scope.address'
+    | 'scope.invoiceTitle'
+    | 'scope.werun'
+    | 'scope.record'
+    | 'scope.writePhotosAlbum'
 export interface OpenSettingRes {
     /**
      * 用户授权结果，其中 key 为 scope 值，value 为 Bool 值，表示用户是否允许授权，详见 scope 列表
      */
     authSetting: {
-        key: Scope
-        value: boolean
+        [key: string]: boolean
     }
 }
 
