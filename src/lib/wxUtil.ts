@@ -2,6 +2,12 @@ import { wx } from './wx'
 import { promisify } from '../lib/util'
 import * as wxTypes from '../types/types'
 
+let wxUtilConfig: any = {}
+
+export const setWxUtilConfig = (type, params) => {
+    wxUtilConfig[type] = params
+}
+
 /**
  * rpx 转 px
  * @param rpx
@@ -41,9 +47,9 @@ export const alert = (
 ) => {
     return showModal({
         content,
-        title: title || '提示',
+        title: title || wxUtilConfig.alert.title || '提示',
         showCancel: false,
-        confirmColor: confirmColor || '#3CC51F'
+        confirmColor: confirmColor || wxUtilConfig.alert.confirmColor
     })
 }
 
