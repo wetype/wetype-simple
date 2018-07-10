@@ -49,7 +49,7 @@ export const alert = (
         content,
         title: title || wxUtilConfig.alert.title || '提示',
         showCancel: false,
-        confirmColor: confirmColor || wxUtilConfig.alert.confirmColor,
+        confirmColor: confirmColor || wxUtilConfig.alert.confirmColor
     })
 }
 
@@ -113,6 +113,9 @@ export const getStorage = (
 
 export const setStorage = (opts: wxTypes.SetStorageOpts): Promise<void> =>
     promisify<void>(opts, wx.setStorage)
+
+export const clearStorage = (): Promise<void> =>
+    promisify<void>({}, wx.clearStorage)
 
 export const login = (): Promise<wxTypes.LoginRes> =>
     promisify<wxTypes.LoginRes>({}, wx.login)
