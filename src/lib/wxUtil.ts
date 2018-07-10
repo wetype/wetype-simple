@@ -49,7 +49,7 @@ export const alert = (
         content,
         title: title || wxUtilConfig.alert.title || '提示',
         showCancel: false,
-        confirmColor: confirmColor || wxUtilConfig.alert.confirmColor
+        confirmColor: confirmColor || wxUtilConfig.alert.confirmColor,
     })
 }
 
@@ -59,13 +59,15 @@ export const alert = (
 export const confirm = (
     content: string,
     title?: string,
-    confirmColor?: string
+    confirmColor?: string,
+    cancelColor?: string
 ) => {
     return showModal({
         content,
         title: title || '提示',
         showCancel: true,
-        confirmColor: confirmColor || '#3CC51F'
+        confirmColor: confirmColor || wxUtilConfig.confirm.confirmColor,
+        cancelColor: cancelColor || wxUtilConfig.confirm.cancelColor
     })
 }
 

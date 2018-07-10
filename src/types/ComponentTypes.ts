@@ -48,4 +48,5 @@ export interface ComOptions {
 
 export interface ComponentConfig {
     component?: boolean
+    usingComponents?: any
 }

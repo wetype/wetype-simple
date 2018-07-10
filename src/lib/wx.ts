@@ -522,6 +522,8 @@ declare namespace wx {
      * tip: wx.navigateTo 和 wx.redirectTo 不允许跳转到 tabbar 页面，只能用 wx.switchTab 跳转到 tabbar 页面
      */
     export function navigateBack(opts?: wxx.NavigateBackOpts): void
+
+    export function reLaunch(opts?: wxx.ReLaunchOpts): void
 }
 
 /**
