@@ -25,7 +25,8 @@ export abstract class Page extends DecorMethods {
     readonly $route: {
         path: string
         query: any
-    } = { path: '', query: {} }
+        id: string
+    } = { path: '', query: {}, id: '' }
 
     /**
      * 数据

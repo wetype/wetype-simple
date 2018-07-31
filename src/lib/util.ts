@@ -96,3 +96,13 @@ export const alphabet = function(str: string | number) {
         return map[str]
     }
 }
+
+export const decodeParam = (paramString = '') => {
+    const arr = paramString.split('&')
+    const arrObj = arr.map(el => el.split('='))
+    const obj: any = {}
+    arrObj.forEach(el => {
+        obj[el[0]] = el[1]
+    })
+    return obj
+}

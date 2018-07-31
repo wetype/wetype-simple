@@ -6,7 +6,7 @@ import {
     ControlMethod
 } from '../types/PageTypes'
 import { WxEvent } from '../types/eventTypes'
-import { alphabet } from './util'
+import { alphabet, decodeParam } from './util'
 // import { listeners } from './globalObjs'
 import {
     setDataAsync,
@@ -32,6 +32,7 @@ export abstract class PageContext {
     abstract $route: {
         path: string
         query: any
+        id: string
     }
 
     /**
@@ -209,20 +210,23 @@ export const handleConstructor = (
                             _.cloneDeep(_.mapValues(getters, v => v.call(this)))
                         )
                         // 设置router
+                        const query = _.mapValues(args[0], v => {
+                            const val = decodeURIComponent(v)
+                            try {
+                                const json = JSON.parse(val)
+                                return typeof json === 'object'
+                                    ? json
+                                    : String(json)
+                            } catch (e) {
+                                return val
+                            }
+                        })
+                        _.extend(query, { scene: decodeParam(query.scene) })
                         _.extend(this, {
                             $route: {
                                 path: this.route,
-                                query: _.mapValues(args[0], v => {
-                                    let val = decodeURIComponent(v)
-                                    try {
-                                        let json = JSON.parse(val)
-                                        return typeof json === 'object'
-                                            ? json
-                                            : String(json)
-                                    } catch (e) {
-                                        return val
-                                    }
-                                })
+                                query,
+                                id: query.id || query.scene.id || ''
                             }
                         })
 
