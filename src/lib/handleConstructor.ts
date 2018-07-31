@@ -221,12 +221,12 @@ export const handleConstructor = (
                                 return val
                             }
                         })
-                        _.extend(query, { scene: decodeParam(query.scene) })
+                        _.extend(query, decodeParam(query.scene))
                         _.extend(this, {
                             $route: {
                                 path: this.route,
                                 query,
-                                id: query.id || query.scene.id || ''
+                                id: query.id || ''
                             }
                         })
 
